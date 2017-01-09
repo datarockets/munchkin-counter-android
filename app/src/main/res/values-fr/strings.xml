@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Munchkin Level Counter</string>
+    <string name="button.skip">Passer</string>
+    <string name="button.finish">Terminer</string>
+    <string name="button.continue">Continuer</string>
+    <string name="button.add_new_player">Ajouter un joueur</string>
+    <string name="button.no">Non</string>
+    <string name="button.yes">Oui</string>
+    <string name="button.start">Commencer</string>
+    <string name="menu.finish">Terminer</string>
+    <string name="onboarder.page1.title">Bienvenue !</string>
+    <string name="onboarder.page2.title">Illimité</string>
+    <string name="progress_dialog.stats_loader.title">Chargement</string>
+    <string name="settings.max_level">Niveau maximum</string>
+    <string name="tab.level">Niveau</string>
+    <string name="text.level">Niveau</string>
+    <string name="dialog.finish_game.title">Terminer le jeu</string>
+    <string name="dialog.finish_game.message">Voulez-vous terminer le jeu ?</string>
+    <string name="dialog.player_delete.message">Voulez-vous supprimer ce joueur ?</string>
+    <string name="dialog.player_delete.title">Supprimer un joueur</string>
+    <string name="dialog.start_continue_game.message">Voulez-vous continuer ou commencer une nouvelle partie ?</string>
+    <string name="menu.settings">Paramètres</string>
+    <string name="dialog.start_continue_game.title">Continuer ou commencer ?</string>
+    <string name="settings.keep_screen_on">Suspendre la mise en veille de l\'écran</string>
+    <string name="text.player_name">Nom du joueur</string>
+    <string name="text.player_add_warning">Veuillez ajouter deux joueurs ou plus et appuyer sur commencer</string>
+    <string name="tab.strength">Force</string>
+    <string name="progress_dialog.stats_loader.message">Patientez pendant le chargement des statistiques</string>
+    <string name="onboarder.page3.title">Facilité d\'utilisation</string>
+    <string name="tab.summary">Résumé</string>
+    <string name="text.steps">Tours</string>
+    <string name="text.strength">Force</string>
+    <string name="title.analytics">Analyse</string>
+    <string name="title.choose_game_type">Choisir un type de jeu</string>
+    <string name="title.players_editor">Editeur de joueurs</string>
+    <string name="title.settings">Paramètres</string>
+    <string name="button.next_step">Tour suivant</string>
+    <string name="onboarder.page1.description">Munchkin Level Counter rend votre jeu beaucoup mieux</string>
+    <string name="onboarder.page2.description">Ajoute autant de joueurs que tu veux</string>
+    <string name="onboarder.page3.description">Gère le score des joueurs facilement</string>
+</resources>
