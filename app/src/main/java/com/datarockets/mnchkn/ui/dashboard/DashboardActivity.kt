@@ -14,7 +14,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.OnItemClick
 import com.datarockets.mnchkn.R
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.BaseActivity
 import com.datarockets.mnchkn.ui.dialogs.RollDiceDialogFragment
 import com.datarockets.mnchkn.ui.player.PlayerFragment
@@ -121,7 +121,7 @@ class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.PlayerFr
         if (position == lvPlayerList.count - 1) {
             lvPlayerList.setItemChecked(0, true)
             lvPlayerList.setSelection(0)
-            position = 0
+//            position = 0
         } else {
             position++
             lvPlayerList.setItemChecked(position, true)

@@ -1,6 +1,6 @@
 package com.datarockets.mnchkn.store;
 
-import com.datarockets.mnchkn.models.Player;
+import com.datarockets.mnchkn.data.models.Player;
 
 import java.util.ArrayList;
 

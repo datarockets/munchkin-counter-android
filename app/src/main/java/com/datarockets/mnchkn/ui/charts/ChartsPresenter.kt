@@ -1,9 +1,7 @@
 package com.datarockets.mnchkn.ui.charts
 
 import com.datarockets.mnchkn.data.DataManager
-import com.datarockets.mnchkn.models.Player
 import com.datarockets.mnchkn.ui.base.Presenter
-import rx.Subscriber
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -27,19 +25,7 @@ class ChartsPresenter
         mSubscription = mDataManager.getPlayers(orderBy)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Subscriber<List<Player>>() {
-                    override fun onCompleted() {
-
-                    }
-
-                    override fun onError(e: Throwable) {
-
-                    }
-
-                    override fun onNext(players: List<Player>) {
-                        mChartsView?.showPlayersList(players)
-                    }
-                })
+                .subscribe { players -> mChartsView?.showPlayersList(players) }
     }
 
     override fun detachView() {

@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.datarockets.mnchkn.models.GameStep;
-import com.datarockets.mnchkn.models.Player;
+import com.datarockets.mnchkn.data.models.GameStep;
+import com.datarockets.mnchkn.data.models.Player;
 
 import java.util.ArrayList;
 

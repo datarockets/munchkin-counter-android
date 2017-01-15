@@ -10,7 +10,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.datarockets.mnchkn.R
-import com.datarockets.mnchkn.models.Dice
+import com.datarockets.mnchkn.data.models.Dice
 import com.datarockets.mnchkn.ui.base.BaseActivity
 import javax.inject.Inject
 

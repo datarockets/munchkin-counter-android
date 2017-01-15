@@ -10,7 +10,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.datarockets.mnchkn.R
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.BaseActivity
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.LineDataSet

@@ -1,7 +1,7 @@
 package com.datarockets.mnchkn.store
 
-import com.datarockets.mnchkn.models.GameStep
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.GameStep
+import com.datarockets.mnchkn.data.models.Player
 
 interface GameService {
     fun insertStep(player: Player)

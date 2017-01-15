@@ -8,7 +8,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.datarockets.mnchkn.R
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.Player
 import java.util.*
 import javax.inject.Inject
 
@@ -36,14 +36,14 @@ class PlayerListAdapter
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+
         val holder: ViewHolder
         val player = mPlayers[position]
 
         if (convertView != null) {
             holder = convertView.tag as ViewHolder
         } else {
-            convertView = LayoutInflater.from(parent.context)
+            val convertView = LayoutInflater.from(parent.context)
                     .inflate(R.layout.player_list_item, parent, false)
             holder = ViewHolder(convertView)
             convertView!!.tag = holder
@@ -52,7 +52,7 @@ class PlayerListAdapter
         holder.tvPlayerName.text = player.name
         holder.tvPlayerLevelScore.text = player.levelScore.toString()
         holder.tvPlayerStrengthScore.text = player.strengthScore.toString()
-        return convertView
+        return convertView!!
     }
 
     internal class ViewHolder(view: View) {

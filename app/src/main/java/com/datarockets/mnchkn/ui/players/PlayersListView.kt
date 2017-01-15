@@ -1,7 +1,7 @@
 package com.datarockets.mnchkn.ui.players
 
 
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.MvpView
 
 interface PlayersListView : MvpView {

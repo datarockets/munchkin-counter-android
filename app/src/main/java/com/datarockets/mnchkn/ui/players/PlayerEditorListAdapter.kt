@@ -11,7 +11,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.amulyakhare.textdrawable.TextDrawable
 import com.datarockets.mnchkn.R
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.Player
 import java.util.*
 import javax.inject.Inject
 
@@ -53,16 +53,16 @@ class PlayerEditorListAdapter
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
         val holder: ViewHolder
 
         val player = mPlayersList[position]
         if (convertView != null) {
             holder = convertView.tag as ViewHolder
         } else {
-            convertView = LayoutInflater.from(parent.context).inflate(R.layout.player_item, parent, false)
+            val convertView = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.player_item, parent, false)
             holder = ViewHolder(convertView)
-            convertView!!.tag = holder
+            convertView.tag = holder
         }
 
         val color = Color.parseColor(player.color)
@@ -71,7 +71,7 @@ class PlayerEditorListAdapter
                 .buildRound(capitalizedPlayerFirstLetter, color)
         holder.ivPlayerImage.setImageDrawable(drawable)
         holder.tvPlayerName.text = player.name
-        return convertView
+        return convertView!!
     }
 
     internal class ViewHolder(view: View) {

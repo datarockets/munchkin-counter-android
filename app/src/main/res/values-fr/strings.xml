@@ -39,4 +39,7 @@
     <string name="onboarder.page1.description">Munchkin Level Counter rend votre jeu beaucoup mieux</string>
     <string name="onboarder.page2.description">Ajoute autant de joueurs que tu veux</string>
     <string name="onboarder.page3.description">Gère le score des joueurs facilement</string>
+    <string name="button.update_player">Mettre à jour un joueur</string>
+    <string name="menu.roll_dice">Lancer un dé</string>
+    <string name="text.edit_player">Modifier le joueur</string>
 </resources>

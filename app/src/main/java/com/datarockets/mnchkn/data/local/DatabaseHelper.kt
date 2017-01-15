@@ -1,8 +1,8 @@
 package com.datarockets.mnchkn.data.local
 
 import android.content.ContentValues
-import com.datarockets.mnchkn.models.GameStep
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.GameStep
+import com.datarockets.mnchkn.data.models.Player
 import com.squareup.sqlbrite.BriteDatabase
 import com.squareup.sqlbrite.SqlBrite
 import rx.Observable

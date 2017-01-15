@@ -1,7 +1,7 @@
 package com.datarockets.mnchkn.ui.editplayer
 
 import com.datarockets.mnchkn.data.DataManager
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.Presenter
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -30,7 +30,7 @@ class EditPlayerPresenter
     }
 
     fun updatePlayerName(playerName: String) {
-        mPlayer?.name = playerName
+        mPlayer.name = playerName
     }
 
     fun updatePlayerColor() {
@@ -46,7 +46,7 @@ class EditPlayerPresenter
 
     override fun detachView() {
         mEditPlayerView = null
-        if (mSubscription != null) mSubscription!!.unsubscribe()
+        mSubscription?.unsubscribe()
     }
 
 }

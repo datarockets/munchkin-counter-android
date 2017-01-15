@@ -1,4 +1,4 @@
-package com.datarockets.mnchkn.models
+package com.datarockets.mnchkn.data.models
 
 class GameStep {
     var playerId: Long = 0

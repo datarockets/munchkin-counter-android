@@ -4,8 +4,8 @@ package com.datarockets.mnchkn.data.local
 import android.content.ContentValues
 import android.database.Cursor
 
-import com.datarockets.mnchkn.models.GameStep
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.GameStep
+import com.datarockets.mnchkn.data.models.Player
 
 object Db {
 

@@ -1,9 +1,8 @@
 package com.datarockets.mnchkn.ui.dashboard
 
 import com.datarockets.mnchkn.data.DataManager
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.Presenter
-import rx.Subscriber
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -28,57 +27,21 @@ class DashboardPresenter
         mSubscription = mDataManager.players
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Subscriber<List<Player>>() {
-                    override fun onCompleted() {
-
-                    }
-
-                    override fun onError(e: Throwable) {
-
-                    }
-
-                    override fun onNext(players: List<Player>) {
-                        mDashboardView?.setPlayers(players)
-                    }
-                })
+                .subscribe { players -> mDashboardView?.setPlayers(players) }
     }
 
     fun updatePlayerInformation(player: Player, position: Int) {
         mSubscription = mDataManager.updatePlayer(player)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Subscriber<Player>() {
-                    override fun onCompleted() {
-
-                    }
-
-                    override fun onError(e: Throwable) {
-
-                    }
-
-                    override fun onNext(player: Player) {
-                        mDashboardView?.updatePlayerInformation(player, position)
-                    }
-                })
+                .subscribe { player -> mDashboardView?.updatePlayerInformation(player, position) }
     }
 
     fun insertStep(player: Player) {
         mSubscription = mDataManager.addGameStep(player)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Subscriber<Void>() {
-                    override fun onCompleted() {
-
-                    }
-
-                    override fun onError(e: Throwable) {
-
-                    }
-
-                    override fun onNext(aVoid: Void) {
-
-                    }
-                })
+                .subscribe {}
     }
 
     fun setGameFinished() {

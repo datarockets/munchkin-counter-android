@@ -38,4 +38,7 @@
     <string name="onboarder.page3.title">Удобство</string>
     <string name="onboarder.page3.description">Управляйте количеством очков других игроков</string>
     <string name="settings.keep_screen_on">Держать экран включенным</string>
+    <string name="button.update_player">Обновить игрока</string>
+    <string name="menu.roll_dice">Бросить кость</string>
+    <string name="text.edit_player">Изменить игрока</string>
 </resources>

@@ -45,12 +45,12 @@ class NewPlayerDialogFragment : BottomSheetDialogFragment() {
     }
 
     @OnClick(R.id.btn_add_new_player)
-    internal fun onAddNewPlayerClick() {
+    fun onAddNewPlayerClick() {
         passNameToActivity()
     }
 
     @OnEditorAction(R.id.et_player_name)
-    internal fun onEditorAction(actionId: Int): Boolean {
+    fun onEditorAction(actionId: Int): Boolean {
         if (EditorInfo.IME_ACTION_DONE == actionId) {
             passNameToActivity()
             return true
@@ -59,7 +59,7 @@ class NewPlayerDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun passNameToActivity() {
-        val name = etPlayerName!!.text.toString()
+        val name = etPlayerName.text.toString()
         if (!name.isEmpty()) {
             mListener.onFinishEditDialog(name)
             dismiss()

@@ -1,6 +1,6 @@
 package com.datarockets.mnchkn.ui.dashboard
 
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.MvpView
 
 

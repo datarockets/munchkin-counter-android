@@ -38,4 +38,7 @@
     <string name="onboarder.page3.title">Nutzbarkeit</string>
     <string name="onboarder.page3.description">Verwalte deine Spielergebnisse ganz einfach</string>
     <string name="settings.keep_screen_on">Halten Bildschirm wach</string>
+    <string name="button.update_player">Spieler aktualisieren</string>
+    <string name="menu.roll_dice">Würfeln</string>
+    <string name="text.edit_player">Spieler bearbeiten</string>
 </resources>

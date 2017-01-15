@@ -3,8 +3,8 @@ package com.datarockets.mnchkn.store;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.datarockets.mnchkn.models.GameStep;
-import com.datarockets.mnchkn.models.Player;
+import com.datarockets.mnchkn.data.models.GameStep;
+import com.datarockets.mnchkn.data.models.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;

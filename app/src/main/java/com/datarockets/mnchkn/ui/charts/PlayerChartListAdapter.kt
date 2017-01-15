@@ -12,7 +12,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.amulyakhare.textdrawable.TextDrawable
 import com.datarockets.mnchkn.R
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.Player
 import java.util.*
 import javax.inject.Inject
 
@@ -58,21 +58,21 @@ class PlayerChartListAdapter
         val capitalizedPlayerFirstLetter = player.name!!.substring(0, 1).toUpperCase()
         val drawable = TextDrawable.builder().buildRound(capitalizedPlayerFirstLetter, color)
 
-        holder.ivPlayerColor!!.setImageDrawable(drawable)
-        holder.tvPlayerName!!.text = player.name
+        holder.ivPlayerColor.setImageDrawable(drawable)
+        holder.tvPlayerName.text = player.name
         when (mType) {
             ORDER_BY_LEVEL -> {
                 val levelScore = player.levelScore.toString()
-                holder.tvPlayerScore!!.text = levelScore
+                holder.tvPlayerScore.text = levelScore
             }
             ORDER_BY_STRENGTH -> {
                 val strengthScore = player.strengthScore.toString()
-                holder.tvPlayerScore!!.text = strengthScore
+                holder.tvPlayerScore.text = strengthScore
             }
             ORDER_BY_TOTAL -> {
                 val totalScoreAmount = player.levelScore + player.strengthScore
                 val totalScore = totalScoreAmount.toString()
-                holder.tvPlayerScore!!.text = totalScore
+                holder.tvPlayerScore.text = totalScore
             }
         }
         return convertView

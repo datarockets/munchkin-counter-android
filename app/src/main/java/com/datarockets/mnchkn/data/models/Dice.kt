@@ -1,4 +1,4 @@
-package com.datarockets.mnchkn.models
+package com.datarockets.mnchkn.data.models
 
 import java.util.*
 import javax.inject.Inject

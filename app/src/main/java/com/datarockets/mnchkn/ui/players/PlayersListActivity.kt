@@ -12,7 +12,7 @@ import android.widget.ListView
 import android.widget.Toast
 import butterknife.*
 import com.datarockets.mnchkn.R
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.BaseActivity
 import com.datarockets.mnchkn.ui.dashboard.DashboardActivity
 import com.datarockets.mnchkn.ui.dialogs.NewPlayerDialogFragment
@@ -97,7 +97,8 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         return true
     }
 
-    @OnClick(R.id.fab_add_player) internal fun onClick() {
+    @OnClick(R.id.fab_add_player)
+    fun onAddNewPlayerClick() {
         showAddNewPlayerDialog()
     }
 
@@ -108,9 +109,9 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
                 .setPositiveButton(R.string.button_continue) { dialog, which -> launchDashboard() }
                 .setNegativeButton(R.string.button_start) { dialog, which ->
                     dialog.dismiss()
-                    presenter!!.setGameFinished()
-                    presenter!!.clearPlayersStats()
-                    presenter!!.clearGameSteps()
+                    presenter.setGameFinished()
+                    presenter.clearPlayersStats()
+                    presenter.clearGameSteps()
                 }
                 .setCancelable(false)
                 .create()

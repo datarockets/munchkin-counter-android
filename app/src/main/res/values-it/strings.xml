@@ -39,4 +39,7 @@
     <string name="title.choose_game_type">Scegliere Il Tipo Di Gioco</string>
     <string name="title.players_editor">I Giocatori Editor</string>
     <string name="title.settings">Impostazioni</string>
+    <string name="button.update_player">Aggiornamento giocatore</string>
+    <string name="menu.roll_dice">Tirare un dado</string>
+    <string name="text.edit_player">Modifica Player</string>
 </resources>

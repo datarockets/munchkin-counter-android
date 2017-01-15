@@ -2,8 +2,8 @@ package com.datarockets.mnchkn.data
 
 import com.datarockets.mnchkn.data.local.DatabaseHelper
 import com.datarockets.mnchkn.data.local.PreferencesHelper
-import com.datarockets.mnchkn.models.GameStep
-import com.datarockets.mnchkn.models.Player
+import com.datarockets.mnchkn.data.models.GameStep
+import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.utils.ColorUtil
 import com.github.mikephil.charting.data.Entry
 import rx.Observable

@@ -2,7 +2,6 @@ package com.datarockets.mnchkn.ui.players
 
 import com.datarockets.mnchkn.data.DataManager
 import com.datarockets.mnchkn.ui.base.Presenter
-import rx.Subscriber
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -35,27 +34,15 @@ class PlayersListPresenter
         mSubscription = mDataManager.addPlayer(playerName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { player ->
-                    mPlayersListView?.addPlayerToList(player)
-                }
+                .subscribe { player -> mPlayersListView?.addPlayerToList(player) }
     }
 
     fun deletePlayerListItem(position: Int, playerId: Long) {
         mSubscription = mDataManager.deletePlayer(playerId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Subscriber<Void>() {
-                    override fun onCompleted() {
-                        mPlayersListView!!.deletePlayerFromList(position)
-                    }
-
-                    override fun onError(e: Throwable) {
-
-                    }
-
-                    override fun onNext(aVoid: Void) {
-
-                    }
+                .subscribe({}, {}, {
+                    mPlayersListView?.deletePlayerFromList(position)
                 })
     }
 
@@ -90,9 +77,7 @@ class PlayersListPresenter
         mSubscription = mDataManager.players
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { players ->
-                    mPlayersListView?.setPlayersList(players)
-                }
+                .subscribe { players -> mPlayersListView?.setPlayersList(players) }
     }
 
     override fun detachView() {
