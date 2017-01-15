@@ -1,0 +1,43 @@
+ext.version = [
+        kotlin          : "1.0.6",
+        support         : "25.1.0",
+        text_drawable   : "1.0.1",
+        color_picker    : "2.0.0",
+        onboarder       : "0.6",
+        mixpanel        : "4.+",
+        mp_android_chart: "v3.0.1",
+        rxkotlin        : "0.60.0",
+        rxandroid       : "1.2.1",
+        sqlbrite        : "1.1.1",
+        timber          : "4.5.0",
+        butterknife     : "8.0.1",
+        dagger          : "2.6",
+        mockito         : "2.0.52-beta",
+        junit           : "4.12"
+]
+
+def version = ext.version;
+
+ext.library = [
+        kotlin              : "org.jetbrains.kotlin:kotlin-stdlib:${version.kotlin}",
+        support_v4          : "com.android.support:support-v4:${version.support}",
+        support_compat      : "com.android.support:appcompat-v7:${version.support}",
+        support_design      : "com.android.support:design:${version.support}",
+        support_recycler    : "com.android.support:recyclerview-v7:${version.support}",
+        support_card        : "com.android.support:cardview-v7:${version.support}",
+        text_drawable       : "com.amulyakhare:com.amulyakhare.textdrawable:${version.text_drawable}",
+        color_picker        : "com.jrummyapps:colorpicker:${version.color_picker}",
+        onboarder           : "com.github.chyrta:AndroidOnboarder:${version.onboarder}",
+        mixpanel            : "com.mixpanel.android:mixpanel-android:${version.mixpanel}",
+        mp_android_chart    : "com.github.PhilJay:MPAndroidChart:${version.mp_android_chart}",
+        rxkotlin            : "io.reactivex:rxkotlin:${version.rxkotlin}",
+        rxandroid           : "io.reactivex:rxandroid:${version.rxandroid}",
+        sqlbrite            : "com.squareup.sqlbrite:sqlbrite:${version.sqlbrite}",
+        timber              : "com.jakewharton.timber:timber:${version.timber}",
+        butterknife         : "com.jakewharton:butterknife:${version.butterknife}",
+        butterknife_compiler: "com.jakewharton:butterknife-compiler:${version.butterknife}",
+        dagger              : "com.google.dagger:dagger:${version.dagger}",
+        dagger_compiler     : "com.google.dagger:dagger-compiler:${version.dagger}",
+        mockito             : "org.mockito:mockito-core:${version.mockito}",
+        junit               : "junit:junit:${version.junit}"
+]

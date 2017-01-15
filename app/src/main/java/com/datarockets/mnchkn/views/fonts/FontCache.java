@@ -2,15 +2,12 @@ package com.datarockets.mnchkn.views.fonts;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
-
-import com.datarockets.mnchkn.utils.LogUtil;
 
 import java.util.HashMap;
 
-public class FontCache {
+import timber.log.Timber;
 
-    private static final String TAG = LogUtil.makeLogTag(FontCache.class);
+public class FontCache {
 
     private static HashMap<String, Typeface> fontNameTypefaceMap = new HashMap<>();
 
@@ -20,7 +17,7 @@ public class FontCache {
             try {
                 typeface = Typeface.createFromAsset(context.getAssets(), fontName);
             } catch (Exception e) {
-                Log.e(TAG, "Error while trying to get typeface");
+                Timber.e("Error while trying to get typeface");
             }
             fontNameTypefaceMap.put(fontName, typeface);
         }

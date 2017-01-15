@@ -1,26 +1,15 @@
 package com.datarockets.mnchkn.store;
 
-import android.content.Context;
-
-import com.datarockets.mnchkn.MunchkinApplication;
 import com.datarockets.mnchkn.models.Player;
 import com.datarockets.mnchkn.utils.ColorUtil;
-import com.datarockets.mnchkn.utils.LogUtil;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 public class PlayerServiceImpl implements PlayerService {
 
-    public static final String TAG = LogUtil.makeLogTag(PlayerServiceImpl.class);
+    public static final String TAG = "PlayerServiceImpl";
 
-    @Inject
     MunchkinDatabaseHelper mPlayerDatabase;
-
-    public PlayerServiceImpl(Context context) {
-        MunchkinApplication.get(context).getAppComponent().inject(this);
-    }
 
     @Override
     public Player addPlayer(String name) {

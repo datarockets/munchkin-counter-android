@@ -2,9 +2,7 @@ package com.datarockets.mnchkn.store;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 
-import com.datarockets.mnchkn.MunchkinApplication;
 import com.datarockets.mnchkn.models.GameStep;
 import com.datarockets.mnchkn.models.Player;
 
@@ -13,27 +11,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
-
 public class GameServiceImpl implements GameService {
 
     private static final String IS_GAME_STARTED = "is_game_started";
 
-    @Inject
+
     MunchkinDatabaseHelper mDatabase;
-    @Inject
+
     SharedPreferences mPreferences;
-    @Inject
+
     SharedPreferences.Editor mPreferencesEditor;
 
     private Map<Player, List<GameStep>> mGameStepsMap;
 
     public GameServiceImpl(Context context) {
-        MunchkinApplication.get(context).getAppComponent().inject(this);
     }
 
     @Override
@@ -68,51 +59,51 @@ public class GameServiceImpl implements GameService {
         return mGameStepsMap;
     }
 
-    @Override
-    public LineChartData createScoresChartData(int type, Map<Player, List<GameStep>> gameStepsMap) {
-        List<Line> playersLines = new ArrayList<>();
-        List<String> playerColors = new ArrayList<>();
-        LineChartData lineChartData;
-
-        for (Player player : gameStepsMap.keySet()) {
-            String color = player.getColor();
-            playerColors.add(color);
-        }
-
-        for (List<GameStep> gameSteps : gameStepsMap.values()) {
-            List<PointValue> pointValues = new ArrayList<>();
-            for (int i = 0; i < gameSteps.size(); i++) {
-                switch (type) {
-                    case 0:
-                        int playerLevel = gameSteps.get(i).getPlayerLevel();
-                        pointValues.add(new PointValue(i, playerLevel));
-                        break;
-                    case 1:
-                        int playerStrength = gameSteps.get(i).getPlayerStrength();
-                        pointValues.add(new PointValue(i, playerStrength));
-                        break;
-                    case 2:
-                        int playerTotal = gameSteps.get(i).getPlayerLevel() +
-                                gameSteps.get(i).getPlayerStrength();
-                        pointValues.add(new PointValue(i, playerTotal));
-                        break;
-                }
-            }
-            Line line = new Line();
-            line.setValues(pointValues);
-            line.setHasPoints(false);
-            line.setCubic(true);
-            playersLines.add(line);
-        }
-
-        for (int i = 0; i < playersLines.size(); i++) {
-            playersLines.get(i).setColor(Color.parseColor(playerColors.get(i)));
-        }
-
-        lineChartData = new LineChartData(playersLines);
-
-        return lineChartData;
-    }
+//    @Override
+//    public LineChartData createScoresChartData(int type, Map<Player, List<GameStep>> gameStepsMap) {
+//        List<Line> playersLines = new ArrayList<>();
+//        List<String> playerColors = new ArrayList<>();
+//        LineChartData lineChartData;
+//
+//        for (Player player : gameStepsMap.keySet()) {
+//            String color = player.getColor();
+//            playerColors.add(color);
+//        }
+//
+//        for (List<GameStep> gameSteps : gameStepsMap.values()) {
+//            List<PointValue> pointValues = new ArrayList<>();
+//            for (int i = 0; i < gameSteps.size(); i++) {
+//                switch (type) {
+//                    case 0:
+//                        int playerLevel = gameSteps.get(i).getPlayerLevel();
+//                        pointValues.add(new PointValue(i, playerLevel));
+//                        break;
+//                    case 1:
+//                        int playerStrength = gameSteps.get(i).getPlayerStrength();
+//                        pointValues.add(new PointValue(i, playerStrength));
+//                        break;
+//                    case 2:
+//                        int playerTotal = gameSteps.get(i).getPlayerLevel() +
+//                                gameSteps.get(i).getPlayerStrength();
+//                        pointValues.add(new PointValue(i, playerTotal));
+//                        break;
+//                }
+//            }
+//            Line line = new Line();
+//            line.setValues(pointValues);
+//            line.setHasPoints(false);
+//            line.setCubic(true);
+//            playersLines.add(line);
+//        }
+//
+//        for (int i = 0; i < playersLines.size(); i++) {
+//            playersLines.get(i).setColor(Color.parseColor(playerColors.get(i)));
+//        }
+//
+//        lineChartData = new LineChartData(playersLines);
+//
+//        return lineChartData;
+//    }
 
     @Override
     public void clearSteps() {

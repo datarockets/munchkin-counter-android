@@ -6,10 +6,12 @@
     <string name="title.settings">Settings</string>
     <string name="menu.finish">Finish</string>
     <string name="menu.settings">Settings</string>
+    <string name="menu.roll_dice">Roll a dice</string>
     <string name="button.finish">Finish</string>
     <string name="button.skip">Skip</string>
     <string name="button.next_step">Next step</string>
     <string name="button.add_new_player">Add player</string>
+    <string name="button.update_player">Update player</string>
     <string name="button.yes">Yes</string>
     <string name="button.no">No</string>
     <string name="button.start">Start </string>
@@ -24,6 +26,7 @@
     <string name="progress_dialog.stats_loader.message">Wait while we are loading your stats</string>
     <string name="text.player_add_warning">Please, add two or more players and press Start icon</string>
     <string name="text.player_name">Player Name</string>
+    <string name="text.edit_player">Edit Player</string>
     <string name="text.level">Level</string>
     <string name="text.strength">Strength</string>
     <string name="text.steps">Steps</string>

@@ -5,27 +5,26 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <include
-            layout="@layout/toolbar" />
+        <include layout="@layout/toolbar" />
 
         <ListView
             android:id="@+id/lv_player_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_player"
-        app:fabSize="normal"
-        app:srcCompat="@drawable/ic_plus"
-        android:layout_margin="@dimen/fab_margin_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right|end"/>
+        android:layout_gravity="bottom|right|end"
+        android:layout_margin="@dimen/fab_margin_phone"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_plus" />
 
 </android.support.design.widget.CoordinatorLayout>
