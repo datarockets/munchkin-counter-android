@@ -16,6 +16,8 @@
     <string name="button.no">No</string>
     <string name="button.start">Start </string>
     <string name="button.continue">Continue</string>
+    <string name="dialog.player_actions.edit_player">Edit Player</string>
+    <string name="dialog.player_actions.delete_player">Delete Player</string>
     <string name="dialog.finish_game.title">Finish game</string>
     <string name="dialog.finish_game.message">Do you want to finish the game?</string>
     <string name="dialog.player_delete.title">Delete a player</string>

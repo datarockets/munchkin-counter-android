@@ -5,34 +5,39 @@ import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ListView
+import android.view.View
 import android.widget.Toast
-import butterknife.*
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.datarockets.mnchkn.R
 import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.BaseActivity
 import com.datarockets.mnchkn.ui.dashboard.DashboardActivity
 import com.datarockets.mnchkn.ui.dialogs.NewPlayerDialogFragment
 import com.datarockets.mnchkn.ui.dialogs.PlayerActionsDialogFragment
-import com.datarockets.mnchkn.ui.editplayer.EditPlayerDialogFragment
 import com.datarockets.mnchkn.ui.settings.SettingsActivity
 import com.jrummyapps.android.colorpicker.ColorPickerDialogListener
+import com.woxthebox.draglistview.DragListView
 import timber.log.Timber
 import javax.inject.Inject
 
 class PlayersListActivity : BaseActivity(), PlayersListView,
         NewPlayerDialogFragment.AddNewPlayerDialogInterface,
-        ColorPickerDialogListener {
+        ColorPickerDialogListener,
+        PlayerEditorListAdapter.OnItemClickListener {
 
     @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
-    @BindView(R.id.lv_player_list) lateinit var lvPlayersList: ListView
+    @BindView(R.id.lv_player_list) lateinit var lvPlayersList: DragListView
     @BindView(R.id.fab_add_player) lateinit var fabAddPlayer: FloatingActionButton
 
     @Inject lateinit var lvPlayerEditorListAdapter: PlayerEditorListAdapter
-    @Inject lateinit var presenter: PlayersListPresenter
+    @Inject lateinit var playersListPresenter: PlayersListPresenter
+    @Inject lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +45,12 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         setContentView(R.layout.activity_players)
         ButterKnife.bind(this)
         setSupportActionBar(toolbar)
-        lvPlayersList.adapter = lvPlayerEditorListAdapter
-        presenter.attachView(this)
-        presenter.checkIsGameStarted()
-        presenter.getPlayersList()
+        lvPlayersList.setLayoutManager(linearLayoutManager)
+        lvPlayersList.setAdapter(lvPlayerEditorListAdapter, false)
+        lvPlayerEditorListAdapter.setOnItemClickListener(this)
+        playersListPresenter.attachView(this)
+        playersListPresenter.checkIsGameStarted()
+        playersListPresenter.getPlayersList()
     }
 
     override fun onResume() {
@@ -74,37 +81,10 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     }
 
     override fun launchDashboard() {
-        presenter.setGameStarted()
+        playersListPresenter.setGameStarted()
         val intent = Intent(this, DashboardActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    @OnItemClick(R.id.lv_player_list)
-    fun onItemClick(playerId: Long) {
-        val editPlayerDialogFragment = EditPlayerDialogFragment.newInstance(playerId)
-        editPlayerDialogFragment.show(supportFragmentManager, "EditPlayerDialogFragment")
-    }
-
-    @OnItemLongClick(R.id.lv_player_list)
-    fun onItemLongClick(position: Int, playerId: Long): Boolean {
-        val playerActionDialogFragment = PlayerActionsDialogFragment()
-        playerActionDialogFragment.show(supportFragmentManager, "PlayerActionDialogFragment")
-//
-//        val alertDialog = AlertDialog.Builder(this)
-//        alertDialog.apply {
-//            setTitle(R.string.dialog_player_delete_title)
-//            setMessage(R.string.dialog_player_delete_message)
-//            setPositiveButton(R.string.button_yes) { dialog, which ->
-//                presenter.deletePlayerListItem(position, itemId)
-//            }
-//            setNegativeButton(R.string.button_no) { dialog, which ->
-//                dialog.dismiss()
-//            }
-//            create()
-//            show()
-//        }
-        return true
     }
 
     @OnClick(R.id.fab_add_player)
@@ -120,9 +100,9 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
             setPositiveButton(R.string.button_continue) { dialog, which -> launchDashboard() }
             setNegativeButton(R.string.button_start) { dialog, which ->
                 dialog.dismiss()
-                presenter.setGameFinished()
-                presenter.clearPlayersStats()
-                presenter.clearGameSteps()
+                playersListPresenter.setGameFinished()
+                playersListPresenter.clearPlayersStats()
+                playersListPresenter.clearGameSteps()
             }
             setCancelable(false)
             create()
@@ -136,24 +116,19 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_start_game -> presenter.checkIsEnoughPlayers()
-            R.id.item_settings -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-            }
-            else -> {
-            }
+            R.id.item_start_game -> playersListPresenter.checkIsEnoughPlayers()
+            R.id.item_settings -> startActivity(Intent(this, SettingsActivity::class.java))
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onFinishEditDialog(inputName: String) {
-        presenter.addPlayer(inputName)
+        playersListPresenter.addPlayer(inputName)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter.detachView()
+        playersListPresenter.detachView()
     }
 
     override fun onColorSelected(dialogId: Int, @ColorInt color: Int) {
@@ -162,6 +137,12 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
 
     override fun onDialogDismissed(dialogId: Int) {
 
+    }
+
+    override fun onItemClick(itemView: View, position: Int) {
+        val selectedPlayerId = lvPlayerEditorListAdapter.getItemId(position)
+        val playerActionDialogFragment = PlayerActionsDialogFragment()
+        playerActionDialogFragment.show(supportFragmentManager, "PlayerActionDialogFragment")
     }
 
 }

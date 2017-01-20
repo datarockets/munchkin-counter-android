@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 
 import com.datarockets.mnchkn.injection.ActivityContext
 
@@ -27,6 +28,11 @@ class ActivityModule(private val mActivity: AppCompatActivity) {
     @Provides
     fun providesSupportFragmentManager(): FragmentManager {
         return mActivity.supportFragmentManager
+    }
+
+    @Provides
+    fun providesLinearLayoutManager(): LinearLayoutManager {
+        return LinearLayoutManager(mActivity)
     }
 
 }

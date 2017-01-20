@@ -1,10 +1,10 @@
 package com.datarockets.mnchkn.ui.players
 
 import android.graphics.Color
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
@@ -12,77 +12,80 @@ import butterknife.ButterKnife
 import com.amulyakhare.textdrawable.TextDrawable
 import com.datarockets.mnchkn.R
 import com.datarockets.mnchkn.data.models.Player
-import java.util.*
+import com.woxthebox.draglistview.DragItemAdapter
 import javax.inject.Inject
 
 class PlayerEditorListAdapter
-@Inject constructor() : BaseAdapter() {
+@Inject constructor() : DragItemAdapter<Player, PlayerEditorListAdapter.ViewHolder>() {
 
-    private val mPlayersList: MutableList<Player> = ArrayList()
-
-    fun addPlayer(player: Player) {
-        mPlayersList.add(player)
-        notifyDataSetChanged()
+    init {
+        setHasStableIds(true)
+        itemList = mutableListOf()
     }
 
-    fun setPlayers(players: List<Player>) {
-        mPlayersList.addAll(players)
-        notifyDataSetChanged()
+    interface OnItemClickListener {
+        fun onItemClick(itemView: View, position: Int)
     }
 
-    fun deletePlayer(position: Int) {
-        mPlayersList.removeAt(position)
-        notifyDataSetChanged()
+    var mListener: OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        mListener = listener
     }
 
-    fun updatePlayer(position: Int, player: Player) {
-        mPlayersList[position] = player
-        notifyDataSetChanged()
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent!!.context).inflate(R.layout.player_item, parent, false)
+        return ViewHolder(view)
     }
 
-    override fun getCount(): Int {
-        return mPlayersList.size
-    }
+    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+        super.onBindViewHolder(holder, position)
 
-    override fun getItem(position: Int): Player {
-        return mPlayersList[position]
-    }
-
-    override fun getItemId(i: Int): Long {
-        return mPlayersList[i].id
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
-        val holder: ViewHolder
-
-        val player = mPlayersList[position]
-
-        if (convertView != null) {
-            holder = convertView.tag as ViewHolder
-        } else {
-            convertView = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.player_item, parent, false)
-            holder = ViewHolder(convertView)
-            convertView.tag = holder
-        }
+        val player = itemList[position]
 
         val color = Color.parseColor(player.color)
         val capitalizedPlayerFirstLetter = player.name!!.substring(0, 1).toUpperCase()
         val drawable = TextDrawable.builder()
                 .buildRound(capitalizedPlayerFirstLetter, color)
-        holder.ivPlayerImage.setImageDrawable(drawable)
-        holder.tvPlayerName.text = player.name
-        return convertView!!
+        holder?.ivPlayerImage?.setImageDrawable(drawable)
+        holder?.tvPlayerName?.text = player.name
     }
 
-    internal class ViewHolder(view: View) {
+    fun addPlayer(player: Player) {
+        addItem(itemList.count(), player)
+    }
+
+    fun setPlayers(players: List<Player>) {
+        itemList = players
+    }
+
+    fun deletePlayer(position: Int) {
+        itemList.removeAt(position)
+    }
+
+    fun updatePlayer(position: Int, player: Player) {
+        itemList[position] = player
+    }
+
+    override fun getItemId(position: Int): Long {
+        return itemList[position].id
+    }
+
+    inner class ViewHolder : DragItemAdapter.ViewHolder {
         @BindView(R.id.iv_player_color) lateinit var ivPlayerImage: ImageView
         @BindView(R.id.tv_player_name) lateinit var tvPlayerName: TextView
 
-        init {
+        constructor(view: View) : super(view, R.id.ll_player_list_item, true) {
             ButterKnife.bind(this, view)
+            view.setOnClickListener {
+                var position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    mListener?.onItemClick(view, position)
+                }
+
+            }
         }
+
     }
 
 }

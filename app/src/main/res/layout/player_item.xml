@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_player_list_item"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_with_avatar_height"
+    android:background="@drawable/player_list_item_selector"
     android:minHeight="@dimen/list_item_with_avatar_height"
     android:orientation="horizontal"
     android:paddingLeft="@dimen/list_item_side_padding"

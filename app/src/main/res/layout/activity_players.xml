@@ -11,7 +11,7 @@
 
         <include layout="@layout/toolbar" />
 
-        <ListView
+        <com.woxthebox.draglistview.DragListView
             android:id="@+id/lv_player_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

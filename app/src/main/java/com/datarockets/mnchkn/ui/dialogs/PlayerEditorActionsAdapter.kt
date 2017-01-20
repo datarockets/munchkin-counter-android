@@ -14,8 +14,15 @@ import javax.inject.Inject
 class PlayerEditorActionsAdapter
 @Inject constructor() : BaseAdapter() {
 
-    val actionItemsTitles: IntArray = intArrayOf(R.string.menu_finish, R.string.menu_roll_dice)
-    val actionItemsIcons: IntArray = intArrayOf(R.drawable.ic_arrow_down, R.drawable.ic_delete)
+    val actionItemsTitles: IntArray = intArrayOf(
+            R.string.dialog_player_actions_edit_player,
+            R.string.dialog_player_actions_delete_player
+    )
+
+    val actionItemsIcons: IntArray = intArrayOf(
+            R.drawable.ic_edit,
+            R.drawable.ic_delete
+    )
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var convertView = convertView
@@ -24,7 +31,7 @@ class PlayerEditorActionsAdapter
         if (convertView != null) {
             holder = convertView.tag as ViewHolder
         } else {
-            convertView = LayoutInflater.from(parent.context).inflate(R.layout.player_action_item, null)
+            convertView = LayoutInflater.from(parent.context).inflate(R.layout.player_action_item, parent, false)
             holder = ViewHolder(convertView)
             convertView.tag = holder
         }
