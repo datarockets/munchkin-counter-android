@@ -16,6 +16,7 @@ import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.BaseActivity
 import com.datarockets.mnchkn.ui.dashboard.DashboardActivity
 import com.datarockets.mnchkn.ui.dialogs.NewPlayerDialogFragment
+import com.datarockets.mnchkn.ui.dialogs.PlayerActionsDialogFragment
 import com.datarockets.mnchkn.ui.editplayer.EditPlayerDialogFragment
 import com.datarockets.mnchkn.ui.settings.SettingsActivity
 import com.jrummyapps.android.colorpicker.ColorPickerDialogListener
@@ -86,14 +87,23 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     }
 
     @OnItemLongClick(R.id.lv_player_list)
-    fun onItemLongClick(position: Int, itemId: Long): Boolean {
-        val alertDialog = AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_player_delete_title)
-                .setMessage(R.string.dialog_player_delete_message)
-                .setPositiveButton(R.string.button_yes) { dialog, which -> presenter.deletePlayerListItem(position, itemId) }
-                .setNegativeButton(R.string.button_no) { dialog, which -> dialog.dismiss() }
-                .create()
-        alertDialog.show()
+    fun onItemLongClick(position: Int, playerId: Long): Boolean {
+        val playerActionDialogFragment = PlayerActionsDialogFragment()
+        playerActionDialogFragment.show(supportFragmentManager, "PlayerActionDialogFragment")
+//
+//        val alertDialog = AlertDialog.Builder(this)
+//        alertDialog.apply {
+//            setTitle(R.string.dialog_player_delete_title)
+//            setMessage(R.string.dialog_player_delete_message)
+//            setPositiveButton(R.string.button_yes) { dialog, which ->
+//                presenter.deletePlayerListItem(position, itemId)
+//            }
+//            setNegativeButton(R.string.button_no) { dialog, which ->
+//                dialog.dismiss()
+//            }
+//            create()
+//            show()
+//        }
         return true
     }
 
@@ -104,18 +114,20 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
 
     override fun showStartContinueDialog() {
         val startContinueDialog = AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_start_continue_game_title)
-                .setMessage(R.string.dialog_start_continue_game_message)
-                .setPositiveButton(R.string.button_continue) { dialog, which -> launchDashboard() }
-                .setNegativeButton(R.string.button_start) { dialog, which ->
-                    dialog.dismiss()
-                    presenter.setGameFinished()
-                    presenter.clearPlayersStats()
-                    presenter.clearGameSteps()
-                }
-                .setCancelable(false)
-                .create()
-        startContinueDialog.show()
+        startContinueDialog.apply {
+            setTitle(R.string.dialog_start_continue_game_title)
+            setMessage(R.string.dialog_start_continue_game_message)
+            setPositiveButton(R.string.button_continue) { dialog, which -> launchDashboard() }
+            setNegativeButton(R.string.button_start) { dialog, which ->
+                dialog.dismiss()
+                presenter.setGameFinished()
+                presenter.clearPlayersStats()
+                presenter.clearGameSteps()
+            }
+            setCancelable(false)
+            create()
+            show()
+        }
     }
 
     override fun showWarning() {

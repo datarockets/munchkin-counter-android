@@ -53,13 +53,15 @@ class PlayerEditorListAdapter
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var convertView = convertView
         val holder: ViewHolder
 
         val player = mPlayersList[position]
+
         if (convertView != null) {
             holder = convertView.tag as ViewHolder
         } else {
-            val convertView = LayoutInflater.from(parent.context)
+            convertView = LayoutInflater.from(parent.context)
                     .inflate(R.layout.player_item, parent, false)
             holder = ViewHolder(convertView)
             convertView.tag = holder
