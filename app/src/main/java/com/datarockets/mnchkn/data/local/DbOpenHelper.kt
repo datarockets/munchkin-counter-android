@@ -28,16 +28,24 @@ class DbOpenHelper
             db.execSQL("ALTER TABLE "
                     + Db.PlayerTable.TABLE_NAME + " ADD COLUMN "
                     + Db.PlayerTable.KEY_PLAYER_COLOR + " TEXT")
-            //            if (!isTableEmpty(db, TABLE_PLAYERS)) {
-            //                addColorsToUpdatedPlayers(db);
-            //            }
+//                        if (!isTableEmpty(db, TABLE_PLAYERS)) {
+//                            addColorsToUpdatedPlayers(db);
+//                        }
+        }
+        if (previousVersion > 6) {
+            db.beginTransaction()
+            db.execSQL("ALTER TABLE "
+                    + Db.PlayerTable.TABLE_NAME + " ADD COLUMN "
+                    + Db.PlayerTable.KEY_PLAYER_POSITION + " INTEGER,"
+                    + Db.PlayerTable.KEY_PLAYER_IS_PLAYING + " INTEGER")
+            db.setTransactionSuccessful()
+            db.endTransaction()
         }
     }
 
     companion object {
-
         val DATABASE_NAME = "players_db"
-        val DATABASE_VERSION = 6
+        val DATABASE_VERSION = 7
     }
 
 

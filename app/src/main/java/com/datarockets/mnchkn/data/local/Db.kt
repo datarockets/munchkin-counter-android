@@ -18,6 +18,8 @@ object Db {
         val KEY_PLAYER_STRENGTH = "strength"
         val KEY_PLAYER_COLOR = "color"
         val KEY_PLAYER_TOTAL = "total"
+        val KEY_PLAYER_POSITION = "position"
+        val KEY_PLAYER_IS_PLAYING = "is_playing"
 
         val ORDER_BY = " ORDER BY "
 
@@ -25,6 +27,7 @@ object Db {
         val ORDER_BY_LEVEL = 1
         val ORDER_BY_STRENGTH = 2
         val ORDER_BY_TOTAL = 3
+        val ORDER_BY_POSITION = 4
 
         val CREATE = "CREATE TABLE " + TABLE_NAME +
                 "(" +
@@ -32,7 +35,9 @@ object Db {
                 KEY_PLAYER_NAME + " TEXT," +
                 KEY_PLAYER_LEVEL + " INTEGER," +
                 KEY_PLAYER_STRENGTH + " INTEGER," +
-                KEY_PLAYER_COLOR + " TEXT" +
+                KEY_PLAYER_COLOR + " TEXT," +
+                KEY_PLAYER_IS_PLAYING + " INTEGER," +
+                KEY_PLAYER_POSITION + " INTEGER" +
                 ")"
 
         fun parseCursor(cursor: Cursor): Player {

@@ -66,13 +66,13 @@ class DatabaseHelper
                 Db.PlayerTable.ORDER_BY_TOTAL -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_TOTAL
             }
             val playersTotalQuery = "SELECT " +
-            Db.PlayerTable.KEY_PLAYER_ID + ", " +
-            Db.PlayerTable.KEY_PLAYER_NAME + ", " +
-            Db.PlayerTable.KEY_PLAYER_LEVEL + ", " +
-            Db.PlayerTable.KEY_PLAYER_STRENGTH + ", " +
-            Db.PlayerTable.KEY_PLAYER_COLOR + ", (" +
-            Db.PlayerTable.KEY_PLAYER_LEVEL + " + " + Db.PlayerTable.KEY_PLAYER_STRENGTH + ") AS " + Db.PlayerTable.KEY_PLAYER_TOTAL +
-            " FROM " + Db.PlayerTable.TABLE_NAME + orderByQuery + " DESC"
+                    Db.PlayerTable.KEY_PLAYER_ID + ", " +
+                    Db.PlayerTable.KEY_PLAYER_NAME + ", " +
+                    Db.PlayerTable.KEY_PLAYER_LEVEL + ", " +
+                    Db.PlayerTable.KEY_PLAYER_STRENGTH + ", " +
+                    Db.PlayerTable.KEY_PLAYER_COLOR + ", (" +
+                    Db.PlayerTable.KEY_PLAYER_LEVEL + " + " + Db.PlayerTable.KEY_PLAYER_STRENGTH + ") AS " + Db.PlayerTable.KEY_PLAYER_TOTAL +
+                    " FROM " + Db.PlayerTable.TABLE_NAME + orderByQuery + " DESC"
             val cursor = briteDb.query(playersTotalQuery)
             while (cursor.moveToNext()) {
                 subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
@@ -106,6 +106,37 @@ class DatabaseHelper
                         Db.PlayerTable.KEY_PLAYER_ID + " = ?", player.id.toString())
                 transaction.markSuccessful()
                 subscriber.onNext(player)
+                subscriber.onCompleted()
+            } finally {
+                transaction.end()
+            }
+        }
+    }
+
+    fun changePlayerPosition(fromPlayerId: Long,
+                             toPlayerId: Long): Observable<Void> {
+        return Observable.create { subscriber ->
+            val transaction = briteDb.newTransaction()
+            try {
+                val playerOne = "playerOne"
+                val playerTwo = "playerTwo"
+                val updateQuery = "UPDATE %s AS %s JOIN %s AS %s " +
+                        "ON ( %s.%s = %d AND %s.%s = %d ) " +
+                        "OR ( %s.%s = %d AND %s.%s = %d ) " +
+                        "SET %s.%s = %s.%s, %s.%s = %s.%s"
+                val formattedQuery = String.format(updateQuery,
+                        Db.PlayerTable.TABLE_NAME, playerOne,
+                        Db.PlayerTable.TABLE_NAME, playerTwo,
+                        playerOne, Db.PlayerTable.KEY_PLAYER_ID, fromPlayerId,
+                        playerTwo, Db.PlayerTable.KEY_PLAYER_ID, toPlayerId,
+                        playerOne, Db.PlayerTable.KEY_PLAYER_ID, toPlayerId,
+                        playerTwo, Db.PlayerTable.KEY_PLAYER_ID, fromPlayerId,
+                        playerOne, Db.PlayerTable.KEY_PLAYER_POSITION,
+                        playerTwo, Db.PlayerTable.KEY_PLAYER_POSITION,
+                        playerTwo, Db.PlayerTable.KEY_PLAYER_POSITION,
+                        playerOne, Db.PlayerTable.KEY_PLAYER_POSITION)
+                briteDb.execute(formattedQuery)
+                transaction.markSuccessful()
                 subscriber.onCompleted()
             } finally {
                 transaction.end()
@@ -150,12 +181,12 @@ class DatabaseHelper
     val gameSteps: Observable<GameStep>
         get() = Observable.create { subscriber ->
             val QUERY = "SELECT " +
-            Db.GameTable.KEY_GAME_PLAYER_ID + ", " +
-            Db.GameTable.KEY_GAME_PLAYER_LEVEL + ", " +
-            Db.GameTable.KEY_GAME_PLAYER_STRENGTH + ", " +
-            Db.PlayerTable.KEY_PLAYER_NAME + ", " +
-            Db.PlayerTable.KEY_PLAYER_COLOR + " FROM " + Db.GameTable.TABLE_NAME +
-            " INNER JOIN " + Db.PlayerTable.TABLE_NAME + " ON players.id = " + Db.GameTable.KEY_GAME_PLAYER_ID
+                    Db.GameTable.KEY_GAME_PLAYER_ID + ", " +
+                    Db.GameTable.KEY_GAME_PLAYER_LEVEL + ", " +
+                    Db.GameTable.KEY_GAME_PLAYER_STRENGTH + ", " +
+                    Db.PlayerTable.KEY_PLAYER_NAME + ", " +
+                    Db.PlayerTable.KEY_PLAYER_COLOR + " FROM " + Db.GameTable.TABLE_NAME +
+                    " INNER JOIN " + Db.PlayerTable.TABLE_NAME + " ON players.id = " + Db.GameTable.KEY_GAME_PLAYER_ID
             val cursor = briteDb.query(QUERY)
             while (cursor.moveToNext()) {
                 subscriber.onNext(Db.GameTable.parseCursor(cursor))
