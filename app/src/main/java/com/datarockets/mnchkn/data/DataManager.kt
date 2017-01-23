@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class DataManager
 @Inject constructor(private val mDatabaseHelper: DatabaseHelper,
-                    private val mPreferencesHelper: PreferencesHelper) {
+                    mPreferencesHelper: PreferencesHelper) {
 
     val preferencesHelper = mPreferencesHelper
 
@@ -35,6 +35,12 @@ class DataManager
         player.strengthScore = 1
         player.color = ColorUtil.generatePlayerAvatarColor()
         return mDatabaseHelper.setPlayer(player)
+    }
+
+    fun changePlayerPosition(fromPlayerId: Long,
+                             toPlayerId: Long): Observable<Void> {
+        return mDatabaseHelper.changePlayerPosition(fromPlayerId,
+                toPlayerId)
     }
 
     fun updatePlayer(player: Player): Observable<Player> {

@@ -2,14 +2,12 @@ package com.datarockets.mnchkn.ui.players
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.ColorInt
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -20,16 +18,17 @@ import com.datarockets.mnchkn.ui.base.BaseActivity
 import com.datarockets.mnchkn.ui.dashboard.DashboardActivity
 import com.datarockets.mnchkn.ui.dialogs.NewPlayerDialogFragment
 import com.datarockets.mnchkn.ui.dialogs.PlayerActionsDialogFragment
+import com.datarockets.mnchkn.ui.editplayer.EditPlayerDialogFragment
 import com.datarockets.mnchkn.ui.settings.SettingsActivity
-import com.jrummyapps.android.colorpicker.ColorPickerDialogListener
 import com.woxthebox.draglistview.DragListView
-import timber.log.Timber
 import javax.inject.Inject
 
 class PlayersListActivity : BaseActivity(), PlayersListView,
-        NewPlayerDialogFragment.AddNewPlayerDialogInterface,
-        ColorPickerDialogListener,
-        PlayerEditorListAdapter.OnItemClickListener {
+        NewPlayerDialogFragment.NewPlayerDialogListener,
+        EditPlayerDialogFragment.EditPlayerDialogListener,
+        PlayerEditorListAdapter.OnItemClickListener,
+        DragListView.DragListListener,
+        PlayerActionsDialogFragment.PlayerActionsListener {
 
     @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
     @BindView(R.id.lv_player_list) lateinit var lvPlayersList: DragListView
@@ -47,6 +46,7 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         setSupportActionBar(toolbar)
         lvPlayersList.setLayoutManager(linearLayoutManager)
         lvPlayersList.setAdapter(lvPlayerEditorListAdapter, false)
+        lvPlayersList.setDragListListener(this)
         lvPlayerEditorListAdapter.setOnItemClickListener(this)
         playersListPresenter.attachView(this)
         playersListPresenter.checkIsGameStarted()
@@ -126,23 +126,43 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         playersListPresenter.addPlayer(inputName)
     }
 
+    override fun onPlayerItemClick(position: Int) {
+        val selectedPlayerId = lvPlayerEditorListAdapter.getItemId(position)
+        val playerActionDialogFragment = PlayerActionsDialogFragment.newInstance(selectedPlayerId)
+        playerActionDialogFragment.show(supportFragmentManager, "PlayerActionDialogFragment")
+    }
+
+    override fun onItemDragStarted(position: Int) {
+
+    }
+
+    override fun onItemDragging(itemPosition: Int, x: Float, y: Float) {
+
+    }
+
+    override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
+        val playerOneId = lvPlayerEditorListAdapter.getItemId(fromPosition)
+        val playerTwoId = lvPlayerEditorListAdapter.getItemId(toPosition)
+        playersListPresenter.changePlayerPosition(playerOneId, playerTwoId)
+    }
+
+    override fun onEditPlayer(playerId: Long) {
+        val editPlayerDialogFragment = EditPlayerDialogFragment.newInstance(playerId)
+        editPlayerDialogFragment.show(supportFragmentManager, "EditPlayerDialogFragment")
+    }
+
+    override fun onDeletePlayer(playerId: Long) {
+        val position = lvPlayerEditorListAdapter.getPositionForItemId(playerId)
+        playersListPresenter.deletePlayerListItem(position, playerId)
+    }
+
+    override fun onEditedPlayer() {
+        playersListPresenter.getPlayersList()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         playersListPresenter.detachView()
-    }
-
-    override fun onColorSelected(dialogId: Int, @ColorInt color: Int) {
-        Timber.d("Color selected: " + color)
-    }
-
-    override fun onDialogDismissed(dialogId: Int) {
-
-    }
-
-    override fun onItemClick(itemView: View, position: Int) {
-        val selectedPlayerId = lvPlayerEditorListAdapter.getItemId(position)
-        val playerActionDialogFragment = PlayerActionsDialogFragment()
-        playerActionDialogFragment.show(supportFragmentManager, "PlayerActionDialogFragment")
     }
 
 }

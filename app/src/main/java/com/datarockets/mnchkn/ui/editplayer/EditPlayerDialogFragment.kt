@@ -1,6 +1,7 @@
 package com.datarockets.mnchkn.ui.editplayer
 
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
@@ -21,6 +22,7 @@ class EditPlayerDialogFragment : BottomSheetDialogFragment(), EditPlayerView {
 
     private lateinit var unbinder: Unbinder
     private var playerId: Long = 0
+    private var editPlayerDialogListener: EditPlayerDialogListener? = null
 
     @BindView(R.id.et_player_name) lateinit var etPlayerName: EditText
     @BindView(R.id.btn_update_player) lateinit var btnUpdatePlayer: Button
@@ -28,10 +30,19 @@ class EditPlayerDialogFragment : BottomSheetDialogFragment(), EditPlayerView {
 
     @Inject lateinit var editPlayerPresenter: EditPlayerPresenter
 
+    interface EditPlayerDialogListener {
+        fun onEditedPlayer()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as BaseActivity).activityComponent().inject(this)
         playerId = arguments.getLong(PLAYER_ID)
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        editPlayerDialogListener = (activity as EditPlayerDialogListener)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -52,10 +63,12 @@ class EditPlayerDialogFragment : BottomSheetDialogFragment(), EditPlayerView {
     }
 
     @OnEditorAction(R.id.et_player_name)
-    internal fun onEditorAction(actionId: Int): Boolean {
+    fun onEditorAction(actionId: Int): Boolean {
         if (EditorInfo.IME_ACTION_DONE == actionId) {
             val playerName = etPlayerName.text.toString()
             editPlayerPresenter.updatePlayerName(playerName)
+            editPlayerDialogListener?.onEditedPlayer()
+            dismiss()
             return true
         }
         return false

@@ -5,20 +5,36 @@ import android.content.Intent
 import android.os.Bundle
 import com.chyrta.onboarder.OnboarderActivity
 import com.chyrta.onboarder.OnboarderPage
+import com.datarockets.mnchkn.MunchkinApplication
 import com.datarockets.mnchkn.R
+import com.datarockets.mnchkn.injection.components.ActivityComponent
+import com.datarockets.mnchkn.injection.components.DaggerActivityComponent
+import com.datarockets.mnchkn.injection.modules.ActivityModule
 import com.datarockets.mnchkn.ui.players.PlayersListActivity
 import java.util.*
+import javax.inject.Inject
 
 class WelcomeActivity : OnboarderActivity(), WelcomeView {
 
-    lateinit var onboarderPages: MutableList<OnboarderPage>
-    lateinit var onboarderPageOne: OnboarderPage
-    lateinit var onboarderPageTwo: OnboarderPage
-    lateinit var onboarderPageThree: OnboarderPage
+    private lateinit var onboarderPages: MutableList<OnboarderPage>
+    private lateinit var onboarderPageOne: OnboarderPage
+    private lateinit var onboarderPageTwo: OnboarderPage
+    private lateinit var onboarderPageThree: OnboarderPage
+    private lateinit var mActivityComponent: ActivityComponent
+
+    @Inject lateinit var welcomePresenter: WelcomePresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mActivityComponent = DaggerActivityComponent.builder()
+                .applicationComponent(MunchkinApplication[this].mApplicationComponent)
+                .activityModule(ActivityModule(this))
+                .build()
+        mActivityComponent.inject(this)
+
+        welcomePresenter.attachView(this)
+        welcomePresenter.checkIsOnboardingSeen()
         onboarderPages = ArrayList<OnboarderPage>()
         onboarderPageOne = OnboarderPage(
                 R.string.onboarder_page1_title,
@@ -50,9 +66,15 @@ class WelcomeActivity : OnboarderActivity(), WelcomeView {
     }
 
     override fun openPlayersActivity() {
+        welcomePresenter.setOnboardingSeen()
         val intent = Intent(this, PlayersListActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        welcomePresenter.detachView()
     }
 
 }

@@ -37,6 +37,15 @@ class PlayersListPresenter
                 .subscribe { player -> mPlayersListView?.addPlayerToList(player) }
     }
 
+    fun changePlayerPosition(fromPlayerId: Long, toPlayerId: Long) {
+        mSubscription = mDataManager.changePlayerPosition(fromPlayerId, toPlayerId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+
+                }
+    }
+
     fun deletePlayerListItem(position: Int, playerId: Long) {
         mSubscription = mDataManager.deletePlayer(playerId)
                 .subscribeOn(Schedulers.io())

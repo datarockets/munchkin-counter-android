@@ -20,7 +20,7 @@ class RollDiceDialogFragment : DialogFragment() {
 
     @Inject lateinit var dice: Dice
 
-    private lateinit var unbinder: Unbinder
+    private lateinit var mUnbinder: Unbinder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +33,11 @@ class RollDiceDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        unbinder = ButterKnife.bind(this, view!!)
+        mUnbinder = ButterKnife.bind(this, view!!)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        unbinder.unbind()
+        mUnbinder.unbind()
     }
 }
