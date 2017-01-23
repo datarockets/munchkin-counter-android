@@ -24,7 +24,7 @@ class PlayerEditorListAdapter
     }
 
     interface OnItemClickListener {
-        fun onItemClick(itemView: View, position: Int)
+        fun onPlayerItemClick(position: Int)
     }
 
     var mListener: OnItemClickListener? = null
@@ -60,7 +60,7 @@ class PlayerEditorListAdapter
     }
 
     fun deletePlayer(position: Int) {
-        itemList.removeAt(position)
+        removeItem(position)
     }
 
     fun updatePlayer(position: Int, player: Player) {
@@ -71,16 +71,16 @@ class PlayerEditorListAdapter
         return itemList[position].id
     }
 
-    inner class ViewHolder : DragItemAdapter.ViewHolder {
+    inner class ViewHolder(view: View) : DragItemAdapter.ViewHolder(view, R.id.ll_player_list_item, true) {
         @BindView(R.id.iv_player_color) lateinit var ivPlayerImage: ImageView
         @BindView(R.id.tv_player_name) lateinit var tvPlayerName: TextView
 
-        constructor(view: View) : super(view, R.id.ll_player_list_item, true) {
+        init {
             ButterKnife.bind(this, view)
             view.setOnClickListener {
-                var position = adapterPosition
+                val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    mListener?.onItemClick(view, position)
+                    mListener?.onPlayerItemClick(position)
                 }
 
             }
