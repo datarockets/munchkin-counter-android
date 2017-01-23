@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'io.fabric'
 apply from: "$rootProject.projectDir/buildsystem/config.gradle"
 apply from: "$rootProject.projectDir/buildsystem/library.gradle"
 
@@ -67,6 +68,9 @@ dependencies {
     kapt "${library.dagger_compiler}"
     compile "${library.butterknife}"
     kapt "${library.butterknife_compiler}"
+    compile("${library.crashlytics}") {
+        transitive = true
+    }
     testCompile "${library.junit}"
     testCompile "${library.mockito}"
 }

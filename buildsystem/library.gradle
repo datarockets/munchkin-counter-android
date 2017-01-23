@@ -13,6 +13,7 @@ ext.version = [
         timber          : "4.5.0",
         butterknife     : "8.0.1",
         dagger          : "2.6",
+        crashlytics     : "2.6.6",
         mockito         : "2.0.52-beta",
         junit           : "4.12"
 ]
@@ -40,6 +41,7 @@ ext.library = [
         butterknife_compiler: "com.jakewharton:butterknife-compiler:${version.butterknife}",
         dagger              : "com.google.dagger:dagger:${version.dagger}",
         dagger_compiler     : "com.google.dagger:dagger-compiler:${version.dagger}",
+        crashlytics         : "com.crashlytics.sdk.android:crashlytics:${version.crashlytics}@aar",
         mockito             : "org.mockito:mockito-core:${version.mockito}",
         junit               : "junit:junit:${version.junit}"
 ]
