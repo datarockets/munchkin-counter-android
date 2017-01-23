@@ -17,16 +17,15 @@ android {
         versionCode buildVersionCode()
         versionName buildVersionName()
         vectorDrawables.useSupportLibrary = true
+        buildConfigField("String", "MIXPANEL_API_KEY", "\"" + MIXPANEL_API_KEY + "\"")
     }
 
     buildTypes {
         debug {
             testCoverageEnabled true
-            buildConfigField("String", "MIXPANEL_API_KEY", "\"" + MIXPANEL_API_KEY +"\"")
         }
         release {
             minifyEnabled true
-            buildConfigField("String", "MIXPANEL_API_KEY", "\"" + MIXPANEL_API_KEY +"\"")
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
