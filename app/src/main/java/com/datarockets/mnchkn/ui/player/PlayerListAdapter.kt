@@ -36,6 +36,7 @@ class PlayerListAdapter
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var convertView = convertView
 
         val holder: ViewHolder
         val player = mPlayers[position]
@@ -43,7 +44,7 @@ class PlayerListAdapter
         if (convertView != null) {
             holder = convertView.tag as ViewHolder
         } else {
-            val convertView = LayoutInflater.from(parent.context)
+            convertView = LayoutInflater.from(parent.context)
                     .inflate(R.layout.player_list_item, parent, false)
             holder = ViewHolder(convertView)
             convertView!!.tag = holder
