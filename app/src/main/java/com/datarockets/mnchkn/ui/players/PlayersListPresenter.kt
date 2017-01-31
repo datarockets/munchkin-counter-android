@@ -18,7 +18,7 @@ class PlayersListPresenter
     }
 
     fun checkIsEnoughPlayers() {
-        mSubscription = mDataManager.players
+        mSubscription = mDataManager.getPlayers()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { players ->
@@ -37,8 +37,8 @@ class PlayersListPresenter
                 .subscribe { player -> mPlayersListView?.addPlayerToList(player) }
     }
 
-    fun changePlayerPosition(fromPlayerId: Long, toPlayerId: Long) {
-        mSubscription = mDataManager.changePlayerPosition(fromPlayerId, toPlayerId)
+    fun changePlayerPosition(playerId: Long, position: Int) {
+        mSubscription = mDataManager.changePlayerPosition(playerId, position)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -83,7 +83,7 @@ class PlayersListPresenter
     }
 
     fun getPlayersList() {
-        mSubscription = mDataManager.players
+        mSubscription = mDataManager.getPlayers()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { players -> mPlayersListView?.setPlayersList(players) }

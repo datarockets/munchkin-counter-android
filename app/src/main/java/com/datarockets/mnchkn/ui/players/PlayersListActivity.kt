@@ -44,13 +44,17 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         setContentView(R.layout.activity_players)
         ButterKnife.bind(this)
         setSupportActionBar(toolbar)
-        lvPlayersList.setLayoutManager(linearLayoutManager)
-        lvPlayersList.setAdapter(lvPlayerEditorListAdapter, false)
-        lvPlayersList.setDragListListener(this)
+        lvPlayersList.apply {
+            setLayoutManager(linearLayoutManager)
+            setAdapter(lvPlayerEditorListAdapter, false)
+            setDragListListener(this@PlayersListActivity)
+        }
         lvPlayerEditorListAdapter.setOnItemClickListener(this)
-        playersListPresenter.attachView(this)
-        playersListPresenter.checkIsGameStarted()
-        playersListPresenter.getPlayersList()
+        playersListPresenter.apply {
+            attachView(this@PlayersListActivity)
+            checkIsGameStarted()
+            getPlayersList()
+        }
     }
 
     override fun onResume() {
@@ -93,16 +97,17 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     }
 
     override fun showStartContinueDialog() {
-        val startContinueDialog = AlertDialog.Builder(this)
-        startContinueDialog.apply {
+        AlertDialog.Builder(this).apply {
             setTitle(R.string.dialog_start_continue_game_title)
             setMessage(R.string.dialog_start_continue_game_message)
             setPositiveButton(R.string.button_continue) { dialog, which -> launchDashboard() }
             setNegativeButton(R.string.button_start) { dialog, which ->
                 dialog.dismiss()
-                playersListPresenter.setGameFinished()
-                playersListPresenter.clearPlayersStats()
-                playersListPresenter.clearGameSteps()
+                playersListPresenter.apply {
+                    setGameFinished()
+                    clearPlayersStats()
+                    clearGameSteps()
+                }
             }
             setCancelable(false)
             create()
@@ -143,7 +148,10 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
         val playerOneId = lvPlayerEditorListAdapter.getItemId(fromPosition)
         val playerTwoId = lvPlayerEditorListAdapter.getItemId(toPosition)
-        playersListPresenter.changePlayerPosition(playerOneId, playerTwoId)
+        playersListPresenter.apply {
+            changePlayerPosition(playerOneId, toPosition)
+            changePlayerPosition(playerTwoId, fromPosition)
+        }
     }
 
     override fun onEditPlayer(playerId: Long) {
