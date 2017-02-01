@@ -12,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DataManager
+open class DataManager
 @Inject constructor(private val mDatabaseHelper: DatabaseHelper,
                     mPreferencesHelper: PreferencesHelper) {
 
@@ -22,15 +22,15 @@ class DataManager
         return mDatabaseHelper.getPlayer(playerId)
     }
 
-    fun getPlayingPlayers(): Observable<List<Player>> {
+    open fun getPlayingPlayers(): Observable<List<Player>> {
         return mDatabaseHelper.getPlayingPlayers().toList()
     }
 
-    fun getPlayers(): Observable<List<Player>> {
+    open fun getPlayers(): Observable<List<Player>> {
         return mDatabaseHelper.getPlayers(Db.PlayerTable.ORDER_BY_POSITION).toList()
     }
 
-    fun getPlayers(sortType: Int): Observable<List<Player>> {
+    open fun getPlayers(sortType: Int): Observable<List<Player>> {
         return mDatabaseHelper.getPlayers(sortType).toList()
     }
 
