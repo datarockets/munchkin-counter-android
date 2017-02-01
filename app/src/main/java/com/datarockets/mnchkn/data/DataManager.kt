@@ -1,6 +1,7 @@
 package com.datarockets.mnchkn.data
 
 import com.datarockets.mnchkn.data.local.DatabaseHelper
+import com.datarockets.mnchkn.data.local.Db
 import com.datarockets.mnchkn.data.local.PreferencesHelper
 import com.datarockets.mnchkn.data.models.GameStep
 import com.datarockets.mnchkn.data.models.Player
@@ -21,8 +22,13 @@ class DataManager
         return mDatabaseHelper.getPlayer(playerId)
     }
 
-    val players: Observable<List<Player>>
-        get() = mDatabaseHelper.players.toList()
+    fun getPlayingPlayers(): Observable<List<Player>> {
+        return mDatabaseHelper.getPlayingPlayers().toList()
+    }
+
+    fun getPlayers(): Observable<List<Player>> {
+        return mDatabaseHelper.getPlayers(Db.PlayerTable.ORDER_BY_POSITION).toList()
+    }
 
     fun getPlayers(sortType: Int): Observable<List<Player>> {
         return mDatabaseHelper.getPlayers(sortType).toList()
@@ -37,10 +43,9 @@ class DataManager
         return mDatabaseHelper.setPlayer(player)
     }
 
-    fun changePlayerPosition(fromPlayerId: Long,
-                             toPlayerId: Long): Observable<Void> {
-        return mDatabaseHelper.changePlayerPosition(fromPlayerId,
-                toPlayerId)
+    fun changePlayerPosition(playerId: Long,
+                             position: Int): Observable<Void> {
+        return mDatabaseHelper.changePlayerPosition(playerId, position)
     }
 
     fun updatePlayer(player: Player): Observable<Player> {
