@@ -53,9 +53,6 @@ class DatabaseHelper
         }
     }
 
-    val players: Observable<Player>
-        get() = getPlayers(Db.PlayerTable.ORDER_BY_ID)
-
     fun getPlayers(orderValue: Int): Observable<Player> {
         return Observable.create { subscriber ->
             var orderByQuery: String? = null
@@ -64,6 +61,7 @@ class DatabaseHelper
                 Db.PlayerTable.ORDER_BY_LEVEL -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_LEVEL
                 Db.PlayerTable.ORDER_BY_STRENGTH -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_STRENGTH
                 Db.PlayerTable.ORDER_BY_TOTAL -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_TOTAL
+                Db.PlayerTable.ORDER_BY_POSITION -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_POSITION
             }
             val playersTotalQuery = "SELECT " +
                     Db.PlayerTable.KEY_PLAYER_ID + ", " +
@@ -113,29 +111,17 @@ class DatabaseHelper
         }
     }
 
-    fun changePlayerPosition(fromPlayerId: Long,
-                             toPlayerId: Long): Observable<Void> {
+    fun changePlayerPosition(playerId: Long,
+                             position: Int): Observable<Void> {
         return Observable.create { subscriber ->
             val transaction = briteDb.newTransaction()
             try {
-                val playerOne = "playerOne"
-                val playerTwo = "playerTwo"
-                val updateQuery = "UPDATE %s AS %s JOIN %s AS %s " +
-                        "ON ( %s.%s = %d AND %s.%s = %d ) " +
-                        "OR ( %s.%s = %d AND %s.%s = %d ) " +
-                        "SET %s.%s = %s.%s, %s.%s = %s.%s"
-                val formattedQuery = String.format(updateQuery,
-                        Db.PlayerTable.TABLE_NAME, playerOne,
-                        Db.PlayerTable.TABLE_NAME, playerTwo,
-                        playerOne, Db.PlayerTable.KEY_PLAYER_ID, fromPlayerId,
-                        playerTwo, Db.PlayerTable.KEY_PLAYER_ID, toPlayerId,
-                        playerOne, Db.PlayerTable.KEY_PLAYER_ID, toPlayerId,
-                        playerTwo, Db.PlayerTable.KEY_PLAYER_ID, fromPlayerId,
-                        playerOne, Db.PlayerTable.KEY_PLAYER_POSITION,
-                        playerTwo, Db.PlayerTable.KEY_PLAYER_POSITION,
-                        playerTwo, Db.PlayerTable.KEY_PLAYER_POSITION,
-                        playerOne, Db.PlayerTable.KEY_PLAYER_POSITION)
-                briteDb.execute(formattedQuery)
+                val contentValues = ContentValues().apply {
+                    put(Db.PlayerTable.KEY_PLAYER_POSITION, position)
+                }
+                briteDb.update(Db.PlayerTable.TABLE_NAME,
+                        contentValues,
+                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
                 transaction.markSuccessful()
                 subscriber.onCompleted()
             } finally {
