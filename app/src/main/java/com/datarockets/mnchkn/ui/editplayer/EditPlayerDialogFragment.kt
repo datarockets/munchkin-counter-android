@@ -31,7 +31,7 @@ class EditPlayerDialogFragment : BottomSheetDialogFragment(), EditPlayerView {
     @Inject lateinit var editPlayerPresenter: EditPlayerPresenter
 
     interface EditPlayerDialogListener {
-        fun onEditedPlayer()
+        fun onEditedPlayerName(playerId: Long, playerName: String)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,17 +58,13 @@ class EditPlayerDialogFragment : BottomSheetDialogFragment(), EditPlayerView {
 
     @OnClick(R.id.btn_update_player)
     fun onUpdatePlayerClick() {
-        editPlayerPresenter.updatePlayer()
-        dismiss()
+        editPlayerPresenter.updatePlayerName(playerId, etPlayerName.text.toString())
     }
 
     @OnEditorAction(R.id.et_player_name)
     fun onEditorAction(actionId: Int): Boolean {
         if (EditorInfo.IME_ACTION_DONE == actionId) {
-            val playerName = etPlayerName.text.toString()
-            editPlayerPresenter.updatePlayerName(playerName)
-            editPlayerDialogListener?.onEditedPlayer()
-            dismiss()
+            editPlayerPresenter.updatePlayerName(playerId, etPlayerName.text.toString())
             return true
         }
         return false
@@ -82,6 +78,11 @@ class EditPlayerDialogFragment : BottomSheetDialogFragment(), EditPlayerView {
         val drawable = TextDrawable.builder()
                 .buildRound(capitalizedPlayerFirstLetter, color)
         ivPlayerColor.setImageDrawable(drawable)
+    }
+
+    override fun hideEditPlayerDialog(playerId: Long, playerName: String) {
+        editPlayerDialogListener?.onEditedPlayerName(playerId, playerName)
+        dismiss()
     }
 
     override fun onDestroyView() {

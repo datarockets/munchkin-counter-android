@@ -1,7 +1,6 @@
 package com.datarockets.mnchkn.ui.editplayer
 
 import com.datarockets.mnchkn.data.DataManager
-import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.Presenter
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -13,7 +12,6 @@ class EditPlayerPresenter
 
     private var mEditPlayerView: EditPlayerView? = null
     private var mSubscription: Subscription? = null
-    private lateinit var mPlayer: Player
 
     override fun attachView(mvpView: EditPlayerView) {
         mEditPlayerView = mvpView
@@ -24,24 +22,18 @@ class EditPlayerPresenter
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { player ->
-                    mPlayer = player
-                    mEditPlayerView?.showPlayerInformation(mPlayer.name!!, mPlayer.color!!)
+                    mEditPlayerView?.showPlayerInformation(player.name!!, player.color!!)
                 }
     }
 
-    fun updatePlayerName(playerName: String) {
-        mPlayer.name = playerName
-    }
-
-    fun updatePlayerColor() {
-
-    }
-
-    fun updatePlayer() {
-        mSubscription = mDataManager.updatePlayer(mPlayer)
+    fun updatePlayerName(playerId: Long, playerName: String) {
+        mSubscription = mDataManager.updatePlayerName(playerId, playerName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{}
+                .doOnCompleted {
+                    mEditPlayerView?.hideEditPlayerDialog(playerId, playerName)
+                }
+                .subscribe()
     }
 
     override fun detachView() {
