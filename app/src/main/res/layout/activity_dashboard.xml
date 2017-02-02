@@ -45,7 +45,7 @@
                 android:layout_alignParentTop="true" />
 
             <Button
-                android:id="@+id/btn_next_step"
+                android:id="@+id/btn_next_player"
                 android:layout_alignParentBottom="true"
                 android:text="@string/button.next_step"
                 android:layout_width="match_parent"

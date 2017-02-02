@@ -22,16 +22,15 @@ import com.datarockets.mnchkn.ui.player.PlayerListAdapter
 import com.datarockets.mnchkn.ui.result.GameResultActivity
 import javax.inject.Inject
 
-class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.PlayerFragmentCallback {
+class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.OnScoresChangedListener {
 
     @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
     @BindView(R.id.lv_player_list) lateinit var lvPlayerList: ListView
-    @BindView(R.id.btn_next_step) lateinit var btnNextStep: Button
+    @BindView(R.id.btn_next_player) lateinit var btnNextStep: Button
 
     @Inject lateinit var lvPlayerListAdapter: PlayerListAdapter
     @Inject lateinit var presenter: DashboardPresenter
-
-    lateinit var playerFragment: PlayerFragment
+    private lateinit var playerFragment: PlayerFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +40,16 @@ class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.PlayerFr
         setSupportActionBar(toolbar)
         lvPlayerList.adapter = lvPlayerListAdapter
         playerFragment = supportFragmentManager.findFragmentById(R.id.fragment_player) as PlayerFragment
-        presenter.attachView(this)
-        presenter.checkIsScreenShouldBeOn()
+        presenter.apply {
+            attachView(this@DashboardActivity)
+            checkIsScreenShouldBeOn()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         trackWithProperties("Current activity", "Activity name", "DashboardActivity")
-        presenter.getPlayers()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.detachView()
+        presenter.getPlayingPlayers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -64,11 +60,7 @@ class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.PlayerFr
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_finish_game -> showConfirmFinishGameDialog()
-            R.id.item_roll_dice -> {
-                showRollDiceDialog()
-                return super.onOptionsItemSelected(item)
-            }
-            else -> return super.onOptionsItemSelected(item)
+            R.id.item_roll_dice -> showRollDiceDialog()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -81,18 +73,22 @@ class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.PlayerFr
     }
 
     override fun setPlayers(players: List<Player>) {
-        lvPlayerListAdapter.addPlayers(players)
-        lvPlayerList.setSelection(0)
-        lvPlayerList.setItemChecked(0, true)
+        lvPlayerListAdapter.setPlayers(players)
+        lvPlayerList.apply {
+            setSelection(0)
+            setItemChecked(0, true)
+        }
     }
 
     override fun showConfirmFinishGameDialog() {
-        val confirmFinishGameDialog = AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_finish_game_title)
-                .setMessage(R.string.dialog_finish_game_message)
-                .setPositiveButton(R.string.button_yes) { dialog, which -> finishGame() }
-                .setNegativeButton(R.string.button_no) { dialog, which -> dialog.dismiss() }
-        confirmFinishGameDialog.create().show()
+        AlertDialog.Builder(this).apply {
+            setTitle(R.string.dialog_finish_game_title)
+            setMessage(R.string.dialog_finish_game_message)
+            setPositiveButton(R.string.button_yes) { dialog, which -> finishGame() }
+            setNegativeButton(R.string.button_no) { dialog, which -> dialog.dismiss() }
+            create()
+            show()
+        }
     }
 
     override fun showRollDiceDialog() {
@@ -108,37 +104,45 @@ class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.PlayerFr
     }
 
     override fun keepScreenOn(keepActive: Boolean) {
-        if (keepActive) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        } else {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        val keepScreenOnFlag = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        window.apply {
+            if (keepActive) {
+                addFlags(keepScreenOnFlag)
+            } else {
+                clearFlags(keepScreenOnFlag)
+            }
         }
     }
 
-    @OnClick(R.id.btn_next_step)
-    fun nextStep() {
+    @OnClick(R.id.btn_next_player)
+    fun nextPlayer() {
         var position = lvPlayerList.checkedItemPosition
         if (position == lvPlayerList.count - 1) {
             lvPlayerList.setItemChecked(0, true)
             lvPlayerList.setSelection(0)
-//            position = 0
+            position = 0
         } else {
             position++
             lvPlayerList.setItemChecked(position, true)
             lvPlayerList.setSelection(position)
         }
-        //        playerFragment.loadPlayerScores(lvPlayerListAdapter.getItem(position), position);
+        playerFragment.loadPlayerScores(lvPlayerListAdapter.getItemId(position), position)
     }
 
     @OnItemClick(R.id.lv_player_list)
     fun onItemClick(position: Int) {
         lvPlayerList.setItemChecked(position, true)
-        //        playerFragment.loadPlayerScores(lvPlayerListAdapter.getItem(position), position);
+        lvPlayerList.setSelection(position)
+        playerFragment.loadPlayerScores(lvPlayerListAdapter.getItemId(position), position)
     }
 
-    override fun onScoreChanged(player: Player, index: Int) {
-        presenter.updatePlayerInformation(player, index)
-        presenter.insertStep(player)
+    override fun onScoresChanged(playerPosition: Int, playerLevel: Int, playerStrength: Int) {
+        lvPlayerListAdapter.updatePlayerScores(playerPosition, playerLevel, playerStrength)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
     }
 
 }
