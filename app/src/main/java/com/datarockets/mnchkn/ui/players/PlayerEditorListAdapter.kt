@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
@@ -24,13 +25,22 @@ class PlayerEditorListAdapter
     }
 
     interface OnItemClickListener {
-        fun onPlayerItemClick(position: Int)
+        fun onPlayerItemClick(playerId: Long)
     }
 
-    var mListener: OnItemClickListener? = null
+    interface OnItemCheckboxClickListener {
+        fun onPlayerItemCheckboxClick(playerId: Long, isPlaying: Boolean)
+    }
+
+    var mClickListener: OnItemClickListener? = null
+    var mCheckboxClickListener: OnItemCheckboxClickListener? = null
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
-        mListener = listener
+        mClickListener = listener
+    }
+
+    fun setOnItemCheckboxClickListener(listener: OnItemCheckboxClickListener) {
+        mCheckboxClickListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -49,6 +59,7 @@ class PlayerEditorListAdapter
                 .buildRound(capitalizedPlayerFirstLetter, color)
         holder?.ivPlayerImage?.setImageDrawable(drawable)
         holder?.tvPlayerName?.text = player.name
+        holder?.cbIsPlaying?.isChecked = player.playing
     }
 
     fun addPlayer(player: Player) {
@@ -59,12 +70,15 @@ class PlayerEditorListAdapter
         itemList = players
     }
 
-    fun deletePlayer(position: Int) {
+    fun deletePlayer(playerId: Long) {
+        val position = getPositionForItemId(playerId)
         removeItem(position)
     }
 
-    fun updatePlayer(position: Int, player: Player) {
-        itemList[position] = player
+    fun updatePlayerName(playerId: Long, playerName: String) {
+        val position = getPositionForItemId(playerId)
+        itemList[position].name = playerName
+        notifyItemChanged(position)
     }
 
     override fun getItemId(position: Int): Long {
@@ -74,15 +88,23 @@ class PlayerEditorListAdapter
     inner class ViewHolder(view: View) : DragItemAdapter.ViewHolder(view, R.id.ll_player_list_item, true) {
         @BindView(R.id.iv_player_color) lateinit var ivPlayerImage: ImageView
         @BindView(R.id.tv_player_name) lateinit var tvPlayerName: TextView
+        @BindView(R.id.cb_is_playing) lateinit var cbIsPlaying: CheckBox
 
         init {
             ButterKnife.bind(this, view)
             view.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    mListener?.onPlayerItemClick(position)
+                    val playerId = getItemId(position)
+                    mClickListener?.onPlayerItemClick(playerId)
                 }
-
+            }
+            cbIsPlaying.setOnCheckedChangeListener { compoundButton, b ->
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val playerId = getItemId(position)
+                    mCheckboxClickListener?.onPlayerItemCheckboxClick(playerId, b)
+                }
             }
         }
 
