@@ -53,6 +53,21 @@ class DatabaseHelper
         }
     }
 
+    fun getPlayingPlayers() : Observable<Player> {
+        return Observable.create { subscriber ->
+            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s",
+                    Db.PlayerTable.TABLE_NAME,
+                    Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
+                    Db.PlayerTable.KEY_PLAYER_POSITION)
+            val cursor = briteDb.query(query)
+            while (cursor.moveToNext()) {
+                subscriber.onNext((Db.PlayerTable.parseCursor(cursor)))
+            }
+            cursor.close()
+            subscriber.onCompleted()
+        }
+    }
+
     fun getPlayers(orderValue: Int): Observable<Player> {
         return Observable.create { subscriber ->
             var orderByQuery: String? = null
@@ -63,14 +78,7 @@ class DatabaseHelper
                 Db.PlayerTable.ORDER_BY_TOTAL -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_TOTAL
                 Db.PlayerTable.ORDER_BY_POSITION -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_POSITION
             }
-            val playersTotalQuery = "SELECT " +
-                    Db.PlayerTable.KEY_PLAYER_ID + ", " +
-                    Db.PlayerTable.KEY_PLAYER_NAME + ", " +
-                    Db.PlayerTable.KEY_PLAYER_LEVEL + ", " +
-                    Db.PlayerTable.KEY_PLAYER_STRENGTH + ", " +
-                    Db.PlayerTable.KEY_PLAYER_COLOR + ", (" +
-                    Db.PlayerTable.KEY_PLAYER_LEVEL + " + " + Db.PlayerTable.KEY_PLAYER_STRENGTH + ") AS " + Db.PlayerTable.KEY_PLAYER_TOTAL +
-                    " FROM " + Db.PlayerTable.TABLE_NAME + orderByQuery + " DESC"
+            val playersTotalQuery = "SELECT * FROM " + Db.PlayerTable.TABLE_NAME + orderByQuery + " DESC"
             val cursor = briteDb.query(playersTotalQuery)
             while (cursor.moveToNext()) {
                 subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
@@ -94,16 +102,53 @@ class DatabaseHelper
         }
     }
 
-    fun updatePlayer(player: Player): Observable<Player> {
+    fun updatePlayerName(playerId: Long, playerName: String): Observable<Void> {
         return Observable.create { subscriber ->
             val transaction = briteDb.newTransaction()
             try {
-                val contentValues = Db.PlayerTable.toContentValues(player)
+                val contentValues = ContentValues().apply {
+                    put(Db.PlayerTable.KEY_PLAYER_NAME, playerName)
+                }
                 briteDb.update(Db.PlayerTable.TABLE_NAME,
                         contentValues,
-                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", player.id.toString())
+                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
                 transaction.markSuccessful()
-                subscriber.onNext(player)
+                subscriber.onCompleted()
+            } finally {
+                transaction.end()
+            }
+        }
+    }
+
+    fun updatePlayerScores(playerId: Long, levelScore: Int, strengthScore: Int): Observable<Void> {
+        return Observable.create { subscriber ->
+            val transaction = briteDb.newTransaction()
+            try {
+                val contentValues = ContentValues().apply {
+                    put(Db.PlayerTable.KEY_PLAYER_LEVEL, levelScore)
+                    put(Db.PlayerTable.KEY_PLAYER_STRENGTH, strengthScore)
+                }
+                briteDb.update(Db.PlayerTable.TABLE_NAME,
+                        contentValues,
+                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
+                transaction.markSuccessful()
+                subscriber.onCompleted()
+            } finally {
+                transaction.end()
+            }
+        }
+    }
+
+    fun markPlayerPlaying(playerId: Long, isPlaying: Boolean): Observable<Void> {
+        return Observable.create { subscriber ->
+            val transaction = briteDb.newTransaction()
+            try {
+                val contentValues = ContentValues()
+                contentValues.put(Db.PlayerTable.KEY_PLAYER_IS_PLAYING, isPlaying)
+                briteDb.update(Db.PlayerTable.TABLE_NAME,
+                        contentValues,
+                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
+                transaction.markSuccessful()
                 subscriber.onCompleted()
             } finally {
                 transaction.end()

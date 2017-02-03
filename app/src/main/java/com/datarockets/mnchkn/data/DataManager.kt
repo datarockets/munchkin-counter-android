@@ -48,8 +48,16 @@ open class DataManager
         return mDatabaseHelper.changePlayerPosition(playerId, position)
     }
 
-    fun updatePlayer(player: Player): Observable<Player> {
-        return mDatabaseHelper.updatePlayer(player)
+    fun setPlayerPlaying(playerId: Long, isPlaying: Boolean): Observable<Void> {
+        return mDatabaseHelper.markPlayerPlaying(playerId, isPlaying)
+    }
+
+    fun updatePlayerName(playerId: Long, playerName: String): Observable<Void> {
+        return mDatabaseHelper.updatePlayerName(playerId, playerName)
+    }
+
+    fun updatePlayerScores(playerId: Long, levelScore: Int, strengthScore: Int): Observable<Void> {
+        return mDatabaseHelper.updatePlayerScores(playerId, levelScore, strengthScore)
     }
 
     fun deletePlayer(playerId: Long): Observable<Void> {
