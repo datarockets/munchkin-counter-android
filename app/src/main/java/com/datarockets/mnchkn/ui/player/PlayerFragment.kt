@@ -12,15 +12,11 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.Unbinder
 import com.datarockets.mnchkn.R
-import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.BaseActivity
 import com.datarockets.mnchkn.views.fonts.MunchkinTextView
 import javax.inject.Inject
 
 class PlayerFragment : Fragment(), PlayerView {
-
-    private val mPlayerId: Int = 0
-    private val mPosition: Int = 0
 
     @BindView(R.id.btn_level_score_up) lateinit var btnLevelScoreUp: ImageButton
     @BindView(R.id.btn_level_score_down) lateinit var btnLevelScoreDown: ImageButton
@@ -32,23 +28,23 @@ class PlayerFragment : Fragment(), PlayerView {
 
     @Inject lateinit var presenter: PlayerPresenter
 
-    private lateinit var callback: PlayerFragmentCallback
     private lateinit var unbinder: Unbinder
 
-    interface PlayerFragmentCallback {
-        fun onScoreChanged(player: Player, index: Int)
+    private var listener: OnScoresChangedListener? = null
+    private var mPlayerPosition = 0
+
+    interface OnScoresChangedListener {
+        fun onScoresChanged(playerPosition: Int, playerLevel: Int, strengthScore: Int)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as BaseActivity).activityComponent().inject(this)
-        //        mPlayerId = getArguments().getLong(PLAYER_ID, -1);
-        //        mPosition = getArguments().getInt(POSITION, 0);
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        callback = activity as PlayerFragmentCallback
+        listener = (activity as OnScoresChangedListener)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, bundle: Bundle?): View? {
@@ -59,7 +55,6 @@ class PlayerFragment : Fragment(), PlayerView {
         super.onViewCreated(view, savedInstanceState)
         unbinder = ButterKnife.bind(this, view!!)
         presenter.attachView(this)
-        presenter.loadPlayerScores(mPlayerId)
     }
 
     @OnClick(R.id.btn_level_score_up)
@@ -86,9 +81,15 @@ class PlayerFragment : Fragment(), PlayerView {
         tvPlayerName.text = playerName
     }
 
-    override fun showPlayerScores(levelScore: Int, strengthScore: Int) {
-        tvLevelScore.text = levelScore.toString()
-        tvStrengthScore.text = strengthScore.toString()
+    override fun showPlayerScores(levelScore: String, strengthScore: String) {
+        tvLevelScore.text = levelScore
+        tvStrengthScore.text = strengthScore
+        listener?.onScoresChanged(mPlayerPosition, levelScore.toInt(), strengthScore.toInt())
+    }
+
+    fun loadPlayerScores(playerId: Long, playerPosition: Int) {
+        presenter.loadPlayerScores(playerId)
+        mPlayerPosition = playerPosition
     }
 
     override fun onDestroyView() {
@@ -97,18 +98,4 @@ class PlayerFragment : Fragment(), PlayerView {
         unbinder.unbind()
     }
 
-    companion object {
-
-        private val PLAYER_ID = "player_id"
-        private val POSITION = "position"
-
-        fun newInstance(playerId: Long, position: Int): PlayerFragment {
-            val args = Bundle()
-            args.putLong(PLAYER_ID, playerId)
-            args.putInt(POSITION, position)
-            val fragment = PlayerFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
 }

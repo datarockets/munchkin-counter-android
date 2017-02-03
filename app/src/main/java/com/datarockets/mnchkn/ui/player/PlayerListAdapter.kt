@@ -16,10 +16,16 @@ import javax.inject.Inject
 class PlayerListAdapter
 @Inject constructor() : BaseAdapter() {
 
-    private val mPlayers: MutableList<Player> = ArrayList()
+    private var mPlayers: List<Player> = ArrayList()
 
-    fun addPlayers(players: List<Player>) {
-        mPlayers.addAll(players)
+    fun setPlayers(players: List<Player>) {
+        mPlayers = players
+        notifyDataSetChanged()
+    }
+
+    fun updatePlayerScores(playerPosition: Int, levelScore: Int, strengthScore: Int) {
+        mPlayers[playerPosition].levelScore = levelScore
+        mPlayers[playerPosition].strengthScore = strengthScore
         notifyDataSetChanged()
     }
 
@@ -31,8 +37,8 @@ class PlayerListAdapter
         return mPlayers[position]
     }
 
-    override fun getItemId(i: Int): Long {
-        return mPlayers[i].id
+    override fun getItemId(position: Int): Long {
+        return mPlayers[position].id
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -53,7 +59,7 @@ class PlayerListAdapter
         holder.tvPlayerName.text = player.name
         holder.tvPlayerLevelScore.text = player.levelScore.toString()
         holder.tvPlayerStrengthScore.text = player.strengthScore.toString()
-        return convertView!!
+        return convertView
     }
 
     internal class ViewHolder(view: View) {
