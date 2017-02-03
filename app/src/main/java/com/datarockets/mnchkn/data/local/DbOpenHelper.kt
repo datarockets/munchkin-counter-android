@@ -24,22 +24,9 @@ class DbOpenHelper
     }
 
     override fun onUpgrade(db: SQLiteDatabase, previousVersion: Int, newVersion: Int) {
-        if (previousVersion > 1) {
-            db.execSQL("ALTER TABLE "
-                    + Db.PlayerTable.TABLE_NAME + " ADD COLUMN "
-                    + Db.PlayerTable.KEY_PLAYER_COLOR + " TEXT")
-//                        if (!isTableEmpty(db, TABLE_PLAYERS)) {
-//                            addColorsToUpdatedPlayers(db);
-//                        }
-        }
-        if (previousVersion > 6) {
-            db.beginTransaction()
-            db.execSQL("ALTER TABLE "
-                    + Db.PlayerTable.TABLE_NAME + " ADD COLUMN "
-                    + Db.PlayerTable.KEY_PLAYER_POSITION + " INTEGER,"
-                    + Db.PlayerTable.KEY_PLAYER_IS_PLAYING + " INTEGER")
-            db.setTransactionSuccessful()
-            db.endTransaction()
+        when (previousVersion) {
+            1 -> addColorColumnToPlayersTable(db)
+            6 -> addPositionIsPlayingColumnToPlayersTable(db)
         }
     }
 
@@ -48,5 +35,26 @@ class DbOpenHelper
         val DATABASE_VERSION = 7
     }
 
+    fun addPositionIsPlayingColumnToPlayersTable(db: SQLiteDatabase) {
+        db.beginTransaction()
+        db.execSQL("ALTER TABLE "
+                + Db.PlayerTable.TABLE_NAME + " ADD COLUMN "
+                + Db.PlayerTable.KEY_PLAYER_POSITION + " INTEGER,"
+                + Db.PlayerTable.KEY_PLAYER_IS_PLAYING + " INTEGER")
+        db.setTransactionSuccessful()
+        db.endTransaction()
+    }
+
+    fun addColorColumnToPlayersTable(db: SQLiteDatabase) {
+        db.beginTransaction()
+        db.execSQL("ALTER TABLE "
+                + Db.PlayerTable.TABLE_NAME + " ADD COLUMN "
+                + Db.PlayerTable.KEY_PLAYER_COLOR + " TEXT")
+//                        if (!isTableEmpty(db, TABLE_PLAYERS)) {
+//                            addColorsToUpdatedPlayers(db);
+//                        }
+        db.setTransactionSuccessful()
+        db.endTransaction()
+    }
 
 }

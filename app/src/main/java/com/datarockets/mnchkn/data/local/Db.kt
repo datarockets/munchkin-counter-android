@@ -47,6 +47,8 @@ object Db {
             player.color = cursor.getString(cursor.getColumnIndexOrThrow(KEY_PLAYER_COLOR))
             player.levelScore = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PLAYER_LEVEL))
             player.strengthScore = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PLAYER_STRENGTH))
+            player.position = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PLAYER_POSITION))
+            player.playing = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PLAYER_IS_PLAYING)) > 0
             return player
         }
 
@@ -56,6 +58,8 @@ object Db {
             contentValues.put(KEY_PLAYER_COLOR, player.color)
             contentValues.put(KEY_PLAYER_LEVEL, player.levelScore)
             contentValues.put(KEY_PLAYER_STRENGTH, player.strengthScore)
+            contentValues.put(KEY_PLAYER_POSITION, player.position)
+            contentValues.put(KEY_PLAYER_IS_PLAYING, player.playing)
             return contentValues
         }
 
