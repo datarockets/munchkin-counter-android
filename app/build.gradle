@@ -59,6 +59,7 @@ dependencies {
     compile "${library.onboarder}"
     compile "${library.mixpanel}"
     compile "${library.mp_android_chart}"
+    compile "${library.tap_target_view}"
     compile "${library.rxkotlin}"
     compile "${library.rxandroid}"
     compile "${library.sqlbrite}"
@@ -72,4 +73,5 @@ dependencies {
     }
     testCompile "${library.junit}"
     testCompile "${library.mockito}"
+    kaptTest "${library.dagger}"
 }
