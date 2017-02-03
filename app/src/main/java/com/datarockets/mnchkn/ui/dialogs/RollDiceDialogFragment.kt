@@ -34,6 +34,7 @@ class RollDiceDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mUnbinder = ButterKnife.bind(this, view!!)
+        tvDiceValue.text = dice.roll()
     }
 
     override fun onDestroyView() {
