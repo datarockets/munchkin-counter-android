@@ -39,9 +39,11 @@ class ChartsFragment : Fragment(), ChartsView {
         super.onViewCreated(view, savedInstanceState)
         unbinder = ButterKnife.bind(this, view!!)
         lvPlayerList.adapter = lvPlayerListAdapter
-        presenter.attachView(this)
-        presenter.loadChartData(arguments.getInt(CHART_TYPE))
-        presenter.loadPlayers(arguments.getInt(CHART_TYPE) + 1)
+        presenter.apply {
+            attachView(this@ChartsFragment)
+//            loadChartData(arguments.getInt(CHART_TYPE))
+            presenter.loadPlayers(arguments.getInt(CHART_TYPE))
+        }
     }
 
 
