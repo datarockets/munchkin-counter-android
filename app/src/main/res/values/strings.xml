@@ -7,9 +7,10 @@
     <string name="menu.finish">Finish</string>
     <string name="menu.settings">Settings</string>
     <string name="menu.roll_dice">Roll a dice</string>
+    <string name="menu.share_app">Share this application</string>
     <string name="button.finish">Finish</string>
     <string name="button.skip">Skip</string>
-    <string name="button.next_step">Next step</string>
+    <string name="button.next_player">Next step</string>
     <string name="button.add_new_player">Add player</string>
     <string name="button.update_player">Update player</string>
     <string name="button.yes">Yes</string>
