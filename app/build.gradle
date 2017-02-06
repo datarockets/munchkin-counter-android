@@ -71,6 +71,12 @@ dependencies {
     compile("${library.crashlytics}") {
         transitive = true
     }
+    compile("${library.branch}") {
+        transitive = true
+    }
+    compile("${library.fabric}") {
+        transitive = true
+    }
     testCompile "${library.junit}"
     testCompile "${library.mockito}"
     kaptTest "${library.dagger}"
