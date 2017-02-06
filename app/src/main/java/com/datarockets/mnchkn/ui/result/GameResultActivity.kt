@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.view.MenuItem
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -41,7 +42,7 @@ class GameResultActivity : BaseActivity(), GameResultView {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        presenter.onBackPressed()
+        presenter.clearGameResults()
         val intent = Intent(this, PlayersListActivity::class.java)
         startActivity(intent)
         finish()
@@ -49,28 +50,38 @@ class GameResultActivity : BaseActivity(), GameResultView {
 
     override fun loadChartFragments() {
         vpChartsAdapter = ChartsPagerAdapter(supportFragmentManager, this)
-        vpCharts.adapter = vpChartsAdapter
-        vpCharts.offscreenPageLimit = 3
+        vpCharts.apply {
+            adapter = vpChartsAdapter
+            offscreenPageLimit = 3
+        }
         tlChartsTitle.setupWithViewPager(vpCharts)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.game_result_activity_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                return true
-            }
+            android.R.id.home -> onBackPressed()
+            R.id.item_share_app -> presenter.generateShareResultLink()
         }
-        return false
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun launchShareableIntent(shareableIntent: Intent) {
+        startActivity(Intent.createChooser(shareableIntent, "Share an app"))
     }
 
     override fun onStop() {
         super.onStop()
-        presenter.onStop()
+        presenter.clearGameResults()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        presenter.clearGameResults()
         presenter.detachView()
     }
 
