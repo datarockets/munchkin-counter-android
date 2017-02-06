@@ -37,13 +37,11 @@ class DashboardPresenter
 //                .subscribe { player -> mDashboardView?.updatePlayerInformation(player, position) }
     }
 
-    fun insertStep(player: Player) {
-        mSubscription = mDataManager.addGameStep(player)
+    fun insertStep(playerId: Long, levelScore: Int, strengthScore: Int) {
+        mSubscription = mDataManager.addGameStep(playerId, levelScore, strengthScore)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-
-                }
+                .subscribe()
     }
 
     fun setGameFinished() {

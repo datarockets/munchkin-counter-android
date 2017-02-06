@@ -137,7 +137,9 @@ class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.OnScores
     }
 
     override fun onScoresChanged(playerPosition: Int, playerLevel: Int, playerStrength: Int) {
+        val playerId = lvPlayerListAdapter.getItemId(playerPosition)
         lvPlayerListAdapter.updatePlayerScores(playerPosition, playerLevel, playerStrength)
+        presenter.insertStep(playerId, playerLevel, playerStrength)
     }
 
     override fun onDestroy() {
