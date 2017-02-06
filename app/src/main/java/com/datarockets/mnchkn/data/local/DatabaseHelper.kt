@@ -53,33 +53,12 @@ class DatabaseHelper
         }
     }
 
-    fun getPlayingPlayers() : Observable<Player> {
+    fun getPlayers(): Observable<Player> {
         return Observable.create { subscriber ->
-            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s",
+            val query = String.format("SELECT * FROM %s ORDER BY %s DESC",
                     Db.PlayerTable.TABLE_NAME,
-                    Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
                     Db.PlayerTable.KEY_PLAYER_POSITION)
             val cursor = briteDb.query(query)
-            while (cursor.moveToNext()) {
-                subscriber.onNext((Db.PlayerTable.parseCursor(cursor)))
-            }
-            cursor.close()
-            subscriber.onCompleted()
-        }
-    }
-
-    fun getPlayers(orderValue: Int): Observable<Player> {
-        return Observable.create { subscriber ->
-            var orderByQuery: String? = null
-            when (orderValue) {
-                Db.PlayerTable.ORDER_BY_ID -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_ID
-                Db.PlayerTable.ORDER_BY_LEVEL -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_LEVEL
-                Db.PlayerTable.ORDER_BY_STRENGTH -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_STRENGTH
-                Db.PlayerTable.ORDER_BY_TOTAL -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_TOTAL
-                Db.PlayerTable.ORDER_BY_POSITION -> orderByQuery = Db.PlayerTable.ORDER_BY + Db.PlayerTable.KEY_PLAYER_POSITION
-            }
-            val playersTotalQuery = "SELECT * FROM " + Db.PlayerTable.TABLE_NAME + orderByQuery + " DESC"
-            val cursor = briteDb.query(playersTotalQuery)
             while (cursor.moveToNext()) {
                 subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
             }
@@ -88,12 +67,103 @@ class DatabaseHelper
         }
     }
 
+    fun getPlayingPlayers(): Observable<Player> {
+        return Observable.create { subscriber ->
+            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s DESC",
+                    Db.PlayerTable.TABLE_NAME,
+                    Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
+                    Db.PlayerTable.KEY_PLAYER_POSITION)
+            val cursor = briteDb.query(query)
+            while (cursor.moveToNext()) {
+                subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
+            }
+            cursor.close()
+            subscriber.onCompleted()
+        }
+    }
+
+    fun getPlayedPlayersByLevel(): Observable<Player> {
+        return Observable.create { subscriber ->
+            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s DESC",
+                    Db.PlayerTable.TABLE_NAME,
+                    Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
+                    Db.PlayerTable.KEY_PLAYER_LEVEL)
+            val cursor = briteDb.query(query)
+            while (cursor.moveToNext()) {
+                subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
+            }
+            cursor.close()
+            subscriber.onCompleted()
+        }
+    }
+
+    fun getPlayedPlayersByStrength(): Observable<Player> {
+        return Observable.create { subscriber ->
+            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s DESC",
+                    Db.PlayerTable.TABLE_NAME,
+                    Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
+                    Db.PlayerTable.KEY_PLAYER_STRENGTH)
+            val cursor = briteDb.query(query)
+            while (cursor.moveToNext()) {
+                subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
+            }
+            cursor.close()
+            subscriber.onCompleted()
+        }
+    }
+
+    fun getPlayedPlayersByTotal(): Observable<Player> {
+        return Observable.create { subscriber ->
+            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s DESC, %s DESC",
+                    Db.PlayerTable.TABLE_NAME,
+                    Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
+                    Db.PlayerTable.KEY_PLAYER_LEVEL,
+                    Db.PlayerTable.KEY_PLAYER_STRENGTH)
+            val cursor = briteDb.query(query)
+            while (cursor.moveToNext()) {
+                subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
+            }
+            cursor.close()
+            subscriber.onCompleted()
+        }
+    }
+
+    fun updatePlayersPositions(): Observable<Void> {
+        return Observable.create { subscriber ->
+            val players = mutableListOf<Player>()
+            val query = String.format("SELECT * FROM %s ORDER BY %s DESC",
+                    Db.PlayerTable.TABLE_NAME, Db.PlayerTable.KEY_PLAYER_POSITION)
+            val cursor = briteDb.query(query)
+            while (cursor.moveToNext()) {
+                players.add(Db.PlayerTable.parseCursor(cursor))
+            }
+            for (index in players.indices) {
+                Timber.d(index.toString())
+                val transaction = briteDb.newTransaction()
+                try {
+                    val contentValues = ContentValues()
+                    contentValues.put(Db.PlayerTable.KEY_PLAYER_POSITION, index)
+                    briteDb.update(Db.PlayerTable.TABLE_NAME,
+                            contentValues,
+                            Db.PlayerTable.KEY_PLAYER_ID + " = ?",
+                            players[index].id.toString())
+                    transaction.markSuccessful()
+                } finally {
+                    transaction.end()
+                }
+            }
+            subscriber.onCompleted()
+        }
+    }
+
     fun deletePlayer(playerId: Long): Observable<Void> {
         return Observable.create { subscriber ->
             val transaction = briteDb.newTransaction()
             try {
-                briteDb.delete(Db.PlayerTable.TABLE_NAME, Db.PlayerTable.KEY_PLAYER_ID + " = ?",
-                        *arrayOf(java.lang.Long.toString(playerId)))
+                briteDb.delete(
+                        Db.PlayerTable.TABLE_NAME,
+                        Db.PlayerTable.KEY_PLAYER_ID + " = ?",
+                        playerId.toString())
                 transaction.markSuccessful()
                 subscriber.onCompleted()
             } finally {

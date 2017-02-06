@@ -17,17 +17,8 @@ object Db {
         val KEY_PLAYER_LEVEL = "level"
         val KEY_PLAYER_STRENGTH = "strength"
         val KEY_PLAYER_COLOR = "color"
-        val KEY_PLAYER_TOTAL = "total"
         val KEY_PLAYER_POSITION = "position"
         val KEY_PLAYER_IS_PLAYING = "is_playing"
-
-        val ORDER_BY = " ORDER BY "
-
-        val ORDER_BY_ID = 0
-        val ORDER_BY_LEVEL = 1
-        val ORDER_BY_STRENGTH = 2
-        val ORDER_BY_TOTAL = 3
-        val ORDER_BY_POSITION = 4
 
         val CREATE = "CREATE TABLE " + TABLE_NAME +
                 "(" +
@@ -58,7 +49,6 @@ object Db {
             contentValues.put(KEY_PLAYER_COLOR, player.color)
             contentValues.put(KEY_PLAYER_LEVEL, player.levelScore)
             contentValues.put(KEY_PLAYER_STRENGTH, player.strengthScore)
-            contentValues.put(KEY_PLAYER_POSITION, player.position)
             contentValues.put(KEY_PLAYER_IS_PLAYING, player.playing)
             return contentValues
         }

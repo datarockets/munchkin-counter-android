@@ -1,20 +1,25 @@
 package com.datarockets.mnchkn.data
 
+import android.content.Intent
 import com.datarockets.mnchkn.data.local.DatabaseHelper
-import com.datarockets.mnchkn.data.local.Db
 import com.datarockets.mnchkn.data.local.PreferencesHelper
+import com.datarockets.mnchkn.data.local.SharingHelper
 import com.datarockets.mnchkn.data.models.GameStep
 import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.utils.ColorUtil
 import com.github.mikephil.charting.data.Entry
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
+
 
 @Singleton
 open class DataManager
 @Inject constructor(private val mDatabaseHelper: DatabaseHelper,
-                    mPreferencesHelper: PreferencesHelper) {
+                    private val mPreferencesHelper: PreferencesHelper,
+                    private val mSharingHelper: SharingHelper) {
 
     val preferencesHelper = mPreferencesHelper
 
@@ -22,16 +27,21 @@ open class DataManager
         return mDatabaseHelper.getPlayer(playerId)
     }
 
+    open fun getPlayers(): Observable<List<Player>> {
+        return mDatabaseHelper.getPlayers().toList()
+    }
+
     open fun getPlayingPlayers(): Observable<List<Player>> {
         return mDatabaseHelper.getPlayingPlayers().toList()
     }
 
-    open fun getPlayers(): Observable<List<Player>> {
-        return mDatabaseHelper.getPlayers(Db.PlayerTable.ORDER_BY_POSITION).toList()
-    }
-
     open fun getPlayers(sortType: Int): Observable<List<Player>> {
-        return mDatabaseHelper.getPlayers(sortType).toList()
+        when (sortType) {
+            0 -> return mDatabaseHelper.getPlayedPlayersByLevel().toList()
+            1 -> return mDatabaseHelper.getPlayedPlayersByStrength().toList()
+            2 -> return mDatabaseHelper.getPlayedPlayersByTotal().toList()
+        }
+        return Observable.just(null)
     }
 
     fun addPlayer(playerName: String): Observable<Player> {
@@ -66,10 +76,14 @@ open class DataManager
 
     fun clearGameSteps(): Observable<Void> {
         return mDatabaseHelper.clearGameSteps()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun clearPlayerStats(): Observable<Void> {
         return mDatabaseHelper.clearPlayerStats()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun getEntries() {
@@ -86,12 +100,20 @@ open class DataManager
 
     }
 
-    fun addGameStep(player: Player): Observable<Void> {
+    fun addGameStep(playerId: Long, levelScore: Int, strengthScore: Int): Observable<Void> {
         val gameStep = GameStep()
-        gameStep.playerId = player.id
-        gameStep.playerLevel = player.levelScore
-        gameStep.playerStrength = player.strengthScore
+        gameStep.playerId = playerId
+        gameStep.playerLevel = levelScore
+        gameStep.playerStrength = strengthScore
         return mDatabaseHelper.setGameStep(gameStep)
+    }
+
+    fun generateShareableIntent(): Observable<Intent> {
+        return mSharingHelper.generateShareableIntent()
+    }
+
+    fun updatePlayersPosition() {
+        mDatabaseHelper.updatePlayersPositions().subscribe()
     }
 
 }
