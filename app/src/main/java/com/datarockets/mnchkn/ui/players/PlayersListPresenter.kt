@@ -18,7 +18,7 @@ class PlayersListPresenter
     }
 
     fun checkIsEnoughPlayers() {
-        mSubscription = mDataManager.getPlayers()
+        mSubscription = mDataManager.getPlayingPlayers()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { players ->
@@ -35,38 +35,44 @@ class PlayersListPresenter
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { player -> mPlayersListView?.addPlayerToList(player) }
+        mDataManager.updatePlayersPosition()
     }
 
     fun changePlayerPosition(playerId: Long, position: Int) {
         mSubscription = mDataManager.changePlayerPosition(playerId, position)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-
-                }
+                .subscribe()
     }
 
-    fun deletePlayerListItem(position: Int, playerId: Long) {
+    fun markPlayerAsPlaying(playerId: Long, isPlaying: Boolean) {
+        mSubscription = mDataManager.setPlayerPlaying(playerId, isPlaying)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+    }
+
+    fun deletePlayerListItem(playerId: Long) {
         mSubscription = mDataManager.deletePlayer(playerId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({}, {}, {
-                    mPlayersListView?.deletePlayerFromList(position)
-                })
+                .doOnCompleted { mPlayersListView?.deletePlayerFromList(playerId) }
+                .subscribe()
+        mDataManager.updatePlayersPosition()
     }
 
     fun clearPlayersStats() {
         mSubscription = mDataManager.clearPlayerStats()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {}
+                .subscribe()
     }
 
     fun clearGameSteps() {
         mSubscription = mDataManager.clearGameSteps()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {}
+                .subscribe()
     }
 
     fun setGameStarted() {

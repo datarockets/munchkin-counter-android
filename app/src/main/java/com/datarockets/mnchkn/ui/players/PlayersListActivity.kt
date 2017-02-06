@@ -27,6 +27,7 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         NewPlayerDialogFragment.NewPlayerDialogListener,
         EditPlayerDialogFragment.EditPlayerDialogListener,
         PlayerEditorListAdapter.OnItemClickListener,
+        PlayerEditorListAdapter.OnItemCheckboxClickListener,
         DragListView.DragListListener,
         PlayerActionsDialogFragment.PlayerActionsListener {
 
@@ -49,13 +50,17 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
             setAdapter(lvPlayerEditorListAdapter, false)
             setDragListListener(this@PlayersListActivity)
         }
-        lvPlayerEditorListAdapter.setOnItemClickListener(this)
+        lvPlayerEditorListAdapter.apply {
+            setOnItemClickListener(this@PlayersListActivity)
+            setOnItemCheckboxClickListener(this@PlayersListActivity)
+        }
         playersListPresenter.apply {
             attachView(this@PlayersListActivity)
             checkIsGameStarted()
             getPlayersList()
         }
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -71,8 +76,8 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         lvPlayerEditorListAdapter.addPlayer(player)
     }
 
-    override fun deletePlayerFromList(position: Int) {
-        lvPlayerEditorListAdapter.deletePlayer(position)
+    override fun deletePlayerFromList(playerId: Long) {
+        lvPlayerEditorListAdapter.deletePlayer(playerId)
     }
 
     override fun setPlayersList(players: List<Player>) {
@@ -131,10 +136,13 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         playersListPresenter.addPlayer(inputName)
     }
 
-    override fun onPlayerItemClick(position: Int) {
-        val selectedPlayerId = lvPlayerEditorListAdapter.getItemId(position)
-        val playerActionDialogFragment = PlayerActionsDialogFragment.newInstance(selectedPlayerId)
+    override fun onPlayerItemClick(playerId: Long) {
+        val playerActionDialogFragment = PlayerActionsDialogFragment.newInstance(playerId)
         playerActionDialogFragment.show(supportFragmentManager, "PlayerActionDialogFragment")
+    }
+
+    override fun onPlayerItemCheckboxClick(playerId: Long, isPlaying: Boolean) {
+        playersListPresenter.markPlayerAsPlaying(playerId, isPlaying)
     }
 
     override fun onItemDragStarted(position: Int) {
@@ -151,6 +159,8 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         playersListPresenter.apply {
             changePlayerPosition(playerOneId, toPosition)
             changePlayerPosition(playerTwoId, fromPosition)
+            lvPlayerEditorListAdapter.notifyItemChanged(toPosition)
+            lvPlayerEditorListAdapter.notifyItemChanged(fromPosition)
         }
     }
 
@@ -160,12 +170,11 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     }
 
     override fun onDeletePlayer(playerId: Long) {
-        val position = lvPlayerEditorListAdapter.getPositionForItemId(playerId)
-        playersListPresenter.deletePlayerListItem(position, playerId)
+        playersListPresenter.deletePlayerListItem(playerId)
     }
 
-    override fun onEditedPlayer() {
-        playersListPresenter.getPlayersList()
+    override fun onEditedPlayerName(playerId: Long, playerName: String) {
+        lvPlayerEditorListAdapter.updatePlayerName(playerId, playerName)
     }
 
     override fun onDestroy() {

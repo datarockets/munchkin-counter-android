@@ -57,9 +57,11 @@ class PlayerEditorListAdapter
         val capitalizedPlayerFirstLetter = player.name!!.substring(0, 1).toUpperCase()
         val drawable = TextDrawable.builder()
                 .buildRound(capitalizedPlayerFirstLetter, color)
+
         holder?.ivPlayerImage?.setImageDrawable(drawable)
         holder?.tvPlayerName?.text = player.name
         holder?.cbIsPlaying?.isChecked = player.playing
+
     }
 
     fun addPlayer(player: Player) {
@@ -99,11 +101,12 @@ class PlayerEditorListAdapter
                     mClickListener?.onPlayerItemClick(playerId)
                 }
             }
-            cbIsPlaying.setOnCheckedChangeListener { compoundButton, b ->
+            cbIsPlaying.setOnCheckedChangeListener { compoundButton, isChecked ->
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val playerId = getItemId(position)
-                    mCheckboxClickListener?.onPlayerItemCheckboxClick(playerId, b)
+                    itemList[position].playing = isChecked
+                    mCheckboxClickListener?.onPlayerItemCheckboxClick(playerId, isChecked)
                 }
             }
         }

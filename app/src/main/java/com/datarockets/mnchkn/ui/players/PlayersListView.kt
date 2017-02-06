@@ -6,7 +6,7 @@ import com.datarockets.mnchkn.ui.base.MvpView
 
 interface PlayersListView : MvpView {
     fun addPlayerToList(player: Player)
-    fun deletePlayerFromList(position: Int)
+    fun deletePlayerFromList(playerId: Long)
     fun setPlayersList(players: List<Player>)
     fun showAddNewPlayerDialog()
     fun launchDashboard()
