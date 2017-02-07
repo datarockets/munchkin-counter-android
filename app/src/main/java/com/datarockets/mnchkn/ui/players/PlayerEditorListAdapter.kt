@@ -1,8 +1,10 @@
 package com.datarockets.mnchkn.ui.players
 
 import android.graphics.Color
+import android.support.v4.view.MotionEventCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -13,15 +15,18 @@ import butterknife.ButterKnife
 import com.amulyakhare.textdrawable.TextDrawable
 import com.datarockets.mnchkn.R
 import com.datarockets.mnchkn.data.models.Player
-import com.woxthebox.draglistview.DragItemAdapter
+import com.datarockets.mnchkn.ui.players.helpers.ItemTouchHelperAdapter
+import com.datarockets.mnchkn.ui.players.helpers.ItemTouchHelperViewHolder
+import java.util.*
 import javax.inject.Inject
 
 class PlayerEditorListAdapter
-@Inject constructor() : DragItemAdapter<Player, PlayerEditorListAdapter.ViewHolder>() {
+@Inject constructor() : RecyclerView.Adapter<PlayerEditorListAdapter.ViewHolder>(), ItemTouchHelperAdapter {
+
+    private val mPlayers = mutableListOf<Player>()
 
     init {
         setHasStableIds(true)
-        itemList = mutableListOf()
     }
 
     interface OnItemClickListener {
@@ -32,8 +37,13 @@ class PlayerEditorListAdapter
         fun onPlayerItemCheckboxClick(playerId: Long, isPlaying: Boolean)
     }
 
+    interface OnStartDragListener {
+        fun onStartDrag(viewHolder: RecyclerView.ViewHolder)
+    }
+
     var mClickListener: OnItemClickListener? = null
     var mCheckboxClickListener: OnItemCheckboxClickListener? = null
+    var mDragStartListener: OnStartDragListener? = null
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         mClickListener = listener
@@ -43,15 +53,18 @@ class PlayerEditorListAdapter
         mCheckboxClickListener = listener
     }
 
+    fun setOnStartDragListener(listener: OnStartDragListener) {
+        mDragStartListener = listener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent!!.context).inflate(R.layout.player_item, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        super.onBindViewHolder(holder, position)
 
-        val player = itemList[position]
+        val player = mPlayers[position]
 
         val color = Color.parseColor(player.color)
         val capitalizedPlayerFirstLetter = player.name!!.substring(0, 1).toUpperCase()
@@ -62,32 +75,69 @@ class PlayerEditorListAdapter
         holder?.tvPlayerName?.text = player.name
         holder?.cbIsPlaying?.isChecked = player.playing
 
+
+        holder?.itemView?.setOnTouchListener { view, event ->
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                mDragStartListener?.onStartDrag(holder)
+            }
+            false
+        }
+
     }
 
     fun addPlayer(player: Player) {
-        addItem(itemList.count(), player)
+        mPlayers.add(mPlayers.count(), player)
+        notifyDataSetChanged()
     }
 
     fun setPlayers(players: List<Player>) {
-        itemList = players
+        mPlayers.addAll(players)
+        notifyDataSetChanged()
     }
 
     fun deletePlayer(playerId: Long) {
         val position = getPositionForItemId(playerId)
-        removeItem(position)
+        mPlayers.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     fun updatePlayerName(playerId: Long, playerName: String) {
         val position = getPositionForItemId(playerId)
-        itemList[position].name = playerName
+        mPlayers[position].name = playerName
         notifyItemChanged(position)
     }
 
     override fun getItemId(position: Int): Long {
-        return itemList[position].id
+        return mPlayers[position].id
     }
 
-    inner class ViewHolder(view: View) : DragItemAdapter.ViewHolder(view, R.id.ll_player_list_item, true) {
+    override fun getItemCount(): Int {
+        return mPlayers.size
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        Collections.swap(mPlayers, fromPosition, toPosition)
+        notifyItemMoved(fromPosition, toPosition)
+        return true
+    }
+
+    override fun onItemDismiss(position: Int) {
+        mPlayers.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun getPositionForItemId(id: Long): Int {
+        val count = itemCount
+        for (i in 0..count - 1) {
+            if (id == getItemId(i)) {
+                return i
+            }
+        }
+        return RecyclerView.NO_POSITION
+    }
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), ItemTouchHelperViewHolder {
+
         @BindView(R.id.iv_player_color) lateinit var ivPlayerImage: ImageView
         @BindView(R.id.tv_player_name) lateinit var tvPlayerName: TextView
         @BindView(R.id.cb_is_playing) lateinit var cbIsPlaying: CheckBox
@@ -105,10 +155,18 @@ class PlayerEditorListAdapter
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val playerId = getItemId(position)
-                    itemList[position].playing = isChecked
+                    mPlayers[position].playing = isChecked
                     mCheckboxClickListener?.onPlayerItemCheckboxClick(playerId, isChecked)
                 }
             }
+        }
+
+        override fun onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY)
+        }
+
+        override fun onItemClear() {
+            itemView.setBackgroundColor(0)
         }
 
     }

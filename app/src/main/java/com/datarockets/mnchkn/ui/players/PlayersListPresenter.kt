@@ -38,10 +38,8 @@ class PlayersListPresenter
     }
 
     fun changePlayerPosition(movedPlayerId: Long,
-                             replacedPlayerId: Long,
-                             movedPosition: Int,
-                             replacedPosition: Int) {
-        mSubscription = mDataManager.changePlayerPosition(movedPlayerId, replacedPlayerId, movedPosition, replacedPosition)
+                             newPosition: Int) {
+        mSubscription = mDataManager.changePlayerPosition(movedPlayerId, newPosition)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()

@@ -55,7 +55,6 @@ dependencies {
     compile "${library.support_card}"
     compile "${library.text_drawable}"
     compile "${library.color_picker}"
-    compile "${library.drag_list_view}"
     compile "${library.onboarder}"
     compile "${library.mixpanel}"
     compile "${library.mp_android_chart}"

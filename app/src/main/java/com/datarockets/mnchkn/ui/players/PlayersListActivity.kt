@@ -4,8 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -19,9 +22,8 @@ import com.datarockets.mnchkn.ui.dashboard.DashboardActivity
 import com.datarockets.mnchkn.ui.dialogs.NewPlayerDialogFragment
 import com.datarockets.mnchkn.ui.dialogs.PlayerActionsDialogFragment
 import com.datarockets.mnchkn.ui.editplayer.EditPlayerDialogFragment
+import com.datarockets.mnchkn.ui.players.helpers.ItemTouchHelperViewHolder
 import com.datarockets.mnchkn.ui.settings.SettingsActivity
-import com.woxthebox.draglistview.DragListView
-import timber.log.Timber
 import javax.inject.Inject
 
 class PlayersListActivity : BaseActivity(), PlayersListView,
@@ -29,16 +31,18 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         EditPlayerDialogFragment.EditPlayerDialogListener,
         PlayerEditorListAdapter.OnItemClickListener,
         PlayerEditorListAdapter.OnItemCheckboxClickListener,
-        DragListView.DragListListener,
+        PlayerEditorListAdapter.OnStartDragListener,
         PlayerActionsDialogFragment.PlayerActionsListener {
 
     @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
-    @BindView(R.id.lv_player_list) lateinit var lvPlayersList: DragListView
+    @BindView(R.id.lv_player_list) lateinit var lvPlayersList: RecyclerView
     @BindView(R.id.fab_add_player) lateinit var fabAddPlayer: FloatingActionButton
 
     @Inject lateinit var lvPlayerEditorListAdapter: PlayerEditorListAdapter
     @Inject lateinit var playersListPresenter: PlayersListPresenter
     @Inject lateinit var linearLayoutManager: LinearLayoutManager
+
+    lateinit var mItemTouchHelper: ItemTouchHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,22 +50,88 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         setContentView(R.layout.activity_players)
         ButterKnife.bind(this)
         setSupportActionBar(toolbar)
+
         lvPlayersList.apply {
-            setLayoutManager(linearLayoutManager)
-            setAdapter(lvPlayerEditorListAdapter, false)
-            setDragListListener(this@PlayersListActivity)
+            adapter = lvPlayerEditorListAdapter
+            layoutManager = linearLayoutManager
         }
+
         lvPlayerEditorListAdapter.apply {
             setOnItemClickListener(this@PlayersListActivity)
             setOnItemCheckboxClickListener(this@PlayersListActivity)
+            setOnStartDragListener(this@PlayersListActivity)
         }
+
+        mItemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
+
+            override fun onMoved(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, fromPos: Int, target: RecyclerView.ViewHolder?, toPos: Int, x: Int, y: Int) {
+                super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y)
+                val movedPlayerId = lvPlayerEditorListAdapter.getItemId(fromPos)
+                val draggerPlayerId = lvPlayerEditorListAdapter.getItemId(toPos)
+                playersListPresenter.changePlayerPosition(draggerPlayerId, toPos)
+                playersListPresenter.changePlayerPosition(movedPlayerId, fromPos)
+            }
+
+            override fun getMovementFlags(recyclerView: RecyclerView?,
+                                          viewHolder: RecyclerView.ViewHolder?): Int {
+                if (lvPlayersList.layoutManager is GridLayoutManager) {
+                    val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                    val swipeFlags = 0
+                    return ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
+                } else {
+                    val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+                    val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
+                    return ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
+                }
+            }
+
+            override fun onMove(recyclerView: RecyclerView?,
+                                source: RecyclerView.ViewHolder?,
+                                target: RecyclerView.ViewHolder?): Boolean {
+                if (source?.itemViewType != target?.itemViewType) {
+                    return false
+                }
+                lvPlayerEditorListAdapter.onItemMove(source!!.adapterPosition, target!!.adapterPosition)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
+                lvPlayerEditorListAdapter.onItemDismiss(viewHolder!!.adapterPosition)
+            }
+
+            override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+                    if (viewHolder is ItemTouchHelperViewHolder) {
+                        val itemViewHolder: ItemTouchHelperViewHolder = viewHolder
+                        itemViewHolder.onItemSelected()
+                    }
+                }
+                super.onSelectedChanged(viewHolder, actionState)
+
+            }
+
+            override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?) {
+                super.clearView(recyclerView, viewHolder)
+
+                viewHolder?.itemView?.alpha = 1.0f
+
+                if (viewHolder is ItemTouchHelperViewHolder) {
+                    val itemViewHolder: ItemTouchHelperViewHolder = viewHolder
+                    itemViewHolder.onItemClear()
+                }
+
+            }
+
+        })
+
+        mItemTouchHelper.attachToRecyclerView(lvPlayersList)
+
         playersListPresenter.apply {
             attachView(this@PlayersListActivity)
             checkIsGameStarted()
             getPlayersList()
         }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -147,26 +217,6 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         playersListPresenter.markPlayerAsPlaying(playerId, isPlaying)
     }
 
-    override fun onItemDragStarted(position: Int) {
-
-    }
-
-    override fun onItemDragging(itemPosition: Int, x: Float, y: Float) {
-
-    }
-
-    override fun onItemDragEnded(movedPlayerPosition: Int, replacedPlayerPosition: Int) {
-        Timber.d("From: " + movedPlayerPosition + ", To: " + replacedPlayerPosition)
-        val movedPlayerId = lvPlayerEditorListAdapter.getItemId(movedPlayerPosition)
-        val replacedPlayerId = lvPlayerEditorListAdapter.getItemId(replacedPlayerPosition)
-        Timber.d("From id: " + movedPlayerId + ", To id: " + replacedPlayerId)
-        playersListPresenter.changePlayerPosition(movedPlayerId, replacedPlayerId, movedPlayerPosition, replacedPlayerPosition)
-//        lvPlayerEditorListAdapter.apply {
-//            notifyItemChanged(toPosition)
-//            notifyItemChanged(fromPosition)
-//        }
-    }
-
     override fun onEditPlayer(playerId: Long) {
         val editPlayerDialogFragment = EditPlayerDialogFragment.newInstance(playerId)
         editPlayerDialogFragment.show(supportFragmentManager, "EditPlayerDialogFragment")
@@ -178,6 +228,10 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
 
     override fun onEditedPlayerName(playerId: Long, playerName: String) {
         lvPlayerEditorListAdapter.updatePlayerName(playerId, playerName)
+    }
+
+    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+        mItemTouchHelper.startDrag(viewHolder)
     }
 
     override fun onDestroy() {

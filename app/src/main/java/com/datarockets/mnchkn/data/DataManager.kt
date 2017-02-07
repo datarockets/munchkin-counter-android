@@ -55,10 +55,8 @@ open class DataManager
     }
 
     fun changePlayerPosition(movedPlayerId: Long,
-                             replacedPlayerId: Long,
-                             movedPosition: Int,
-                             replacedPosition: Int): Observable<Void> {
-        return mDatabaseHelper.changePlayersPositions(movedPlayerId, replacedPlayerId, movedPosition, replacedPosition)
+                             newPosition: Int): Observable<Void> {
+        return mDatabaseHelper.changePlayersPositions(movedPlayerId, newPosition)
     }
 
     fun setPlayerPlaying(playerId: Long, isPlaying: Boolean): Observable<Void> {

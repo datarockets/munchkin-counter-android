@@ -1,7 +1,6 @@
 package com.datarockets.mnchkn.data.local
 
 import android.content.ContentValues
-import android.database.sqlite.SQLiteDatabase
 import com.datarockets.mnchkn.data.models.GameStep
 import com.datarockets.mnchkn.data.models.Player
 import com.squareup.sqlbrite.BriteDatabase
@@ -229,22 +228,15 @@ class DatabaseHelper
     }
 
     fun changePlayersPositions(movedPlayerId: Long,
-                               replacedPlayerId: Long,
-                               movedPosition: Int,
-                               replacedPosition: Int): Observable<Void> {
+                               newPosition: Int): Observable<Void> {
         return Observable.create { subscriber ->
             val transaction = briteDb.newTransaction()
             try {
                 val contentValues = ContentValues()
-                contentValues.put(Db.PlayerTable.KEY_PLAYER_POSITION, replacedPosition)
-                val contentValues2 = ContentValues()
-                contentValues2.put(Db.PlayerTable.KEY_PLAYER_POSITION, movedPosition)
+                contentValues.put(Db.PlayerTable.KEY_PLAYER_POSITION, newPosition)
                 briteDb.update(Db.PlayerTable.TABLE_NAME,
-                        contentValues, SQLiteDatabase.CONFLICT_REPLACE,
+                        contentValues,
                         Db.PlayerTable.KEY_PLAYER_ID + " = ?", movedPlayerId.toString())
-                briteDb.update(Db.PlayerTable.TABLE_NAME,
-                        contentValues2, SQLiteDatabase.CONFLICT_REPLACE,
-                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", replacedPlayerId.toString())
                 transaction.markSuccessful()
                 subscriber.onCompleted()
             } finally {
