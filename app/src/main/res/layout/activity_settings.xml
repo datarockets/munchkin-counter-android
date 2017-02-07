@@ -6,11 +6,12 @@
     android:layout_height="match_parent">
 
     <include
+        android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
 
     <fragment
         android:id="@+id/fragment_settings"
-        class="com.datarockets.mnchkn.fragments.SettingsFragment"
+        class="com.datarockets.mnchkn.ui.settings.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

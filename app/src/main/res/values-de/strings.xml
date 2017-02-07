@@ -8,7 +8,6 @@
     <string name="menu.settings">Einstellungen</string>
     <string name="button.finish">Ende</string>
     <string name="button.skip">Überspringen</string>
-    <string name="button.next_step">Nächste Runde</string>
     <string name="button.add_new_player">Spieler hinzufügen</string>
     <string name="button.yes">Ja</string>
     <string name="button.no">Nein</string>
@@ -38,4 +37,11 @@
     <string name="onboarder.page3.title">Nutzbarkeit</string>
     <string name="onboarder.page3.description">Verwalte deine Spielergebnisse ganz einfach</string>
     <string name="settings.keep_screen_on">Halten Bildschirm wach</string>
+    <string name="button.update_player">Spieler aktualisieren</string>
+    <string name="menu.roll_dice">Würfeln</string>
+    <string name="text.edit_player">Spieler bearbeiten</string>
+    <string name="button.next_player">Nächste Spieler</string>
+    <string name="dialog.player_actions.delete_player">Spieler löschen</string>
+    <string name="dialog.player_actions.edit_player">Spieler bearbeiten</string>
+    <string name="menu.share_app">Empfehlen Munchkin Level Counter</string>
 </resources>

@@ -2,7 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/item_roll_dice"
+        android:title="@string/menu.roll_dice"
+        android:icon="@drawable/ic_dice"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/item_finish_game"
-        app:showAsAction="ifRoom|withText"
-        android:title="@string/menu.finish"/>
+        android:title="@string/menu.finish"
+        app:showAsAction="ifRoom|withText" />
 </menu>

@@ -1,33 +1,31 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.frogermcs.dagger2metrics'
-apply plugin: 'jacoco-android'
-apply plugin: 'android-apt'
-apply from: '../config/quality/quality.gradle'
+apply plugin: 'kotlin-android'
+apply plugin: 'io.fabric'
+apply from: "$rootProject.projectDir/buildsystem/config.gradle"
+apply from: "$rootProject.projectDir/buildsystem/library.gradle"
 
+def configuration = ext.configuration;
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.1'
-    useLibrary 'org.apache.http.legacy'
+    compileSdkVersion configuration.compileSdk
+    buildToolsVersion configuration.buildTools
 
     defaultConfig {
-        applicationId "com.datarockets.mnchkn"
-        minSdkVersion 14
-        targetSdkVersion 24
-        versionCode 6
-        version "${version_code}"
-        versionName "${version_name}"
+        applicationId configuration.applicationId
+        minSdkVersion configuration.minimumSdk
+        targetSdkVersion configuration.targetSdk
+        versionCode buildVersionCode()
+        versionName buildVersionName()
         vectorDrawables.useSupportLibrary = true
+        buildConfigField("String", "MIXPANEL_API_KEY", "\"" + MIXPANEL_API_KEY + "\"")
     }
 
     buildTypes {
         debug {
             testCoverageEnabled true
-            buildConfigField("String", "MIXPANEL_API_KEY", "\"" + MIXPANEL_API_KEY +"\"")
         }
         release {
-            minifyEnabled false
-            buildConfigField("String", "MIXPANEL_API_KEY", "\"" + MIXPANEL_API_KEY +"\"")
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -44,40 +42,41 @@ android {
 
 }
 
-dependencies {
-    compile "com.android.support:support-v4:${android_support_lib_version}"
-    compile "com.android.support:appcompat-v7:${android_support_lib_version}"
-    compile "com.android.support:design:${android_support_lib_version}"
-    compile "com.android.support:recyclerview-v7:${android_support_lib_version}"
-    compile "com.android.support:cardview-v7:${android_support_lib_version}"
-    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    compile 'com.github.chyrta:AndroidOnboarder:0.+'
-    compile 'com.mixpanel.android:mixpanel-android:4.+'
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
-    compile 'com.jakewharton:butterknife:8.0.1'
-    compile 'com.google.dagger:dagger:2.6'
-    apt 'com.google.dagger:dagger-compiler:2.6'
-    apt 'com.jakewharton:butterknife-compiler:8.0.1'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    testCompile 'junit:junit:4.10'
-    testCompile 'org.assertj:assertj-core:1.7.0'
-    testCompile 'org.robolectric:robolectric:3.0'
-    testCompile 'org.mockito:mockito-core:2.0.52-beta'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.5.4'
+kapt {
+    generateStubs = true
 }
 
-jacocoAndroidUnitTestReport {
-    excludes += ['**/R.class',
-                 '**/R$*.class',
-                 '**/Manifest*.*',
-                 'android/**/*.*',
-                 '**/BuildConfig.*',
-                 '**/*$ViewBinder*.*',
-                 '**/*$ViewInjector*.*',
-                 '**/Lambda$*.class',
-                 '**/Lambda.class',
-                 '**/*Lambda.class',
-                 '**/*Lambda*.class']
+dependencies {
+    compile "${library.kotlin}"
+    compile "${library.support_v4}"
+    compile "${library.support_compat}"
+    compile "${library.support_design}"
+    compile "${library.support_recycler}"
+    compile "${library.support_card}"
+    compile "${library.text_drawable}"
+    compile "${library.color_picker}"
+    compile "${library.onboarder}"
+    compile "${library.mixpanel}"
+    compile "${library.mp_android_chart}"
+    compile "${library.tap_target_view}"
+    compile "${library.rxkotlin}"
+    compile "${library.rxandroid}"
+    compile "${library.sqlbrite}"
+    compile "${library.timber}"
+    compile "${library.dagger}"
+    kapt "${library.dagger_compiler}"
+    compile "${library.butterknife}"
+    kapt "${library.butterknife_compiler}"
+    compile("${library.crashlytics}") {
+        transitive = true
+    }
+    compile("${library.branch}") {
+        transitive = true
+    }
+    compile("${library.fabric}") {
+        transitive = true
+    }
+    testCompile "${library.junit}"
+    testCompile "${library.mockito}"
+    kaptTest "${library.dagger}"
 }

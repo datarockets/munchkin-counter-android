@@ -7,9 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.datarockets.mnchkn.models.GameStep;
-import com.datarockets.mnchkn.models.Player;
-import com.datarockets.mnchkn.utils.LogUtil;
+import com.datarockets.mnchkn.data.models.GameStep;
+import com.datarockets.mnchkn.data.models.Player;
 
 import java.util.ArrayList;
 
@@ -18,7 +17,7 @@ import javax.inject.Singleton;
 @Singleton
 public class MunchkinDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = LogUtil.makeLogTag(MunchkinDatabaseHelper.class);
+    private static final String TAG = "database";
 
     private static final String DATABASE_NAME = "players_db";
     private static final int DATABASE_VERSION = 6;
@@ -90,10 +89,10 @@ public class MunchkinDatabaseHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             ContentValues values = new ContentValues();
-            values.put(KEY_PLAYER_NAME, player.name);
-            values.put(KEY_PLAYER_LEVEL, player.levelScore);
-            values.put(KEY_PLAYER_STRENGTH, player.strengthScore);
-            values.put(KEY_PLAYER_COLOR, player.color);
+            values.put(KEY_PLAYER_NAME, player.getName());
+            values.put(KEY_PLAYER_LEVEL, player.getLevelScore());
+            values.put(KEY_PLAYER_STRENGTH, player.getStrengthScore());
+            values.put(KEY_PLAYER_COLOR, player.getColor());
             playerId = db.insertOrThrow(TABLE_PLAYERS, null, values);
             db.setTransactionSuccessful();
             Log.i(TAG, "Player id is " + playerId);
@@ -169,10 +168,10 @@ public class MunchkinDatabaseHelper extends SQLiteOpenHelper {
     public Player updatePlayer(Player player) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_PLAYER_LEVEL, player.levelScore);
-        values.put(KEY_PLAYER_STRENGTH, player.strengthScore);
+        values.put(KEY_PLAYER_LEVEL, player.getLevelScore());
+        values.put(KEY_PLAYER_STRENGTH, player.getStrengthScore());
         db.update(TABLE_PLAYERS, values, KEY_PLAYER_ID + " = ?",
-                new String[] {String.valueOf(player.id)});
+                new String[] {String.valueOf(player.getId())});
         return player;
     }
 

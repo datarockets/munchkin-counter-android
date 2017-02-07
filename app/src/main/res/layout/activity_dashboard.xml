@@ -11,6 +11,7 @@
         android:orientation="vertical">
 
         <include
+            android:id="@+id/toolbar"
             layout="@layout/toolbar"/>
 
         <LinearLayout
@@ -21,7 +22,7 @@
 
             <fragment
                 android:id="@+id/fragment_player"
-                class="com.datarockets.mnchkn.fragments.players.PlayerFragment"
+                class="com.datarockets.mnchkn.ui.player.PlayerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout="@layout/fragment_player"/>
@@ -45,7 +46,7 @@
                 android:layout_alignParentTop="true" />
 
             <Button
-                android:id="@+id/btn_next_step"
+                android:id="@+id/btn_next_player"
                 android:layout_alignParentBottom="true"
                 android:text="@string/button.next_step"
                 android:layout_width="match_parent"
