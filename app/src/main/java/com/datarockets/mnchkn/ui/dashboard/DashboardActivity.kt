@@ -43,13 +43,13 @@ class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.OnScores
         presenter.apply {
             attachView(this@DashboardActivity)
             checkIsScreenShouldBeOn()
+            getPlayingPlayers()
         }
     }
 
     override fun onResume() {
         super.onResume()
         trackWithProperties("Current activity", "Activity name", "DashboardActivity")
-        presenter.getPlayingPlayers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -78,6 +78,7 @@ class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.OnScores
             setSelection(0)
             setItemChecked(0, true)
         }
+        playerFragment.loadPlayerScores(lvPlayerListAdapter.getItemId(0), 0)
     }
 
     override fun showConfirmFinishGameDialog() {

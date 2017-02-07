@@ -1,7 +1,6 @@
 package com.datarockets.mnchkn.ui.dashboard
 
 import com.datarockets.mnchkn.data.DataManager
-import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.Presenter
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -28,13 +27,6 @@ class DashboardPresenter
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { players -> mDashboardView?.setPlayers(players) }
-    }
-
-    fun updatePlayerInformation(player: Player, position: Int) {
-//        mSubscription = mDataManager.updatePlayer(player)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe { player -> mDashboardView?.updatePlayerInformation(player, position) }
     }
 
     fun insertStep(playerId: Long, levelScore: Int, strengthScore: Int) {
