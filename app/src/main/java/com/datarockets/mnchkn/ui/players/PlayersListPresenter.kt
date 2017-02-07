@@ -30,16 +30,18 @@ class PlayersListPresenter
                 }
     }
 
-    fun addPlayer(playerName: String) {
-        mSubscription = mDataManager.addPlayer(playerName)
+    fun addPlayer(playerName: String, position: Int) {
+        mSubscription = mDataManager.addPlayer(playerName, position)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { player -> mPlayersListView?.addPlayerToList(player) }
-        mDataManager.updatePlayersPosition()
     }
 
-    fun changePlayerPosition(playerId: Long, position: Int) {
-        mSubscription = mDataManager.changePlayerPosition(playerId, position)
+    fun changePlayerPosition(movedPlayerId: Long,
+                             replacedPlayerId: Long,
+                             movedPosition: Int,
+                             replacedPosition: Int) {
+        mSubscription = mDataManager.changePlayerPosition(movedPlayerId, replacedPlayerId, movedPosition, replacedPosition)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()

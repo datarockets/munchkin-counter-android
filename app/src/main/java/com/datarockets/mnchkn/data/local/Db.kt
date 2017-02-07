@@ -49,6 +49,7 @@ object Db {
             contentValues.put(KEY_PLAYER_COLOR, player.color)
             contentValues.put(KEY_PLAYER_LEVEL, player.levelScore)
             contentValues.put(KEY_PLAYER_STRENGTH, player.strengthScore)
+            contentValues.put(KEY_PLAYER_POSITION, player.position)
             contentValues.put(KEY_PLAYER_IS_PLAYING, player.playing)
             return contentValues
         }

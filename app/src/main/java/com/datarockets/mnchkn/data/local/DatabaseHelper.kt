@@ -1,6 +1,7 @@
 package com.datarockets.mnchkn.data.local
 
 import android.content.ContentValues
+import android.database.sqlite.SQLiteDatabase
 import com.datarockets.mnchkn.data.models.GameStep
 import com.datarockets.mnchkn.data.models.Player
 import com.squareup.sqlbrite.BriteDatabase
@@ -55,11 +56,12 @@ class DatabaseHelper
 
     fun getPlayers(): Observable<Player> {
         return Observable.create { subscriber ->
-            val query = String.format("SELECT * FROM %s ORDER BY %s DESC",
+            val query = String.format("SELECT * FROM %s ORDER BY %s ASC",
                     Db.PlayerTable.TABLE_NAME,
                     Db.PlayerTable.KEY_PLAYER_POSITION)
             val cursor = briteDb.query(query)
             while (cursor.moveToNext()) {
+                Timber.d(cursor.getInt(cursor.getColumnIndexOrThrow(Db.PlayerTable.KEY_PLAYER_POSITION)).toString())
                 subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
             }
             cursor.close()
@@ -69,7 +71,7 @@ class DatabaseHelper
 
     fun getPlayingPlayers(): Observable<Player> {
         return Observable.create { subscriber ->
-            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s DESC",
+            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s ASC",
                     Db.PlayerTable.TABLE_NAME,
                     Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
                     Db.PlayerTable.KEY_PLAYER_POSITION)
@@ -131,7 +133,7 @@ class DatabaseHelper
     fun updatePlayersPositions(): Observable<Void> {
         return Observable.create { subscriber ->
             val players = mutableListOf<Player>()
-            val query = String.format("SELECT * FROM %s ORDER BY %s DESC",
+            val query = String.format("SELECT * FROM %s ORDER BY %s ASC",
                     Db.PlayerTable.TABLE_NAME, Db.PlayerTable.KEY_PLAYER_POSITION)
             val cursor = briteDb.query(query)
             while (cursor.moveToNext()) {
@@ -226,17 +228,23 @@ class DatabaseHelper
         }
     }
 
-    fun changePlayerPosition(playerId: Long,
-                             position: Int): Observable<Void> {
+    fun changePlayersPositions(movedPlayerId: Long,
+                               replacedPlayerId: Long,
+                               movedPosition: Int,
+                               replacedPosition: Int): Observable<Void> {
         return Observable.create { subscriber ->
             val transaction = briteDb.newTransaction()
             try {
-                val contentValues = ContentValues().apply {
-                    put(Db.PlayerTable.KEY_PLAYER_POSITION, position)
-                }
+                val contentValues = ContentValues()
+                contentValues.put(Db.PlayerTable.KEY_PLAYER_POSITION, replacedPosition)
+                val contentValues2 = ContentValues()
+                contentValues2.put(Db.PlayerTable.KEY_PLAYER_POSITION, movedPosition)
                 briteDb.update(Db.PlayerTable.TABLE_NAME,
-                        contentValues,
-                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
+                        contentValues, SQLiteDatabase.CONFLICT_REPLACE,
+                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", movedPlayerId.toString())
+                briteDb.update(Db.PlayerTable.TABLE_NAME,
+                        contentValues2, SQLiteDatabase.CONFLICT_REPLACE,
+                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", replacedPlayerId.toString())
                 transaction.markSuccessful()
                 subscriber.onCompleted()
             } finally {

@@ -21,6 +21,7 @@ import com.datarockets.mnchkn.ui.dialogs.PlayerActionsDialogFragment
 import com.datarockets.mnchkn.ui.editplayer.EditPlayerDialogFragment
 import com.datarockets.mnchkn.ui.settings.SettingsActivity
 import com.woxthebox.draglistview.DragListView
+import timber.log.Timber
 import javax.inject.Inject
 
 class PlayersListActivity : BaseActivity(), PlayersListView,
@@ -133,7 +134,8 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     }
 
     override fun onFinishEditDialog(inputName: String) {
-        playersListPresenter.addPlayer(inputName)
+        val playersCount = lvPlayerEditorListAdapter.itemCount
+        playersListPresenter.addPlayer(inputName, playersCount)
     }
 
     override fun onPlayerItemClick(playerId: Long) {
@@ -153,15 +155,16 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
 
     }
 
-    override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
-        val playerOneId = lvPlayerEditorListAdapter.getItemId(fromPosition)
-        val playerTwoId = lvPlayerEditorListAdapter.getItemId(toPosition)
-        playersListPresenter.apply {
-            changePlayerPosition(playerOneId, toPosition)
-            changePlayerPosition(playerTwoId, fromPosition)
-            lvPlayerEditorListAdapter.notifyItemChanged(toPosition)
-            lvPlayerEditorListAdapter.notifyItemChanged(fromPosition)
-        }
+    override fun onItemDragEnded(movedPlayerPosition: Int, replacedPlayerPosition: Int) {
+        Timber.d("From: " + movedPlayerPosition + ", To: " + replacedPlayerPosition)
+        val movedPlayerId = lvPlayerEditorListAdapter.getItemId(movedPlayerPosition)
+        val replacedPlayerId = lvPlayerEditorListAdapter.getItemId(replacedPlayerPosition)
+        Timber.d("From id: " + movedPlayerId + ", To id: " + replacedPlayerId)
+        playersListPresenter.changePlayerPosition(movedPlayerId, replacedPlayerId, movedPlayerPosition, replacedPlayerPosition)
+//        lvPlayerEditorListAdapter.apply {
+//            notifyItemChanged(toPosition)
+//            notifyItemChanged(fromPosition)
+//        }
     }
 
     override fun onEditPlayer(playerId: Long) {

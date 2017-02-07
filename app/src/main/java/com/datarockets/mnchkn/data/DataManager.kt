@@ -44,18 +44,21 @@ open class DataManager
         return Observable.just(null)
     }
 
-    fun addPlayer(playerName: String): Observable<Player> {
+    fun addPlayer(playerName: String, position: Int): Observable<Player> {
         val player = Player()
         player.name = playerName
         player.levelScore = 1
         player.strengthScore = 1
         player.color = ColorUtil.generatePlayerAvatarColor()
+        player.position = position
         return mDatabaseHelper.setPlayer(player)
     }
 
-    fun changePlayerPosition(playerId: Long,
-                             position: Int): Observable<Void> {
-        return mDatabaseHelper.changePlayerPosition(playerId, position)
+    fun changePlayerPosition(movedPlayerId: Long,
+                             replacedPlayerId: Long,
+                             movedPosition: Int,
+                             replacedPosition: Int): Observable<Void> {
+        return mDatabaseHelper.changePlayersPositions(movedPlayerId, replacedPlayerId, movedPosition, replacedPosition)
     }
 
     fun setPlayerPlaying(playerId: Long, isPlaying: Boolean): Observable<Void> {
