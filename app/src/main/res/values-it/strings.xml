@@ -4,7 +4,6 @@
     <string name="button.add_new_player">Aggiungere giocatore</string>
     <string name="button.continue">Continuare</string>
     <string name="button.finish">Finire</string>
-    <string name="button.next_step">Prossimo passo</string>
     <string name="button.no">No</string>
     <string name="button.skip">Saltare</string>
     <string name="button.start">Iniziare</string>
@@ -42,4 +41,8 @@
     <string name="button.update_player">Aggiornamento giocatore</string>
     <string name="menu.roll_dice">Tirare un dado</string>
     <string name="text.edit_player">Modifica Player</string>
+    <string name="button.next_player">Prossimo giocatore</string>
+    <string name="dialog.player_actions.delete_player">Eliminare giocatore</string>
+    <string name="dialog.player_actions.edit_player">Modifica giocatore</string>
+    <string name="menu.share_app">Condividi Munchkin Level Counter</string>
 </resources>
