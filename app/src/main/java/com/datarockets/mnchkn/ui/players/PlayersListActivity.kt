@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
@@ -22,7 +21,7 @@ import com.datarockets.mnchkn.ui.dashboard.DashboardActivity
 import com.datarockets.mnchkn.ui.dialogs.NewPlayerDialogFragment
 import com.datarockets.mnchkn.ui.dialogs.PlayerActionsDialogFragment
 import com.datarockets.mnchkn.ui.editplayer.EditPlayerDialogFragment
-import com.datarockets.mnchkn.ui.players.helpers.ItemTouchHelperViewHolder
+import com.datarockets.mnchkn.ui.players.helpers.ItemTouchHelperCallback
 import com.datarockets.mnchkn.ui.settings.SettingsActivity
 import javax.inject.Inject
 
@@ -32,6 +31,7 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         PlayerEditorListAdapter.OnItemClickListener,
         PlayerEditorListAdapter.OnItemCheckboxClickListener,
         PlayerEditorListAdapter.OnStartDragListener,
+        PlayerEditorListAdapter.OnItemMovedListener,
         PlayerActionsDialogFragment.PlayerActionsListener {
 
     @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
@@ -42,7 +42,8 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     @Inject lateinit var playersListPresenter: PlayersListPresenter
     @Inject lateinit var linearLayoutManager: LinearLayoutManager
 
-    lateinit var mItemTouchHelper: ItemTouchHelper
+    private lateinit var mItemTouchHelper: ItemTouchHelper
+    private lateinit var mItemTouchHelperCallback: ItemTouchHelper.Callback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,70 +61,11 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
             setOnItemClickListener(this@PlayersListActivity)
             setOnItemCheckboxClickListener(this@PlayersListActivity)
             setOnStartDragListener(this@PlayersListActivity)
+            setOnItemMovedListener(this@PlayersListActivity)
         }
 
-        mItemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
-
-            override fun onMoved(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, fromPos: Int, target: RecyclerView.ViewHolder?, toPos: Int, x: Int, y: Int) {
-                super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y)
-                val movedPlayerId = lvPlayerEditorListAdapter.getItemId(fromPos)
-                val draggerPlayerId = lvPlayerEditorListAdapter.getItemId(toPos)
-                playersListPresenter.changePlayerPosition(draggerPlayerId, toPos)
-                playersListPresenter.changePlayerPosition(movedPlayerId, fromPos)
-            }
-
-            override fun getMovementFlags(recyclerView: RecyclerView?,
-                                          viewHolder: RecyclerView.ViewHolder?): Int {
-                if (lvPlayersList.layoutManager is GridLayoutManager) {
-                    val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-                    val swipeFlags = 0
-                    return ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
-                } else {
-                    val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-                    val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
-                    return ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
-                }
-            }
-
-            override fun onMove(recyclerView: RecyclerView?,
-                                source: RecyclerView.ViewHolder?,
-                                target: RecyclerView.ViewHolder?): Boolean {
-                if (source?.itemViewType != target?.itemViewType) {
-                    return false
-                }
-                lvPlayerEditorListAdapter.onItemMove(source!!.adapterPosition, target!!.adapterPosition)
-                return true
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
-                lvPlayerEditorListAdapter.onItemDismiss(viewHolder!!.adapterPosition)
-            }
-
-            override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-                if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-                    if (viewHolder is ItemTouchHelperViewHolder) {
-                        val itemViewHolder: ItemTouchHelperViewHolder = viewHolder
-                        itemViewHolder.onItemSelected()
-                    }
-                }
-                super.onSelectedChanged(viewHolder, actionState)
-
-            }
-
-            override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?) {
-                super.clearView(recyclerView, viewHolder)
-
-                viewHolder?.itemView?.alpha = 1.0f
-
-                if (viewHolder is ItemTouchHelperViewHolder) {
-                    val itemViewHolder: ItemTouchHelperViewHolder = viewHolder
-                    itemViewHolder.onItemClear()
-                }
-
-            }
-
-        })
-
+        mItemTouchHelperCallback= ItemTouchHelperCallback(lvPlayerEditorListAdapter)
+        mItemTouchHelper = ItemTouchHelper(mItemTouchHelperCallback)
         mItemTouchHelper.attachToRecyclerView(lvPlayersList)
 
         playersListPresenter.apply {
@@ -232,6 +174,13 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
 
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
         mItemTouchHelper.startDrag(viewHolder)
+    }
+
+    override fun onItemMoved(fromPosition: Int, toPosition: Int) {
+        val movedPlayerId = lvPlayerEditorListAdapter.getItemId(fromPosition)
+        val draggerPlayerId = lvPlayerEditorListAdapter.getItemId(toPosition)
+        playersListPresenter.changePlayerPosition(draggerPlayerId, toPosition)
+        playersListPresenter.changePlayerPosition(movedPlayerId, fromPosition)
     }
 
     override fun onDestroy() {

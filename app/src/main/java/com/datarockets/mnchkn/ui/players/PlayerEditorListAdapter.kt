@@ -37,6 +37,10 @@ class PlayerEditorListAdapter
         fun onPlayerItemCheckboxClick(playerId: Long, isPlaying: Boolean)
     }
 
+    interface OnItemMovedListener {
+        fun onItemMoved(fromPosition: Int, toPosition: Int)
+    }
+
     interface OnStartDragListener {
         fun onStartDrag(viewHolder: RecyclerView.ViewHolder)
     }
@@ -44,6 +48,7 @@ class PlayerEditorListAdapter
     var mClickListener: OnItemClickListener? = null
     var mCheckboxClickListener: OnItemCheckboxClickListener? = null
     var mDragStartListener: OnStartDragListener? = null
+    var mItemMovedListener: OnItemMovedListener? = null
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         mClickListener = listener
@@ -55,6 +60,10 @@ class PlayerEditorListAdapter
 
     fun setOnStartDragListener(listener: OnStartDragListener) {
         mDragStartListener = listener
+    }
+
+    fun setOnItemMovedListener(listener: OnItemMovedListener) {
+        mItemMovedListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -113,6 +122,10 @@ class PlayerEditorListAdapter
 
     override fun getItemCount(): Int {
         return mPlayers.size
+    }
+
+    override fun onItemMoved(fromPosition: Int, toPosition: Int) {
+        mItemMovedListener?.onItemMoved(fromPosition, toPosition)
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
