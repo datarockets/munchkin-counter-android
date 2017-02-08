@@ -1,6 +1,7 @@
 package com.datarockets.mnchkn.data
 
 import android.content.Intent
+import android.graphics.Color
 import com.datarockets.mnchkn.data.local.DatabaseHelper
 import com.datarockets.mnchkn.data.local.PreferencesHelper
 import com.datarockets.mnchkn.data.local.SharingHelper
@@ -8,9 +9,11 @@ import com.datarockets.mnchkn.data.models.GameStep
 import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.utils.ColorUtil
 import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -77,28 +80,67 @@ open class DataManager
 
     fun clearGameSteps(): Observable<Void> {
         return mDatabaseHelper.clearGameSteps()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun clearPlayerStats(): Observable<Void> {
-        return mDatabaseHelper.clearPlayerStats()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
+    fun getLineData(type: Int): Observable<LineData> {
+        return Observable.create { subscriber ->
+            val playersList = mDatabaseHelper.getPlayingPlayers()
+            val gameSteps = mDatabaseHelper.getGameSteps()
+            val playerGameSteps = mutableMapOf<Player, List<GameStep>>()
 
-    fun getEntries() {
-        mDatabaseHelper.gameSteps
-                .groupBy(GameStep::playerId)
-                .map { it ->
-                    it.map {
-                        val entry = Entry()
-                        entry.y = it.playerLevel.toFloat()
-                        entry
+            playersList.forEach { player ->
+                val playerSteps = mutableListOf<GameStep>()
+                gameSteps.forEach { step ->
+                    if (step.playerId == player.id) {
+                        playerSteps.add(step)
                     }
                 }
-                .toList()
+                playerGameSteps.put(player, playerSteps)
+            }
 
+            var playerLines = ArrayList<ILineDataSet>()
+            val playerColors = mutableListOf<String>()
+
+            playerGameSteps.keys.forEach { player ->
+                val color = player.color
+                playerColors.add(color!!)
+            }
+
+            playerGameSteps.values.forEachIndexed { index, playerStepsList ->
+                val entries = mutableListOf<Entry>()
+                playerStepsList.forEachIndexed { index, step ->
+                    when (type) {
+                        0 -> {
+                            val playerLevel = step.playerLevel
+                            entries.add(Entry(index.toFloat(), playerLevel.toFloat()))
+                        }
+                        1 -> {
+                            val playerStrength = step.playerStrength
+                            entries.add(Entry(index.toFloat(), playerStrength.toFloat()))
+                        }
+                        2 -> {
+                            val playerTotal = step.playerLevel + step.playerStrength
+                            entries.add(Entry(index.toFloat(), playerTotal.toFloat()))
+                        }
+                    }
+                }
+
+
+                val lineDataSet = LineDataSet(entries, "")
+                lineDataSet.setDrawCircles(false)
+                lineDataSet.color = Color.parseColor(playerColors[index])
+                lineDataSet.lineWidth = 3f
+                lineDataSet.cubicIntensity = 0.1f
+                lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+                lineDataSet.setDrawValues(false)
+                lineDataSet.isHighlightEnabled = false
+                playerLines.add(lineDataSet)
+            }
+
+            val lineData = LineData(playerLines)
+            subscriber.onNext(lineData)
+            subscriber.onCompleted()
+        }
     }
 
     fun addGameStep(playerId: Long, levelScore: Int, strengthScore: Int): Observable<Void> {

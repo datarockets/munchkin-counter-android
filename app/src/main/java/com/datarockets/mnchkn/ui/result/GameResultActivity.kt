@@ -74,14 +74,11 @@ class GameResultActivity : BaseActivity(), GameResultView {
         startActivity(Intent.createChooser(shareableIntent, "Share an app"))
     }
 
-    override fun onStop() {
-        super.onStop()
-        presenter.clearGameResults()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        presenter.clearGameResults()
+        if (isFinishing) {
+            presenter.clearGameResults()
+        }
         presenter.detachView()
     }
 

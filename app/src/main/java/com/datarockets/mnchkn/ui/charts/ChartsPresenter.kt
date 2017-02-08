@@ -18,7 +18,10 @@ class ChartsPresenter
     }
 
     fun loadChartData(type: Int) {
-
+        mSubscription = mDataManager.getLineData(type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { lineData -> mChartsView?.showPlayersChart(lineData) }
     }
 
     fun loadPlayers(sortType: Int) {

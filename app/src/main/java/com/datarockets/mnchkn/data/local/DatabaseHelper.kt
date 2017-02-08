@@ -259,7 +259,7 @@ class DatabaseHelper
         }
     }
 
-    fun clearPlayerStats(): Observable<Void> {
+    fun clearGameSteps(): Observable<Void> {
         return Observable.create { subscriber ->
             val transaction = briteDb.newTransaction()
             try {
@@ -267,6 +267,7 @@ class DatabaseHelper
                 values.put(Db.PlayerTable.KEY_PLAYER_LEVEL, 1)
                 values.put(Db.PlayerTable.KEY_PLAYER_STRENGTH, 1)
                 briteDb.update(Db.PlayerTable.TABLE_NAME, values, null)
+                briteDb.execute("DELETE FROM " + Db.GameTable.TABLE_NAME)
                 transaction.markSuccessful()
                 subscriber.onCompleted()
             } finally {
@@ -275,12 +276,8 @@ class DatabaseHelper
         }
     }
 
-    fun clearGameSteps(): Observable<Void> {
-        return Observable.create { }
-    }
-
-    val gameSteps: Observable<GameStep>
-        get() = Observable.create { subscriber ->
+    fun getGameSteps(): Observable<GameStep> {
+        return Observable.create { subscriber ->
             val QUERY = "SELECT " +
                     Db.GameTable.KEY_GAME_PLAYER_ID + ", " +
                     Db.GameTable.KEY_GAME_PLAYER_LEVEL + ", " +
@@ -295,5 +292,6 @@ class DatabaseHelper
             cursor.close()
             subscriber.onCompleted()
         }
+    }
 
 }

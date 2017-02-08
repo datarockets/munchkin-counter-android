@@ -13,7 +13,8 @@ import com.datarockets.mnchkn.R
 import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.BaseActivity
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.LineData
 import javax.inject.Inject
 
 class ChartsFragment : Fragment(), ChartsView {
@@ -41,14 +42,19 @@ class ChartsFragment : Fragment(), ChartsView {
         lvPlayerList.adapter = lvPlayerListAdapter
         presenter.apply {
             attachView(this@ChartsFragment)
-//            loadChartData(arguments.getInt(CHART_TYPE))
-            presenter.loadPlayers(arguments.getInt(CHART_TYPE))
+            loadChartData(arguments.getInt(CHART_TYPE))
+            loadPlayers(arguments.getInt(CHART_TYPE))
         }
     }
 
-
-    override fun showLineDataSets(lineDataSets: List<LineDataSet>) {
-
+    override fun showPlayersChart(lineData: LineData) {
+        lineChartView.xAxis.granularity = 1f
+        lineChartView.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        lineChartView.axisLeft.granularity = 1f
+        lineChartView.setDrawGridBackground(false)
+        lineChartView.description.isEnabled = false
+        lineChartView.data = lineData
+        lineChartView.invalidate()
     }
 
     override fun showPlayersList(players: List<Player>) {

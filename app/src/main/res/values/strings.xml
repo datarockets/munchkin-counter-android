@@ -10,7 +10,7 @@
     <string name="menu.share_app">Share Munchkin Level Counter</string>
     <string name="button.finish">Finish</string>
     <string name="button.skip">Skip</string>
-    <string name="button.next_player">Next step</string>
+    <string name="button.next_player">Next player</string>
     <string name="button.add_new_player">Add player</string>
     <string name="button.update_player">Update player</string>
     <string name="button.yes">Yes</string>

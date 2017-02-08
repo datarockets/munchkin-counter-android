@@ -61,12 +61,6 @@ class PlayersListPresenter
         mDataManager.updatePlayersPosition()
     }
 
-    fun clearPlayersStats() {
-        mSubscription = mDataManager.clearPlayerStats()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-    }
 
     fun clearGameSteps() {
         mSubscription = mDataManager.clearGameSteps()

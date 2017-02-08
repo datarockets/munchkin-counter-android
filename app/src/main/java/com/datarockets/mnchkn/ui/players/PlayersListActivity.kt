@@ -123,7 +123,6 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
                 dialog.dismiss()
                 playersListPresenter.apply {
                     setGameFinished()
-                    clearPlayersStats()
                     clearGameSteps()
                 }
             }
