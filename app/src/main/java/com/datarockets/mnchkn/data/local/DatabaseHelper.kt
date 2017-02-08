@@ -139,7 +139,6 @@ class DatabaseHelper
                 players.add(Db.PlayerTable.parseCursor(cursor))
             }
             for (index in players.indices) {
-                Timber.d(index.toString())
                 val transaction = briteDb.newTransaction()
                 try {
                     val contentValues = ContentValues()
