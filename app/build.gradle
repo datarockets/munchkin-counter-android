@@ -20,11 +20,18 @@ android {
         buildConfigField("String", "MIXPANEL_API_KEY", "\"" + MIXPANEL_API_KEY + "\"")
     }
 
-    buildTypes {
-        debug {
-            testCoverageEnabled true
-        }
+    signingConfigs {
         release {
+            storeFile file("${KEYSTORE_FILE}")
+            keyAlias "${KEYSTORE_ALIAS}"
+            storePassword "${KEYSTORE_PASSWORD}"
+            keyPassword "${KEYSTORE_PASSWORD}"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
