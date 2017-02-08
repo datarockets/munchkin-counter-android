@@ -9,7 +9,6 @@ import com.datarockets.mnchkn.injection.ApplicationContext
 import javax.inject.Inject
 
 
-
 class DbOpenHelper
 @Inject constructor(@ApplicationContext context: Context) :
         SQLiteOpenHelper(context, DbOpenHelper.DATABASE_NAME, null, DbOpenHelper.DATABASE_VERSION) {
@@ -79,9 +78,11 @@ class DbOpenHelper
         while (cursor.moveToNext()) {
             players.add(Db.PlayerTable.parseCursor(cursor))
         }
+        cursor.close()
         players.forEachIndexed { index, player ->
             val contentValues = ContentValues()
             contentValues.put(Db.PlayerTable.KEY_PLAYER_POSITION, index)
+            contentValues.put(Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1)
             db.update(Db.PlayerTable.TABLE_NAME,
                     contentValues,
                     Db.PlayerTable.KEY_PLAYER_ID + " = ?",
@@ -94,6 +95,7 @@ class DbOpenHelper
         val cursor = db.rawQuery(countQuery, null)
         cursor.moveToFirst()
         val count = cursor.getInt(0)
+        cursor.close()
         return count <= 0
     }
 
