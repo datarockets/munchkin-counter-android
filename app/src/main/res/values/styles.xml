@@ -5,6 +5,9 @@
         <item name="colorPrimaryDark">@color/card_general</item>
         <item name="colorAccent">@color/card_corner</item>
     </style>
-    <style name="SplashScreenTheme" parent="Theme.AppCompat.NoActionBar"/>
+
+    <style name="SplashScreenTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
 
 </resources>

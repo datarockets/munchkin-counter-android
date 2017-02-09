@@ -2,6 +2,7 @@ package com.datarockets.mnchkn.ui.base
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.app.AppCompatDelegate
 
 import com.datarockets.mnchkn.MunchkinApplication
 import com.datarockets.mnchkn.injection.components.ActivityComponent
@@ -20,6 +21,7 @@ open class BaseActivity : AppCompatActivity() {
     private var mMixpanel: MixpanelAPI? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         super.onCreate(savedInstanceState)
         mMixpanel = MunchkinApplication[this].mixpanel
     }
