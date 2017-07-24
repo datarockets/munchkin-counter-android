@@ -12,39 +12,38 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import rx.Observable
-import java.util.*
+import io.reactivex.Observable
+import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 open class DataManager
-@Inject constructor(private val mDatabaseHelper: DatabaseHelper,
-                    private val mPreferencesHelper: PreferencesHelper,
-                    private val mSharingHelper: SharingHelper) {
+@Inject constructor(private val databaseHelper: DatabaseHelper,
+                    private val preferencesHelper: PreferencesHelper,
+                    private val sharingHelper: SharingHelper) {
 
-    val preferencesHelper = mPreferencesHelper
+    val localPreferencesHelper = preferencesHelper
 
-    fun getPlayer(playerId: Long): Observable<Player> {
-        return mDatabaseHelper.getPlayer(playerId)
+    fun getPlayer(playerId: Long): io.reactivex.Observable<Player> {
+        return databaseHelper.getPlayer(playerId)
     }
 
-    open fun getPlayers(): Observable<List<Player>> {
-        return mDatabaseHelper.getPlayers().toList()
+    open fun getPlayers(): Single<List<Player>> {
+        return databaseHelper.getPlayers().toList()
     }
 
-    open fun getPlayingPlayers(): Observable<List<Player>> {
-        return mDatabaseHelper.getPlayingPlayers().toList()
+    open fun getPlayingPlayers(): Single<List<Player>> {
+        return databaseHelper.getPlayingPlayers().toList()
     }
 
-    open fun getPlayers(sortType: Int): Observable<List<Player>> {
+    open fun getPlayers(sortType: Int): Single<List<Player>> {
         when (sortType) {
-            0 -> return mDatabaseHelper.getPlayedPlayersByLevel().toList()
-            1 -> return mDatabaseHelper.getPlayedPlayersByStrength().toList()
-            2 -> return mDatabaseHelper.getPlayedPlayersByTotal().toList()
+            0 -> return databaseHelper.getPlayedPlayersByLevel().toList()
+            1 -> return databaseHelper.getPlayedPlayersByStrength().toList()
+            2 -> return databaseHelper.getPlayedPlayersByTotal().toList()
         }
-        return Observable.just(null)
+        return Single.just(null)
     }
 
     fun addPlayer(playerName: String, position: Int): Observable<Player> {
@@ -54,38 +53,38 @@ open class DataManager
         player.strengthScore = 1
         player.color = ColorUtil.generatePlayerAvatarColor()
         player.position = position
-        return mDatabaseHelper.setPlayer(player)
+        return databaseHelper.setPlayer(player)
     }
 
     fun changePlayerPosition(movedPlayerId: Long,
                              newPosition: Int): Observable<Void> {
-        return mDatabaseHelper.changePlayersPositions(movedPlayerId, newPosition)
+        return databaseHelper.changePlayersPositions(movedPlayerId, newPosition)
     }
 
     fun setPlayerPlaying(playerId: Long, isPlaying: Boolean): Observable<Void> {
-        return mDatabaseHelper.markPlayerPlaying(playerId, isPlaying)
+        return databaseHelper.markPlayerPlaying(playerId, isPlaying)
     }
 
     fun updatePlayerName(playerId: Long, playerName: String): Observable<Void> {
-        return mDatabaseHelper.updatePlayerName(playerId, playerName)
+        return databaseHelper.updatePlayerName(playerId, playerName)
     }
 
     fun updatePlayerScores(playerId: Long, levelScore: Int, strengthScore: Int): Observable<Void> {
-        return mDatabaseHelper.updatePlayerScores(playerId, levelScore, strengthScore)
+        return databaseHelper.updatePlayerScores(playerId, levelScore, strengthScore)
     }
 
     fun deletePlayer(playerId: Long): Observable<Void> {
-        return mDatabaseHelper.deletePlayer(playerId)
+        return databaseHelper.deletePlayer(playerId)
     }
 
     fun clearGameSteps(): Observable<Void> {
-        return mDatabaseHelper.clearGameSteps()
+        return databaseHelper.clearGameSteps()
     }
 
     fun getLineData(type: Int): Observable<LineData> {
         return Observable.create { subscriber ->
-            val playersList = mDatabaseHelper.getPlayingPlayers()
-            val gameSteps = mDatabaseHelper.getGameSteps()
+            val playersList = databaseHelper.getPlayingPlayers()
+            val gameSteps = databaseHelper.getGameSteps()
             val playerGameSteps = mutableMapOf<Player, List<GameStep>>()
 
             playersList.forEach { player ->
@@ -139,7 +138,7 @@ open class DataManager
 
             val lineData = LineData(playerLines)
             subscriber.onNext(lineData)
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
 
@@ -148,15 +147,14 @@ open class DataManager
         gameStep.playerId = playerId
         gameStep.playerLevel = levelScore
         gameStep.playerStrength = strengthScore
-        return mDatabaseHelper.setGameStep(gameStep)
+        return databaseHelper.setGameStep(gameStep)
     }
 
     fun generateShareableIntent(): Observable<Intent> {
-        return mSharingHelper.generateShareableIntent()
+        return sharingHelper.generateShareableIntent()
     }
 
     fun updatePlayersPosition() {
-        mDatabaseHelper.updatePlayersPositions().subscribe()
+        databaseHelper.updatePlayersPositions().subscribe()
     }
-
 }

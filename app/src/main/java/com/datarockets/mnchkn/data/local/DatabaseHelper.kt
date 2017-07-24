@@ -3,10 +3,10 @@ package com.datarockets.mnchkn.data.local
 import android.content.ContentValues
 import com.datarockets.mnchkn.data.models.GameStep
 import com.datarockets.mnchkn.data.models.Player
-import com.squareup.sqlbrite.BriteDatabase
-import com.squareup.sqlbrite.SqlBrite
-import rx.Observable
-import rx.schedulers.Schedulers
+import com.squareup.sqlbrite2.BriteDatabase
+import com.squareup.sqlbrite2.SqlBrite
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,7 +20,7 @@ class DatabaseHelper
     init {
         val briteBuilder = SqlBrite.Builder()
                 .logger { message -> Timber.tag("Database").v(message) }
-        briteDb = briteBuilder.build().wrapDatabaseHelper(dbOpenHelper, Schedulers.immediate())
+        briteDb = briteBuilder.build().wrapDatabaseHelper(dbOpenHelper, Schedulers.trampoline())
         briteDb.setLoggingEnabled(true)
     }
 
@@ -33,7 +33,7 @@ class DatabaseHelper
                 player.id = playerId
                 subscriber.onNext(player)
                 transaction.markSuccessful()
-                subscriber.onCompleted()
+                subscriber.onComplete()
             } finally {
                 transaction.end()
             }
@@ -49,7 +49,7 @@ class DatabaseHelper
                 subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
             }
             cursor.close()
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
 
@@ -64,7 +64,7 @@ class DatabaseHelper
                 subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
             }
             cursor.close()
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
 
@@ -79,7 +79,7 @@ class DatabaseHelper
                 subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
             }
             cursor.close()
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
 
@@ -94,7 +94,7 @@ class DatabaseHelper
                 subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
             }
             cursor.close()
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
 
@@ -109,7 +109,7 @@ class DatabaseHelper
                 subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
             }
             cursor.close()
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
 
@@ -125,7 +125,7 @@ class DatabaseHelper
                 subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
             }
             cursor.close()
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
 
@@ -152,7 +152,7 @@ class DatabaseHelper
                     transaction.end()
                 }
             }
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
 
@@ -165,7 +165,7 @@ class DatabaseHelper
                         Db.PlayerTable.KEY_PLAYER_ID + " = ?",
                         playerId.toString())
                 transaction.markSuccessful()
-                subscriber.onCompleted()
+                subscriber.onComplete()
             } finally {
                 transaction.end()
             }
@@ -183,7 +183,7 @@ class DatabaseHelper
                         contentValues,
                         Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
                 transaction.markSuccessful()
-                subscriber.onCompleted()
+                subscriber.onComplete()
             } finally {
                 transaction.end()
             }
@@ -202,7 +202,7 @@ class DatabaseHelper
                         contentValues,
                         Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
                 transaction.markSuccessful()
-                subscriber.onCompleted()
+                subscriber.onComplete()
             } finally {
                 transaction.end()
             }
@@ -219,7 +219,7 @@ class DatabaseHelper
                         contentValues,
                         Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
                 transaction.markSuccessful()
-                subscriber.onCompleted()
+                subscriber.onComplete()
             } finally {
                 transaction.end()
             }
@@ -237,7 +237,7 @@ class DatabaseHelper
                         contentValues,
                         Db.PlayerTable.KEY_PLAYER_ID + " = ?", movedPlayerId.toString())
                 transaction.markSuccessful()
-                subscriber.onCompleted()
+                subscriber.onComplete()
             } finally {
                 transaction.end()
             }
@@ -251,7 +251,7 @@ class DatabaseHelper
                 val contentValues = Db.GameTable.toContentValues(gameStep)
                 briteDb.insert(Db.GameTable.TABLE_NAME, contentValues)
                 transaction.markSuccessful()
-                subscriber.onCompleted()
+                subscriber.onComplete()
             } finally {
                 transaction.end()
             }
@@ -268,7 +268,7 @@ class DatabaseHelper
                 briteDb.update(Db.PlayerTable.TABLE_NAME, values, null)
                 briteDb.execute("DELETE FROM " + Db.GameTable.TABLE_NAME)
                 transaction.markSuccessful()
-                subscriber.onCompleted()
+                subscriber.onComplete()
             } finally {
                 transaction.end()
             }
@@ -289,8 +289,7 @@ class DatabaseHelper
                 subscriber.onNext(Db.GameTable.parseCursor(cursor))
             }
             cursor.close()
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.datarockets.mnchkn.data.local
 
-
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
@@ -39,10 +38,8 @@ class PreferencesHelper
     }
 
     companion object {
-
         private val IS_ONBOARDING_SEEN = "is_onboarding_seen"
         private val IS_WAKELOCK_ACTIVE = "is_wakelock_active"
         private val IS_GAME_STARTED = "is_game_started"
     }
-
 }

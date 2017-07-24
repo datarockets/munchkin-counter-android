@@ -6,7 +6,6 @@ import javax.inject.Inject
 class Dice
 @Inject
 constructor() {
-
     private val mRandom: Random = Random()
     private val mFaces: Int = 6
 
@@ -14,5 +13,4 @@ constructor() {
         val rollResult = 1 + mRandom.nextInt(mFaces)
         return rollResult.toString()
     }
-
 }

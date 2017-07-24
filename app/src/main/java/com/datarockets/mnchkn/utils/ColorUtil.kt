@@ -9,5 +9,4 @@ object ColorUtil {
         val generatedColor = generator.randomColor
         return "#" + Integer.toHexString(generatedColor).substring(2)
     }
-
 }

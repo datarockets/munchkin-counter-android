@@ -2,32 +2,31 @@ package com.datarockets.mnchkn.ui.onboard
 
 import com.datarockets.mnchkn.data.DataManager
 import com.datarockets.mnchkn.ui.base.Presenter
-import rx.Subscription
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class WelcomePresenter
-@Inject constructor(private val mDataManager: DataManager) : Presenter<WelcomeView> {
+@Inject constructor(private val dataManager: DataManager) : Presenter<WelcomeView> {
 
-    private var mWelcomeView: WelcomeView? = null
-    private var mSubscription: Subscription? = null
+    private var welcomeView: WelcomeView? = null
+    private var disposable: Disposable? = null
 
     override fun attachView(mvpView: WelcomeView) {
-        mWelcomeView = mvpView
+        welcomeView = mvpView
     }
 
     fun checkIsOnboardingSeen() {
-        if (mDataManager.preferencesHelper.checkIsUserSeenOnboarding()) {
-            mWelcomeView?.openPlayersActivity()
+        if (dataManager.localPreferencesHelper.checkIsUserSeenOnboarding()) {
+            welcomeView?.openPlayersActivity()
         }
     }
 
     fun setOnboardingSeen() {
-        mDataManager.preferencesHelper.setOnboardingSeen()
+        dataManager.localPreferencesHelper.setOnboardingSeen()
     }
 
     override fun detachView() {
-        mWelcomeView = null
-        mSubscription?.unsubscribe()
+        welcomeView = null
+        disposable?.dispose()
     }
-
 }

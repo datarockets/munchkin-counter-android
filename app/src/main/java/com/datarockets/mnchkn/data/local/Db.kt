@@ -1,6 +1,5 @@
 package com.datarockets.mnchkn.data.local
 
-
 import android.content.ContentValues
 import android.database.Cursor
 
@@ -86,5 +85,4 @@ object Db {
             return contentValues
         }
     }
-
 }

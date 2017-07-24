@@ -34,5 +34,4 @@ class ActivityModule(private val mActivity: AppCompatActivity) {
     fun providesLinearLayoutManager(): LinearLayoutManager {
         return LinearLayoutManager(mActivity)
     }
-
 }

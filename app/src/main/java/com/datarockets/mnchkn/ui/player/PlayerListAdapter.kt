@@ -12,40 +12,39 @@ import com.datarockets.mnchkn.data.models.Player
 import java.util.*
 import javax.inject.Inject
 
-
 class PlayerListAdapter
 @Inject constructor() : BaseAdapter() {
 
-    private var mPlayers: List<Player> = ArrayList()
+    private var players: List<Player> = ArrayList()
 
     fun setPlayers(players: List<Player>) {
-        mPlayers = players
+        this.players = players
         notifyDataSetChanged()
     }
 
     fun updatePlayerScores(playerPosition: Int, levelScore: Int, strengthScore: Int) {
-        mPlayers[playerPosition].levelScore = levelScore
-        mPlayers[playerPosition].strengthScore = strengthScore
+        players[playerPosition].levelScore = levelScore
+        players[playerPosition].strengthScore = strengthScore
         notifyDataSetChanged()
     }
 
     override fun getCount(): Int {
-        return mPlayers.size
+        return players.size
     }
 
     override fun getItem(position: Int): Player {
-        return mPlayers[position]
+        return players[position]
     }
 
     override fun getItemId(position: Int): Long {
-        return mPlayers[position].id
+        return players[position].id
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var convertView = convertView
 
         val holder: ViewHolder
-        val player = mPlayers[position]
+        val player = players[position]
 
         if (convertView != null) {
             holder = convertView.tag as ViewHolder
@@ -70,6 +69,5 @@ class PlayerListAdapter
         init {
             ButterKnife.bind(this, view)
         }
-
     }
 }

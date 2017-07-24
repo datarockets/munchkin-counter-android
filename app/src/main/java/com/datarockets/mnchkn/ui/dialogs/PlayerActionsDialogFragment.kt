@@ -19,10 +19,10 @@ class PlayerActionsDialogFragment : BottomSheetDialogFragment() {
 
     @BindView(R.id.lv_player_actions) lateinit var lvPlayerActions: ListView
 
-    @Inject lateinit var mPlayerEditorActionsAdapter: PlayerEditorActionsAdapter
-    private lateinit var mUnbinder: Unbinder
+    @Inject lateinit var playerEditorActionsAdapter: PlayerEditorActionsAdapter
+    private lateinit var unbinder: Unbinder
 
-    private var mPlayerId: Long = 0
+    private var playerId: Long = 0
     private var playerActionListener: PlayerActionsListener? = null
 
     interface PlayerActionsListener {
@@ -33,7 +33,7 @@ class PlayerActionsDialogFragment : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as BaseActivity).activityComponent().inject(this)
-        mPlayerId = arguments.getLong(PLAYER_ID)
+        playerId = arguments.getLong(PLAYER_ID)
     }
 
     override fun onAttach(context: Context?) {
@@ -49,19 +49,19 @@ class PlayerActionsDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mUnbinder = ButterKnife.bind(this, view!!)
-        lvPlayerActions.adapter = mPlayerEditorActionsAdapter
+        unbinder = ButterKnife.bind(this, view!!)
+        lvPlayerActions.adapter = playerEditorActionsAdapter
     }
 
     @OnItemClick(R.id.lv_player_actions)
     fun onActionItemSelected(position: Int) {
         when(position) {
             ACTION_EDIT -> {
-                playerActionListener?.onEditPlayer(mPlayerId)
+                playerActionListener?.onEditPlayer(playerId)
                 dismiss()
             }
             ACTION_DELETE -> {
-                playerActionListener?.onDeletePlayer(mPlayerId)
+                playerActionListener?.onDeletePlayer(playerId)
                 dismiss()
             }
         }
@@ -69,7 +69,7 @@ class PlayerActionsDialogFragment : BottomSheetDialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mUnbinder.unbind()
+        unbinder.unbind()
     }
 
     companion object {
@@ -85,7 +85,5 @@ class PlayerActionsDialogFragment : BottomSheetDialogFragment() {
             fragment.arguments = args
             return fragment
         }
-
     }
-
 }

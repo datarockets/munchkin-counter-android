@@ -2,47 +2,46 @@ package com.datarockets.mnchkn.ui.dashboard
 
 import com.datarockets.mnchkn.data.DataManager
 import com.datarockets.mnchkn.ui.base.Presenter
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class DashboardPresenter
 @Inject constructor(private val mDataManager: DataManager) : Presenter<DashboardView> {
 
-    private var mDashboardView: DashboardView? = null
-    private var mSubscription: Subscription? = null
+    private var dashboardView: DashboardView? = null
+    private var disposable: Disposable? = null
 
     override fun attachView(mvpView: DashboardView) {
-        mDashboardView = mvpView
+        dashboardView = mvpView
     }
 
     fun checkIsScreenShouldBeOn() {
-        val isScreenShouldBeOn = mDataManager.preferencesHelper.isWakeLockActive
-        mDashboardView?.keepScreenOn(isScreenShouldBeOn)
+        val isScreenShouldBeOn = mDataManager.localPreferencesHelper.isWakeLockActive
+        dashboardView?.keepScreenOn(isScreenShouldBeOn)
     }
 
     fun getPlayingPlayers() {
-        mSubscription = mDataManager.getPlayingPlayers()
+        disposable = mDataManager.getPlayingPlayers()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { players -> mDashboardView?.setPlayers(players) }
+                .subscribe { players -> dashboardView?.setPlayers(players) }
     }
 
     fun insertStep(playerId: Long, levelScore: Int, strengthScore: Int) {
-        mSubscription = mDataManager.addGameStep(playerId, levelScore, strengthScore)
+        disposable = mDataManager.addGameStep(playerId, levelScore, strengthScore)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
     }
 
     fun setGameFinished() {
-        mDataManager.preferencesHelper.setGameStatus(false)
+        mDataManager.localPreferencesHelper.setGameStatus(false)
     }
 
     override fun detachView() {
-        mDashboardView = null
-        mSubscription?.unsubscribe()
+        dashboardView = null
+        disposable?.dispose()
     }
-
 }

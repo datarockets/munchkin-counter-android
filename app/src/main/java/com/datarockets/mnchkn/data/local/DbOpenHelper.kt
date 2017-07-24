@@ -8,7 +8,6 @@ import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.injection.ApplicationContext
 import javax.inject.Inject
 
-
 class DbOpenHelper
 @Inject constructor(@ApplicationContext context: Context) :
         SQLiteOpenHelper(context, DbOpenHelper.DATABASE_NAME, null, DbOpenHelper.DATABASE_VERSION) {
@@ -98,5 +97,4 @@ class DbOpenHelper
         cursor.close()
         return count <= 0
     }
-
 }

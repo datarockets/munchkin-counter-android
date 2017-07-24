@@ -39,5 +39,4 @@ class ApplicationModule(protected val mApplication: Application) {
                 .core(crashlyticsCore)
                 .build()
     }
-
 }

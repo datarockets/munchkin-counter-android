@@ -5,7 +5,7 @@ import android.content.Intent
 import com.datarockets.mnchkn.injection.ApplicationContext
 import io.branch.indexing.BranchUniversalObject
 import io.branch.referral.util.LinkProperties
-import rx.Observable
+import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +20,7 @@ class SharingHelper
             intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_TEXT, link)
             subscriber.onNext(intent)
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
 
@@ -40,7 +40,7 @@ class SharingHelper
                 try {
                     subscriber.onNext(Intent())
                 } finally {
-                    subscriber.onCompleted()
+                    subscriber.onComplete()
                 }
             }
         }
@@ -62,5 +62,4 @@ class SharingHelper
             return this.appName
         }
     }
-
 }

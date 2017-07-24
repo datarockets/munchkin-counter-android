@@ -1,6 +1,5 @@
 package com.datarockets.mnchkn.ui.charts
 
-
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -19,25 +18,25 @@ import javax.inject.Inject
 class PlayerChartListAdapter
 @Inject constructor() : BaseAdapter() {
 
-    private var mPlayersList: List<Player> = ArrayList()
-    private var mType: Int = 0
+    private var playersList: List<Player> = ArrayList()
+    private var type: Int = 0
 
     fun setPlayers(players: List<Player>, orderType: Int) {
-        mPlayersList = players
-        mType = orderType
+        playersList = players
+        type = orderType
         notifyDataSetChanged()
     }
 
     override fun getCount(): Int {
-        return mPlayersList.size
+        return playersList.size
     }
 
     override fun getItem(i: Int): Player {
-        return mPlayersList[i]
+        return playersList[i]
     }
 
     override fun getItemId(i: Int): Long {
-        return mPlayersList[i].id
+        return playersList[i].id
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -60,7 +59,7 @@ class PlayerChartListAdapter
 
         holder.ivPlayerColor.setImageDrawable(drawable)
         holder.tvPlayerName.text = player.name
-        when (mType) {
+        when (type) {
             ORDER_BY_LEVEL -> {
                 val levelScore = player.levelScore.toString()
                 holder.tvPlayerScore.text = levelScore
@@ -93,5 +92,4 @@ class PlayerChartListAdapter
         private val ORDER_BY_STRENGTH = 1
         private val ORDER_BY_TOTAL = 2
     }
-
 }

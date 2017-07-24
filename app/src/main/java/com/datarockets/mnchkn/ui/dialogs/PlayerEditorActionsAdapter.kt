@@ -61,7 +61,5 @@ class PlayerEditorActionsAdapter
         init {
             ButterKnife.bind(this, view)
         }
-
     }
-
 }

@@ -17,13 +17,13 @@ import timber.log.Timber
 
 open class BaseActivity : AppCompatActivity() {
 
-    private var mActivityComponent: ActivityComponent? = null
-    private var mMixpanel: MixpanelAPI? = null
+    private var activityComponent: ActivityComponent? = null
+    private var mixpanel: MixpanelAPI? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         super.onCreate(savedInstanceState)
-        mMixpanel = MunchkinApplication[this].mixpanel
+        mixpanel = MunchkinApplication[this].mixpanel
     }
 
     fun trackWithProperties(title: String, propertyName: String, propertyData: String) {
@@ -34,21 +34,20 @@ open class BaseActivity : AppCompatActivity() {
             Timber.e("Error while trying to send tracked event")
         }
 
-        mMixpanel!!.track(title, props)
+        mixpanel!!.track(title, props)
     }
 
     fun trackWithoutProperties(eventName: String) {
-        mMixpanel!!.track(eventName)
+        mixpanel!!.track(eventName)
     }
 
     fun activityComponent(): ActivityComponent {
-        if (mActivityComponent == null) {
-            mActivityComponent = DaggerActivityComponent.builder()
+        if (activityComponent == null) {
+            activityComponent = DaggerActivityComponent.builder()
                     .applicationComponent(MunchkinApplication[this].mApplicationComponent)
                     .activityModule(ActivityModule(this))
                     .build()
         }
-        return mActivityComponent!!
+        return activityComponent!!
     }
-
 }

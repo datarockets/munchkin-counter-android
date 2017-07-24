@@ -147,5 +147,4 @@ class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.OnScores
         super.onDestroy()
         presenter.detachView()
     }
-
 }

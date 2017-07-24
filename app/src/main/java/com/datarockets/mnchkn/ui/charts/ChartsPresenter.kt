@@ -2,39 +2,37 @@ package com.datarockets.mnchkn.ui.charts
 
 import com.datarockets.mnchkn.data.DataManager
 import com.datarockets.mnchkn.ui.base.Presenter
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ChartsPresenter
-@Inject constructor(private val mDataManager: DataManager) : Presenter<ChartsView> {
+@Inject constructor(private val dataManager: DataManager) : Presenter<ChartsView> {
 
-    private var mChartsView: ChartsView? = null
-    private var mSubscription: Subscription? = null
+    private var chartsView: ChartsView? = null
+    private var disposable: Disposable? = null
 
     override fun attachView(mvpView: ChartsView) {
-        mChartsView = mvpView
+        chartsView = mvpView
     }
 
     fun loadChartData(type: Int) {
-        mSubscription = mDataManager.getLineData(type)
+        disposable = dataManager.getLineData(type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { lineData -> mChartsView?.showPlayersChart(lineData) }
+                .subscribe { lineData -> chartsView?.showPlayersChart(lineData) }
     }
 
     fun loadPlayers(sortType: Int) {
-        mSubscription = mDataManager.getPlayers(sortType)
+        disposable = dataManager.getPlayers(sortType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { players -> mChartsView?.showPlayersList(players) }
+                .subscribe { players -> chartsView?.showPlayersList(players) }
     }
 
     override fun detachView() {
-        mChartsView = null
-        mSubscription?.unsubscribe()
+        chartsView = null
+        disposable?.dispose()
     }
-
-
 }
