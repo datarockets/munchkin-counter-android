@@ -7,90 +7,85 @@ import com.datarockets.mnchkn.data.local.PreferencesHelper
 import com.datarockets.mnchkn.data.local.SharingHelper
 import com.datarockets.mnchkn.data.models.GameStep
 import com.datarockets.mnchkn.data.models.Player
+import com.datarockets.mnchkn.data.utils.SortType
 import com.datarockets.mnchkn.utils.ColorUtil
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import rx.Observable
-import java.util.*
+import io.reactivex.Completable
+import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 open class DataManager
-@Inject constructor(private val mDatabaseHelper: DatabaseHelper,
-                    private val mPreferencesHelper: PreferencesHelper,
-                    private val mSharingHelper: SharingHelper) {
+@Inject constructor(private val databaseHelper: DatabaseHelper,
+                    private val preferencesHelper: PreferencesHelper,
+                    private val sharingHelper: SharingHelper) {
 
-    val preferencesHelper = mPreferencesHelper
+    val localPreferencesHelper = preferencesHelper
 
-    fun getPlayer(playerId: Long): Observable<Player> {
-        return mDatabaseHelper.getPlayer(playerId)
+    fun getPlayer(playerId: Long): Maybe<Player> {
+        return databaseHelper.getPlayer(playerId)
     }
 
-    open fun getPlayers(): Observable<List<Player>> {
-        return mDatabaseHelper.getPlayers().toList()
-    }
-
-    open fun getPlayingPlayers(): Observable<List<Player>> {
-        return mDatabaseHelper.getPlayingPlayers().toList()
-    }
-
-    open fun getPlayers(sortType: Int): Observable<List<Player>> {
+    open fun getPlayers(@SortType sortType: Int): Single<List<Player>> {
         when (sortType) {
-            0 -> return mDatabaseHelper.getPlayedPlayersByLevel().toList()
-            1 -> return mDatabaseHelper.getPlayedPlayersByStrength().toList()
-            2 -> return mDatabaseHelper.getPlayedPlayersByTotal().toList()
+            SortType.POSITION -> return databaseHelper.getPlayingPlayersByPosition()
+            SortType.LEVEL -> return databaseHelper.getPlayedPlayersByLevel()
+            SortType.STRENGTH -> return databaseHelper.getPlayedPlayersByStrength()
+            SortType.TOTAL -> return databaseHelper.getPlayedPlayersByTotal()
+            SortType.NONE -> return databaseHelper.getPlayers()
         }
-        return Observable.just(null)
+        return Single.just(emptyList())
     }
 
-    fun addPlayer(playerName: String, position: Int): Observable<Player> {
+    fun addPlayer(playerName: String, position: Int): Single<Player> {
         val player = Player()
         player.name = playerName
         player.levelScore = 1
         player.strengthScore = 1
         player.color = ColorUtil.generatePlayerAvatarColor()
         player.position = position
-        return mDatabaseHelper.setPlayer(player)
+        return databaseHelper.setPlayer(player)
     }
 
-    fun changePlayerPosition(movedPlayerId: Long,
-                             newPosition: Int): Observable<Void> {
-        return mDatabaseHelper.changePlayersPositions(movedPlayerId, newPosition)
+    fun changePlayerPosition(movedPlayerId: Long, newPosition: Int): Completable {
+        return databaseHelper.changePlayersPositions(movedPlayerId, newPosition)
     }
 
-    fun setPlayerPlaying(playerId: Long, isPlaying: Boolean): Observable<Void> {
-        return mDatabaseHelper.markPlayerPlaying(playerId, isPlaying)
+    fun setPlayerPlaying(playerId: Long, isPlaying: Boolean): Completable {
+        return databaseHelper.updatePlayerPlaying(playerId, isPlaying)
     }
 
-    fun updatePlayerName(playerId: Long, playerName: String): Observable<Void> {
-        return mDatabaseHelper.updatePlayerName(playerId, playerName)
+    fun updatePlayerName(playerId: Long, playerName: String): Completable {
+        return databaseHelper.updatePlayerName(playerId, playerName)
     }
 
-    fun updatePlayerScores(playerId: Long, levelScore: Int, strengthScore: Int): Observable<Void> {
-        return mDatabaseHelper.updatePlayerScores(playerId, levelScore, strengthScore)
+    fun updatePlayerScores(playerId: Long, levelScore: Int, strengthScore: Int): Completable {
+        return databaseHelper.updatePlayerScores(playerId, levelScore, strengthScore)
     }
 
-    fun deletePlayer(playerId: Long): Observable<Void> {
-        return mDatabaseHelper.deletePlayer(playerId)
+    fun deletePlayer(playerId: Long): Completable {
+        return databaseHelper.deletePlayer(playerId)
     }
 
-    fun clearGameSteps(): Observable<Void> {
-        return mDatabaseHelper.clearGameSteps()
+    fun clearGameSteps(): Completable {
+        return databaseHelper.deleteGameStepsAndResetPlayingPlayers()
     }
 
     fun getLineData(type: Int): Observable<LineData> {
         return Observable.create { subscriber ->
-            val playersList = mDatabaseHelper.getPlayingPlayers()
-            val gameSteps = mDatabaseHelper.getGameSteps()
+            val playersList = databaseHelper.getPlayingPlayersByPosition()
+            val gameSteps = databaseHelper.getGameSteps()
             val playerGameSteps = mutableMapOf<Player, List<GameStep>>()
 
-            playersList.forEach { player ->
+            playersList.blockingGet().forEach { player ->
                 val playerSteps = mutableListOf<GameStep>()
-                gameSteps.forEach { step ->
+                gameSteps.blockingGet().forEach { step ->
                     if (step.playerId == player.id) {
                         playerSteps.add(step)
                     }
@@ -98,7 +93,7 @@ open class DataManager
                 playerGameSteps.put(player, playerSteps)
             }
 
-            var playerLines = ArrayList<ILineDataSet>()
+            val playerLines = ArrayList<ILineDataSet>()
             val playerColors = mutableListOf<String>()
 
             playerGameSteps.keys.forEach { player ->
@@ -125,7 +120,6 @@ open class DataManager
                     }
                 }
 
-
                 val lineDataSet = LineDataSet(entries, "")
                 lineDataSet.setDrawCircles(false)
                 lineDataSet.color = Color.parseColor(playerColors[index])
@@ -139,24 +133,19 @@ open class DataManager
 
             val lineData = LineData(playerLines)
             subscriber.onNext(lineData)
-            subscriber.onCompleted()
+            subscriber.onComplete()
         }
     }
 
-    fun addGameStep(playerId: Long, levelScore: Int, strengthScore: Int): Observable<Void> {
+    fun addGameStep(playerId: Long, levelScore: Int, strengthScore: Int): Completable {
         val gameStep = GameStep()
         gameStep.playerId = playerId
         gameStep.playerLevel = levelScore
         gameStep.playerStrength = strengthScore
-        return mDatabaseHelper.setGameStep(gameStep)
+        return databaseHelper.setGameStep(gameStep)
     }
 
     fun generateShareableIntent(): Observable<Intent> {
-        return mSharingHelper.generateShareableIntent()
+        return sharingHelper.generateShareableIntent()
     }
-
-    fun updatePlayersPosition() {
-        mDatabaseHelper.updatePlayersPositions().subscribe()
-    }
-
 }

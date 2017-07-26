@@ -42,8 +42,8 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     @Inject lateinit var playersListPresenter: PlayersListPresenter
     @Inject lateinit var linearLayoutManager: LinearLayoutManager
 
-    private lateinit var mItemTouchHelper: ItemTouchHelper
-    private lateinit var mItemTouchHelperCallback: ItemTouchHelper.Callback
+    private lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var itemTouchHelperCallback: ItemTouchHelper.Callback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,9 +64,9 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
             setOnItemMovedListener(this@PlayersListActivity)
         }
 
-        mItemTouchHelperCallback= ItemTouchHelperCallback(lvPlayerEditorListAdapter)
-        mItemTouchHelper = ItemTouchHelper(mItemTouchHelperCallback)
-        mItemTouchHelper.attachToRecyclerView(lvPlayersList)
+        itemTouchHelperCallback = ItemTouchHelperCallback(lvPlayerEditorListAdapter)
+        itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(lvPlayersList)
 
         playersListPresenter.apply {
             attachView(this@PlayersListActivity)
@@ -172,7 +172,7 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     }
 
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-        mItemTouchHelper.startDrag(viewHolder)
+        itemTouchHelper.startDrag(viewHolder)
     }
 
     override fun onItemMoved(fromPosition: Int, toPosition: Int) {
@@ -186,5 +186,4 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         super.onDestroy()
         playersListPresenter.detachView()
     }
-
 }

@@ -3,43 +3,40 @@ package com.datarockets.mnchkn
 import android.app.Application
 import android.content.Context
 import com.crashlytics.android.Crashlytics
-
 import com.datarockets.mnchkn.injection.components.ApplicationComponent
 import com.datarockets.mnchkn.injection.components.DaggerApplicationComponent
 import com.datarockets.mnchkn.injection.modules.ApplicationModule
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import io.fabric.sdk.android.Fabric
-
 import timber.log.Timber
 import javax.inject.Inject
 
 class MunchkinApplication : Application() {
 
-    lateinit var mApplicationComponent: ApplicationComponent
-    private var mMixpanel: MixpanelAPI? = null
+    lateinit var applicationComponent: ApplicationComponent
+    private var mixpanelApi: MixpanelAPI? = null
 
-    @Inject lateinit var mCrashlytics: Crashlytics
+    @Inject lateinit var crashlytics: Crashlytics
 
     override fun onCreate() {
         super.onCreate()
 
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
 
-        mApplicationComponent = DaggerApplicationComponent.builder()
+        applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(ApplicationModule(this))
                 .build()
-        mApplicationComponent.inject(this)
+        applicationComponent.inject(this)
 
-        Fabric.with(this, mCrashlytics)
-
+        Fabric.with(this, crashlytics)
     }
 
     val mixpanel: MixpanelAPI
         @Synchronized get() {
-            if (mMixpanel == null) {
-                mMixpanel = MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_API_KEY)
+            if (mixpanelApi == null) {
+                mixpanelApi = MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_API_KEY)
             }
-            return mMixpanel!!
+            return mixpanelApi!!
         }
 
     companion object {
@@ -47,5 +44,4 @@ class MunchkinApplication : Application() {
             return context.applicationContext as MunchkinApplication
         }
     }
-
 }

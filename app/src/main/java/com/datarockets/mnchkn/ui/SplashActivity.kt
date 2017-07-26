@@ -1,6 +1,5 @@
 package com.datarockets.mnchkn.ui
 
-
 import android.content.Intent
 import android.os.Bundle
 
@@ -22,5 +21,4 @@ class SplashActivity : BaseActivity() {
         startActivity(intent)
         finish()
     }
-
 }

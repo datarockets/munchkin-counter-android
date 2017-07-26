@@ -2,71 +2,69 @@ package com.datarockets.mnchkn.ui.player
 
 import com.datarockets.mnchkn.data.DataManager
 import com.datarockets.mnchkn.ui.base.Presenter
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class PlayerPresenter
-@Inject constructor(private val mDataManager: DataManager) : Presenter<PlayerView> {
+@Inject constructor(private val dataManager: DataManager) : Presenter<PlayerView> {
 
-    private var mPlayerView: PlayerView? = null
-    private var mSubscription: Subscription? = null
-    private var mPlayerId: Long = 0
-    private var mLevelScore: Int = 0
-    private var mStrengthScore: Int = 0
+    private var playerView: PlayerView? = null
+    private var disposable: Disposable? = null
+    private var playerId: Long = 0
+    private var levelScore: Int = 0
+    private var strengthScore: Int = 0
 
     override fun attachView(mvpView: PlayerView) {
-        mPlayerView = mvpView
+        playerView = mvpView
     }
 
     fun loadPlayerScores(playerId: Long) {
-        mSubscription = mDataManager.getPlayer(playerId)
+        disposable = dataManager.getPlayer(playerId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { player ->
-                    mPlayerId = player.id
-                    mLevelScore = player.levelScore
-                    mStrengthScore = player.strengthScore
-                    mPlayerView?.showPlayerName(player?.name!!)
-                    mPlayerView?.showPlayerScores(mLevelScore.toString(), mStrengthScore.toString())
+                    this.playerId = player.id
+                    levelScore = player.levelScore
+                    strengthScore = player.strengthScore
+                    playerView?.showPlayerName(player.name!!)
+                    playerView?.showPlayerScores(levelScore.toString(), strengthScore.toString())
                 }
     }
 
     fun increaseLevelScore() {
-        mLevelScore += 1
+        levelScore += 1
         updatePlayerScores()
     }
 
     fun decreaseLevelScore() {
-        mLevelScore -= 1
+        levelScore -= 1
         updatePlayerScores()
     }
 
     fun increaseStrengthScore() {
-        mStrengthScore += 1
+        strengthScore += 1
         updatePlayerScores()
     }
 
     fun decreaseStrengthScore() {
-        mStrengthScore -= 1
+        strengthScore -= 1
         updatePlayerScores()
     }
 
     fun updatePlayerScores() {
-        mSubscription = mDataManager.updatePlayerScores(mPlayerId, mLevelScore, mStrengthScore)
+        disposable = dataManager.updatePlayerScores(playerId, levelScore, strengthScore)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnCompleted { mPlayerView?.showPlayerScores(
-                        mLevelScore.toString(),
-                        mStrengthScore.toString())
+                .doOnComplete {
+                    playerView?.showPlayerScores(levelScore.toString(), strengthScore.toString())
                 }
                 .subscribe()
     }
 
     override fun detachView() {
-        mPlayerView = null
-        mSubscription?.unsubscribe()
+        playerView = null
+        disposable?.dispose()
     }
-
 }

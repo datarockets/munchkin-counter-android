@@ -22,5 +22,4 @@ interface ApplicationComponent {
     fun preferencesHelper(): PreferencesHelper
     fun databaseHelper(): DatabaseHelper
     fun dataManager(): DataManager
-
 }

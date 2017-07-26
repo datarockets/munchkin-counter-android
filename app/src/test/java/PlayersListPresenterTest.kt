@@ -1,9 +1,10 @@
-
 import com.datarockets.mnchkn.MockModelFabric
 import com.datarockets.mnchkn.data.DataManager
 import com.datarockets.mnchkn.data.models.Player
+import com.datarockets.mnchkn.data.utils.SortType
 import com.datarockets.mnchkn.ui.players.PlayersListPresenter
 import com.datarockets.mnchkn.ui.players.PlayersListView
+import io.reactivex.Observable
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -13,7 +14,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.verify
 import org.mockito.runners.MockitoJUnitRunner
-import rx.Observable
 import util.RxSchedulersOverrideRule
 
 @RunWith(MockitoJUnitRunner::class)
@@ -49,7 +49,7 @@ class PlayersListPresenterTest {
     fun stubDataManagerGetPlayers(observable: Observable<Any>) {
         doReturn(observable)
                 .`when`(mMockDataManager)
-                .getPlayers()
+                .getPlayers(SortType.NONE)
     }
 
 }

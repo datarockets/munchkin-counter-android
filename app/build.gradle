@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply from: "$rootProject.projectDir/buildsystem/config.gradle"
 apply from: "$rootProject.projectDir/buildsystem/library.gradle"
 
-def configuration = ext.configuration;
+def configuration = ext.configuration
 
 android {
     compileSdkVersion configuration.compileSdk
@@ -49,10 +50,6 @@ android {
 
 }
 
-kapt {
-    generateStubs = true
-}
-
 dependencies {
     compile "${library.kotlin}"
     compile "${library.support_v4}"
@@ -60,6 +57,9 @@ dependencies {
     compile "${library.support_design}"
     compile "${library.support_recycler}"
     compile "${library.support_card}"
+    compile "${library.room_runtime}"
+    compile "${library.room_rxjava2}"
+    kapt "${library.room_compiler}"
     compile "${library.text_drawable}"
     compile "${library.color_picker}"
     compile "${library.onboarder}"
@@ -68,7 +68,6 @@ dependencies {
     compile "${library.tap_target_view}"
     compile "${library.rxkotlin}"
     compile "${library.rxandroid}"
-    compile "${library.sqlbrite}"
     compile "${library.timber}"
     compile "${library.dagger}"
     kapt "${library.dagger_compiler}"

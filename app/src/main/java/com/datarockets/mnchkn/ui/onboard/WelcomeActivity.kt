@@ -1,6 +1,5 @@
 package com.datarockets.mnchkn.ui.onboard
 
-
 import android.content.Intent
 import android.os.Bundle
 import com.chyrta.onboarder.OnboarderActivity
@@ -20,18 +19,18 @@ class WelcomeActivity : OnboarderActivity(), WelcomeView {
     private lateinit var onboarderPageOne: OnboarderPage
     private lateinit var onboarderPageTwo: OnboarderPage
     private lateinit var onboarderPageThree: OnboarderPage
-    private lateinit var mActivityComponent: ActivityComponent
+    private lateinit var activityComponent: ActivityComponent
 
     @Inject lateinit var welcomePresenter: WelcomePresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mActivityComponent = DaggerActivityComponent.builder()
-                .applicationComponent(MunchkinApplication[this].mApplicationComponent)
+        activityComponent = DaggerActivityComponent.builder()
+                .applicationComponent(MunchkinApplication[this].applicationComponent)
                 .activityModule(ActivityModule(this))
                 .build()
-        mActivityComponent.inject(this)
+        activityComponent.inject(this)
 
         welcomePresenter.attachView(this)
         welcomePresenter.checkIsOnboardingSeen()
@@ -76,5 +75,4 @@ class WelcomeActivity : OnboarderActivity(), WelcomeView {
         super.onDestroy()
         welcomePresenter.detachView()
     }
-
 }

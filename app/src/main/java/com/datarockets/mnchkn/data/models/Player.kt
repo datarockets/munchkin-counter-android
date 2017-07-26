@@ -1,6 +1,6 @@
 package com.datarockets.mnchkn.data.models
 
-data class Player(var id: Long = -1,
+data class Player(var id: Long = System.currentTimeMillis(),
                   var name: String? = null,
                   var levelScore: Int = 1,
                   var strengthScore: Int = 1,

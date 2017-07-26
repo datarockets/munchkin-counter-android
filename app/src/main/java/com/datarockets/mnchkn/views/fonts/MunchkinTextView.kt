@@ -26,5 +26,4 @@ class MunchkinTextView : AppCompatTextView {
     companion object {
         val FONT_NAME = "buccaner.ttf"
     }
-
 }

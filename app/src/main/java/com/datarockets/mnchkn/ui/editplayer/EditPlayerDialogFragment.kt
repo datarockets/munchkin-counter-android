@@ -1,6 +1,5 @@
 package com.datarockets.mnchkn.ui.editplayer
 
-
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -103,6 +102,4 @@ class EditPlayerDialogFragment : BottomSheetDialogFragment(), EditPlayerView {
             return fragment
         }
     }
-
-
 }

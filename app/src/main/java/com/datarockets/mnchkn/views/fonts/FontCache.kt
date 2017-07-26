@@ -21,5 +21,4 @@ object FontCache {
         }
         return typeface
     }
-
 }

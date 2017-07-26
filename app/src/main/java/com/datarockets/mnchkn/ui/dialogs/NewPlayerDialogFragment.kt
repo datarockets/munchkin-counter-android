@@ -18,8 +18,8 @@ class NewPlayerDialogFragment : BottomSheetDialogFragment() {
     @BindView(R.id.et_player_name) lateinit var etPlayerName: EditText
     @BindView(R.id.btn_add_new_player) lateinit var btnAddNewPlayer: Button
 
-    private lateinit var mListener: NewPlayerDialogListener
-    private lateinit var mUnbinder: Unbinder
+    private lateinit var listener: NewPlayerDialogListener
+    private lateinit var unbinder: Unbinder
 
     interface NewPlayerDialogListener {
         fun onFinishEditDialog(inputName: String)
@@ -27,7 +27,7 @@ class NewPlayerDialogFragment : BottomSheetDialogFragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        mListener = activity as NewPlayerDialogListener
+        listener = activity as NewPlayerDialogListener
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +41,7 @@ class NewPlayerDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mUnbinder = ButterKnife.bind(this, view!!)
+        unbinder = ButterKnife.bind(this, view!!)
     }
 
     @OnClick(R.id.btn_add_new_player)
@@ -61,14 +61,13 @@ class NewPlayerDialogFragment : BottomSheetDialogFragment() {
     private fun passNameToActivity() {
         val name = etPlayerName.text.toString()
         if (!name.isEmpty()) {
-            mListener.onFinishEditDialog(name)
+            listener.onFinishEditDialog(name)
             dismiss()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mUnbinder.unbind()
+        unbinder.unbind()
     }
-
 }

@@ -1,34 +1,33 @@
 package com.datarockets.mnchkn.ui.result
 
-
 import com.datarockets.mnchkn.data.DataManager
 import com.datarockets.mnchkn.ui.base.Presenter
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class GameResultPresenter
-@Inject constructor(private val mDataManager: DataManager) : Presenter<GameResultView> {
+@Inject constructor(private val dataManager: DataManager) : Presenter<GameResultView> {
 
-    private var mGameResultView: GameResultView? = null
-    private var mSubscription: Subscription? = null
+    private var gameResultView: GameResultView? = null
+    private var disposable: Disposable? = null
 
     override fun attachView(mvpView: GameResultView) {
-        mGameResultView = mvpView
+        gameResultView = mvpView
     }
 
     fun generateShareResultLink() {
-        mSubscription = mDataManager.generateShareableIntent()
+        disposable = dataManager.generateShareableIntent()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { intent ->
-                    mGameResultView?.launchShareableIntent(intent)
+                    gameResultView?.launchShareableIntent(intent)
                 }
     }
 
     fun clearGameResults() {
-        mSubscription = mDataManager.clearGameSteps()
+        disposable = dataManager.clearGameSteps()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
@@ -36,8 +35,7 @@ class GameResultPresenter
 
 
     override fun detachView() {
-        mGameResultView = null
-        mSubscription?.unsubscribe()
+        gameResultView = null
+        disposable?.dispose()
     }
-
 }

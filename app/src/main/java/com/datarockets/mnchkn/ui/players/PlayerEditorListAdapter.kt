@@ -23,7 +23,7 @@ import javax.inject.Inject
 class PlayerEditorListAdapter
 @Inject constructor() : RecyclerView.Adapter<PlayerEditorListAdapter.ViewHolder>(), ItemTouchHelperAdapter {
 
-    private val mPlayers = mutableListOf<Player>()
+    private val players = mutableListOf<Player>()
 
     init {
         setHasStableIds(true)
@@ -45,25 +45,25 @@ class PlayerEditorListAdapter
         fun onStartDrag(viewHolder: RecyclerView.ViewHolder)
     }
 
-    var mClickListener: OnItemClickListener? = null
-    var mCheckboxClickListener: OnItemCheckboxClickListener? = null
-    var mDragStartListener: OnStartDragListener? = null
-    var mItemMovedListener: OnItemMovedListener? = null
+    var clickListener: OnItemClickListener? = null
+    var checkboxClickListener: OnItemCheckboxClickListener? = null
+    var dragStartListener: OnStartDragListener? = null
+    var itemMovedListener: OnItemMovedListener? = null
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
-        mClickListener = listener
+        clickListener = listener
     }
 
     fun setOnItemCheckboxClickListener(listener: OnItemCheckboxClickListener) {
-        mCheckboxClickListener = listener
+        checkboxClickListener = listener
     }
 
     fun setOnStartDragListener(listener: OnStartDragListener) {
-        mDragStartListener = listener
+        dragStartListener = listener
     }
 
     fun setOnItemMovedListener(listener: OnItemMovedListener) {
-        mItemMovedListener = listener
+        itemMovedListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -73,7 +73,7 @@ class PlayerEditorListAdapter
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
 
-        val player = mPlayers[position]
+        val player = players[position]
 
         val color = Color.parseColor(player.color)
         val capitalizedPlayerFirstLetter = player.name!!.substring(0, 1).toUpperCase()
@@ -87,55 +87,54 @@ class PlayerEditorListAdapter
 
         holder?.itemView?.setOnTouchListener { view, event ->
             if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                mDragStartListener?.onStartDrag(holder)
+                dragStartListener?.onStartDrag(holder)
             }
             false
         }
-
     }
 
     fun addPlayer(player: Player) {
-        mPlayers.add(mPlayers.count(), player)
+        players.add(players.count(), player)
         notifyDataSetChanged()
     }
 
     fun setPlayers(players: List<Player>) {
-        mPlayers.addAll(players)
+        this.players.addAll(players)
         notifyDataSetChanged()
     }
 
     fun deletePlayer(playerId: Long) {
         val position = getPositionForItemId(playerId)
-        mPlayers.removeAt(position)
+        players.removeAt(position)
         notifyItemRemoved(position)
     }
 
     fun updatePlayerName(playerId: Long, playerName: String) {
         val position = getPositionForItemId(playerId)
-        mPlayers[position].name = playerName
+        players[position].name = playerName
         notifyItemChanged(position)
     }
 
     override fun getItemId(position: Int): Long {
-        return mPlayers[position].id
+        return players[position].id
     }
 
     override fun getItemCount(): Int {
-        return mPlayers.size
+        return players.size
     }
 
     override fun onItemMoved(fromPosition: Int, toPosition: Int) {
-        mItemMovedListener?.onItemMoved(fromPosition, toPosition)
+        itemMovedListener?.onItemMoved(fromPosition, toPosition)
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        Collections.swap(mPlayers, fromPosition, toPosition)
+        Collections.swap(players, fromPosition, toPosition)
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
 
     override fun onItemDismiss(position: Int) {
-        mPlayers.removeAt(position)
+        players.removeAt(position)
         notifyItemRemoved(position)
     }
 
@@ -161,15 +160,15 @@ class PlayerEditorListAdapter
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val playerId = getItemId(position)
-                    mClickListener?.onPlayerItemClick(playerId)
+                    clickListener?.onPlayerItemClick(playerId)
                 }
             }
             cbIsPlaying.setOnCheckedChangeListener { compoundButton, isChecked ->
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val playerId = getItemId(position)
-                    mPlayers[position].playing = isChecked
-                    mCheckboxClickListener?.onPlayerItemCheckboxClick(playerId, isChecked)
+                    players[position].playing = isChecked
+                    checkboxClickListener?.onPlayerItemCheckboxClick(playerId, isChecked)
                 }
             }
         }
@@ -181,7 +180,5 @@ class PlayerEditorListAdapter
         override fun onItemClear() {
             itemView.setBackgroundColor(0)
         }
-
     }
-
 }

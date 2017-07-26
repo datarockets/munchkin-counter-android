@@ -81,5 +81,4 @@ class GameResultActivity : BaseActivity(), GameResultView {
         }
         presenter.detachView()
     }
-
 }

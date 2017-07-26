@@ -25,7 +25,7 @@ class ShareResultDialogFragment: BottomSheetDialogFragment(), ShareResultView {
 
     @Inject lateinit var shareResultPresenter: ShareResultPresenter
 
-    private lateinit var mUnbinder: Unbinder
+    private lateinit var unbinder: Unbinder
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -37,7 +37,7 @@ class ShareResultDialogFragment: BottomSheetDialogFragment(), ShareResultView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mUnbinder = ButterKnife.bind(this, view!!)
+        unbinder = ButterKnife.bind(this, view!!)
         shareResultPresenter.attachView(this)
     }
 
@@ -67,8 +67,7 @@ class ShareResultDialogFragment: BottomSheetDialogFragment(), ShareResultView {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mUnbinder.unbind()
+        unbinder.unbind()
         shareResultPresenter.detachView()
     }
-
 }

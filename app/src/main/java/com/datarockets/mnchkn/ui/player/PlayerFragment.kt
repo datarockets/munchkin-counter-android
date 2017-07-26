@@ -31,7 +31,7 @@ class PlayerFragment : Fragment(), PlayerView {
     private lateinit var unbinder: Unbinder
 
     private var listener: OnScoresChangedListener? = null
-    private var mPlayerPosition = 0
+    private var playerPosition = 0
 
     interface OnScoresChangedListener {
         fun onScoresChanged(playerPosition: Int, playerLevel: Int, strengthScore: Int)
@@ -84,12 +84,12 @@ class PlayerFragment : Fragment(), PlayerView {
     override fun showPlayerScores(levelScore: String, strengthScore: String) {
         tvLevelScore.text = levelScore
         tvStrengthScore.text = strengthScore
-        listener?.onScoresChanged(mPlayerPosition, levelScore.toInt(), strengthScore.toInt())
+        listener?.onScoresChanged(playerPosition, levelScore.toInt(), strengthScore.toInt())
     }
 
     fun loadPlayerScores(playerId: Long, playerPosition: Int) {
         presenter.loadPlayerScores(playerId)
-        mPlayerPosition = playerPosition
+        this.playerPosition = playerPosition
     }
 
     override fun onDestroyView() {
@@ -97,5 +97,4 @@ class PlayerFragment : Fragment(), PlayerView {
         presenter.detachView()
         unbinder.unbind()
     }
-
 }

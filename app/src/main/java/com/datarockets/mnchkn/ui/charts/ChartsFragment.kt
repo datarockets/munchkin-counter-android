@@ -79,5 +79,4 @@ class ChartsFragment : Fragment(), ChartsView {
             return fragment
         }
     }
-
 }

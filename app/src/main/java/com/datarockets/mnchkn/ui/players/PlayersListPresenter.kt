@@ -1,97 +1,96 @@
 package com.datarockets.mnchkn.ui.players
 
 import com.datarockets.mnchkn.data.DataManager
+import com.datarockets.mnchkn.data.utils.SortType
 import com.datarockets.mnchkn.ui.base.Presenter
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class PlayersListPresenter
-@Inject constructor(private val mDataManager: DataManager) : Presenter<PlayersListView> {
+@Inject constructor(private val dataManager: DataManager) : Presenter<PlayersListView> {
 
-    private var mPlayersListView: PlayersListView? = null
-    private var mSubscription: Subscription? = null
+    private var playersListView: PlayersListView? = null
+    private var disposable: Disposable? = null
 
     override fun attachView(mvpView: PlayersListView) {
-        mPlayersListView = mvpView
+        playersListView = mvpView
     }
 
     fun checkIsEnoughPlayers() {
-        mSubscription = mDataManager.getPlayingPlayers()
+        disposable = dataManager.getPlayers(SortType.POSITION)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { players ->
                     if (players.size >= 2) {
-                        mPlayersListView?.launchDashboard()
+                        playersListView?.launchDashboard()
                     } else {
-                        mPlayersListView?.showWarning()
+                        playersListView?.showWarning()
                     }
                 }
     }
 
     fun addPlayer(playerName: String, position: Int) {
-        mSubscription = mDataManager.addPlayer(playerName, position)
+        disposable = dataManager.addPlayer(playerName, position)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { player -> mPlayersListView?.addPlayerToList(player) }
+                .subscribe { player -> playersListView?.addPlayerToList(player) }
     }
 
     fun changePlayerPosition(movedPlayerId: Long,
                              newPosition: Int) {
-        mSubscription = mDataManager.changePlayerPosition(movedPlayerId, newPosition)
+        disposable = dataManager.changePlayerPosition(movedPlayerId, newPosition)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
     }
 
     fun markPlayerAsPlaying(playerId: Long, isPlaying: Boolean) {
-        mSubscription = mDataManager.setPlayerPlaying(playerId, isPlaying)
+        disposable = dataManager.setPlayerPlaying(playerId, isPlaying)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
     }
 
     fun deletePlayerListItem(playerId: Long) {
-        mSubscription = mDataManager.deletePlayer(playerId)
+        disposable = dataManager.deletePlayer(playerId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnCompleted { mPlayersListView?.deletePlayerFromList(playerId) }
+                .doOnComplete { playersListView?.deletePlayerFromList(playerId) }
                 .subscribe()
-        mDataManager.updatePlayersPosition()
     }
 
 
     fun clearGameSteps() {
-        mSubscription = mDataManager.clearGameSteps()
+        disposable = dataManager.clearGameSteps()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
     }
 
     fun setGameStarted() {
-        mDataManager.preferencesHelper.setGameStatus(true)
+        dataManager.localPreferencesHelper.setGameStatus(true)
     }
 
     fun setGameFinished() {
-        mDataManager.preferencesHelper.setGameStatus(false)
+        dataManager.localPreferencesHelper.setGameStatus(false)
     }
 
     fun checkIsGameStarted() {
-        val isGameStarted = mDataManager.preferencesHelper.isGameStarted
-        if (isGameStarted) mPlayersListView?.showStartContinueDialog()
+        val isGameStarted = dataManager.localPreferencesHelper.isGameStarted
+        if (isGameStarted) playersListView?.showStartContinueDialog()
     }
 
     fun getPlayersList() {
-        mSubscription = mDataManager.getPlayers()
+        disposable = dataManager.getPlayers(SortType.NONE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { players -> mPlayersListView?.setPlayersList(players) }
+                .subscribe { players -> playersListView?.setPlayersList(players) }
     }
 
     override fun detachView() {
-        mPlayersListView = null
-        mSubscription?.unsubscribe()
+        playersListView = null
+        disposable?.dispose()
     }
-
 }
