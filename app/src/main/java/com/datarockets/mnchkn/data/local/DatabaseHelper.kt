@@ -1,295 +1,102 @@
 package com.datarockets.mnchkn.data.local
 
-import android.content.ContentValues
+import com.datarockets.mnchkn.MunchkinApplication
+import com.datarockets.mnchkn.data.mapper.GameEntityMapper
+import com.datarockets.mnchkn.data.mapper.GameStepMapper
+import com.datarockets.mnchkn.data.mapper.PlayerEntityMapper
+import com.datarockets.mnchkn.data.mapper.PlayerMapper
 import com.datarockets.mnchkn.data.models.GameStep
 import com.datarockets.mnchkn.data.models.Player
-import com.squareup.sqlbrite2.BriteDatabase
-import com.squareup.sqlbrite2.SqlBrite
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
+import io.reactivex.Completable
+import io.reactivex.Maybe
+import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DatabaseHelper
-@Inject constructor(dbOpenHelper: DbOpenHelper) {
+@Inject constructor() {
 
-    val briteDb: BriteDatabase
+    val database = MunchkinApplication.database
 
-    init {
-        val briteBuilder = SqlBrite.Builder()
-                .logger { message -> Timber.tag("Database").v(message) }
-        briteDb = briteBuilder.build().wrapDatabaseHelper(dbOpenHelper, Schedulers.trampoline())
-        briteDb.setLoggingEnabled(true)
+    fun setPlayer(player: Player): Single<Player> = Single.create {
+        val playerId = database.playerDao().setPlayer(PlayerEntityMapper.transform(player))
+        val playerEntity = database.playerDao().getPlayerById(playerId)
+        it.onSuccess(PlayerMapper.transform(playerEntity))
     }
 
-    fun setPlayer(player: Player): Observable<Player> {
-        return Observable.create { subscriber ->
-            val transaction = briteDb.newTransaction()
-            try {
-                val contentValues = Db.PlayerTable.toContentValues(player)
-                val playerId = briteDb.insert(Db.PlayerTable.TABLE_NAME, contentValues)
-                player.id = playerId
-                subscriber.onNext(player)
-                transaction.markSuccessful()
-                subscriber.onComplete()
-            } finally {
-                transaction.end()
-            }
-        }
+    fun getPlayer(playerId: Long): Maybe<Player> = Maybe.create {
+        val playerEntity = database.playerDao().getPlayerById(playerId)
+        it.onSuccess(PlayerMapper.transform(playerEntity))
+        it.onComplete()
     }
 
-    fun getPlayer(playerId: Long): Observable<Player> {
-        return Observable.create { subscriber ->
-            val QUERY = String.format("SELECT * FROM %s WHERE %s = %s",
-                    Db.PlayerTable.TABLE_NAME, Db.PlayerTable.KEY_PLAYER_ID, playerId)
-            val cursor = briteDb.query(QUERY)
-            while (cursor.moveToNext()) {
-                subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
-            }
-            cursor.close()
-            subscriber.onComplete()
-        }
+    fun getPlayers(): Single<List<Player>> = Single.create {
+        val playerEntityList = database.playerDao().getPlayers()
+        it.onSuccess(PlayerMapper.transform(playerEntityList))
     }
 
-    fun getPlayers(): Observable<Player> {
-        return Observable.create { subscriber ->
-            val query = String.format("SELECT * FROM %s ORDER BY %s ASC",
-                    Db.PlayerTable.TABLE_NAME,
-                    Db.PlayerTable.KEY_PLAYER_POSITION)
-            val cursor = briteDb.query(query)
-            while (cursor.moveToNext()) {
-                Timber.d(cursor.getInt(cursor.getColumnIndexOrThrow(Db.PlayerTable.KEY_PLAYER_POSITION)).toString())
-                subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
-            }
-            cursor.close()
-            subscriber.onComplete()
-        }
+    fun getPlayingPlayersByPosition(): Single<List<Player>> = Single.create {
+        val playerEntityList = database.playerDao().getPlayingPlayersByPosition()
+        it.onSuccess(PlayerMapper.transform(playerEntityList))
     }
 
-    fun getPlayingPlayers(): Observable<Player> {
-        return Observable.create { subscriber ->
-            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s ASC",
-                    Db.PlayerTable.TABLE_NAME,
-                    Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
-                    Db.PlayerTable.KEY_PLAYER_POSITION)
-            val cursor = briteDb.query(query)
-            while (cursor.moveToNext()) {
-                subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
-            }
-            cursor.close()
-            subscriber.onComplete()
-        }
+    fun getPlayedPlayersByLevel(): Single<List<Player>> = Single.create {
+        val playerEntityList = database.playerDao().getPlayingPlayersByLevel()
+        it.onSuccess(PlayerMapper.transform(playerEntityList))
     }
 
-    fun getPlayedPlayersByLevel(): Observable<Player> {
-        return Observable.create { subscriber ->
-            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s DESC",
-                    Db.PlayerTable.TABLE_NAME,
-                    Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
-                    Db.PlayerTable.KEY_PLAYER_LEVEL)
-            val cursor = briteDb.query(query)
-            while (cursor.moveToNext()) {
-                subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
-            }
-            cursor.close()
-            subscriber.onComplete()
-        }
+    fun getPlayedPlayersByStrength(): Single<List<Player>> = Single.create {
+        val playerEntityList = database.playerDao().getPlayingPlayersByStrength()
+        it.onSuccess(PlayerMapper.transform(playerEntityList))
     }
 
-    fun getPlayedPlayersByStrength(): Observable<Player> {
-        return Observable.create { subscriber ->
-            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s DESC",
-                    Db.PlayerTable.TABLE_NAME,
-                    Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
-                    Db.PlayerTable.KEY_PLAYER_STRENGTH)
-            val cursor = briteDb.query(query)
-            while (cursor.moveToNext()) {
-                subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
-            }
-            cursor.close()
-            subscriber.onComplete()
-        }
+    fun getPlayedPlayersByTotal(): Single<List<Player>> = Single.create {
+        val playerEntityList = database.playerDao().getPlayingPlayersByTotal()
+        it.onSuccess(PlayerMapper.transform(playerEntityList))
     }
 
-    fun getPlayedPlayersByTotal(): Observable<Player> {
-        return Observable.create { subscriber ->
-            val query = String.format("SELECT * FROM %s WHERE %s = %s ORDER BY %s DESC, %s DESC",
-                    Db.PlayerTable.TABLE_NAME,
-                    Db.PlayerTable.KEY_PLAYER_IS_PLAYING, 1,
-                    Db.PlayerTable.KEY_PLAYER_LEVEL,
-                    Db.PlayerTable.KEY_PLAYER_STRENGTH)
-            val cursor = briteDb.query(query)
-            while (cursor.moveToNext()) {
-                subscriber.onNext(Db.PlayerTable.parseCursor(cursor))
-            }
-            cursor.close()
-            subscriber.onComplete()
-        }
+    fun deletePlayer(playerId: Long): Completable = Completable.create {
+        database.playerDao().deletePlayerById(playerId)
+        it.onComplete()
     }
 
-    fun updatePlayersPositions(): Observable<Void> {
-        return Observable.create { subscriber ->
-            val players = mutableListOf<Player>()
-            val query = String.format("SELECT * FROM %s ORDER BY %s ASC",
-                    Db.PlayerTable.TABLE_NAME, Db.PlayerTable.KEY_PLAYER_POSITION)
-            val cursor = briteDb.query(query)
-            while (cursor.moveToNext()) {
-                players.add(Db.PlayerTable.parseCursor(cursor))
-            }
-            for (index in players.indices) {
-                val transaction = briteDb.newTransaction()
-                try {
-                    val contentValues = ContentValues()
-                    contentValues.put(Db.PlayerTable.KEY_PLAYER_POSITION, index)
-                    briteDb.update(Db.PlayerTable.TABLE_NAME,
-                            contentValues,
-                            Db.PlayerTable.KEY_PLAYER_ID + " = ?",
-                            players[index].id.toString())
-                    transaction.markSuccessful()
-                } finally {
-                    transaction.end()
-                }
-            }
-            subscriber.onComplete()
-        }
+    fun updatePlayerName(playerId: Long, playerName: String): Completable = Completable.create {
+        val playerEntity = database.playerDao().getPlayerById(playerId).copy(name = playerName)
+        database.playerDao().updatePlayer(playerEntity)
+        it.onComplete()
     }
 
-    fun deletePlayer(playerId: Long): Observable<Void> {
-        return Observable.create { subscriber ->
-            val transaction = briteDb.newTransaction()
-            try {
-                briteDb.delete(
-                        Db.PlayerTable.TABLE_NAME,
-                        Db.PlayerTable.KEY_PLAYER_ID + " = ?",
-                        playerId.toString())
-                transaction.markSuccessful()
-                subscriber.onComplete()
-            } finally {
-                transaction.end()
-            }
-        }
+    fun updatePlayerScores(playerId: Long, levelScore: Int, strengthScore: Int): Completable = Completable.create {
+        val playerEntity = database.playerDao().getPlayerById(playerId).copy(level = levelScore, strength = strengthScore)
+        database.playerDao().updatePlayer(playerEntity)
+        it.onComplete()
     }
 
-    fun updatePlayerName(playerId: Long, playerName: String): Observable<Void> {
-        return Observable.create { subscriber ->
-            val transaction = briteDb.newTransaction()
-            try {
-                val contentValues = ContentValues().apply {
-                    put(Db.PlayerTable.KEY_PLAYER_NAME, playerName)
-                }
-                briteDb.update(Db.PlayerTable.TABLE_NAME,
-                        contentValues,
-                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
-                transaction.markSuccessful()
-                subscriber.onComplete()
-            } finally {
-                transaction.end()
-            }
-        }
+    fun updatePlayerPlaying(playerId: Long, isPlaying: Boolean): Completable = Completable.create {
+        val playerEntity = database.playerDao().getPlayerById(playerId).copy(isPlaying = isPlaying)
+        database.playerDao().updatePlayer(playerEntity)
+        it.onComplete()
     }
 
-    fun updatePlayerScores(playerId: Long, levelScore: Int, strengthScore: Int): Observable<Void> {
-        return Observable.create { subscriber ->
-            val transaction = briteDb.newTransaction()
-            try {
-                val contentValues = ContentValues().apply {
-                    put(Db.PlayerTable.KEY_PLAYER_LEVEL, levelScore)
-                    put(Db.PlayerTable.KEY_PLAYER_STRENGTH, strengthScore)
-                }
-                briteDb.update(Db.PlayerTable.TABLE_NAME,
-                        contentValues,
-                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
-                transaction.markSuccessful()
-                subscriber.onComplete()
-            } finally {
-                transaction.end()
-            }
-        }
+    fun changePlayersPositions(playerId: Long, newPosition: Int): Completable = Completable.create {
+        val playerEntity = database.playerDao().getPlayerById(playerId).copy(position = newPosition)
+        database.playerDao().updatePlayer(playerEntity)
+        it.onComplete()
     }
 
-    fun markPlayerPlaying(playerId: Long, isPlaying: Boolean): Observable<Void> {
-        return Observable.create { subscriber ->
-            val transaction = briteDb.newTransaction()
-            try {
-                val contentValues = ContentValues()
-                contentValues.put(Db.PlayerTable.KEY_PLAYER_IS_PLAYING, isPlaying)
-                briteDb.update(Db.PlayerTable.TABLE_NAME,
-                        contentValues,
-                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", playerId.toString())
-                transaction.markSuccessful()
-                subscriber.onComplete()
-            } finally {
-                transaction.end()
-            }
-        }
+    fun setGameStep(gameStep: GameStep): Completable = Completable.create {
+        database.gameDao().setGameStep(GameEntityMapper.transform(gameStep))
+        it.onComplete()
     }
 
-    fun changePlayersPositions(movedPlayerId: Long,
-                               newPosition: Int): Observable<Void> {
-        return Observable.create { subscriber ->
-            val transaction = briteDb.newTransaction()
-            try {
-                val contentValues = ContentValues()
-                contentValues.put(Db.PlayerTable.KEY_PLAYER_POSITION, newPosition)
-                briteDb.update(Db.PlayerTable.TABLE_NAME,
-                        contentValues,
-                        Db.PlayerTable.KEY_PLAYER_ID + " = ?", movedPlayerId.toString())
-                transaction.markSuccessful()
-                subscriber.onComplete()
-            } finally {
-                transaction.end()
-            }
-        }
+    fun getGameSteps(): Single<List<GameStep>> = Single.create {
+        val gameStepList = database.gameDao().getGameSteps()
+        it.onSuccess(GameStepMapper.transform(gameStepList))
     }
 
-    fun setGameStep(gameStep: GameStep): Observable<Void> {
-        return Observable.create { subscriber ->
-            val transaction = briteDb.newTransaction()
-            try {
-                val contentValues = Db.GameTable.toContentValues(gameStep)
-                briteDb.insert(Db.GameTable.TABLE_NAME, contentValues)
-                transaction.markSuccessful()
-                subscriber.onComplete()
-            } finally {
-                transaction.end()
-            }
-        }
-    }
-
-    fun clearGameSteps(): Observable<Void> {
-        return Observable.create { subscriber ->
-            val transaction = briteDb.newTransaction()
-            try {
-                val values = ContentValues()
-                values.put(Db.PlayerTable.KEY_PLAYER_LEVEL, 1)
-                values.put(Db.PlayerTable.KEY_PLAYER_STRENGTH, 1)
-                briteDb.update(Db.PlayerTable.TABLE_NAME, values, null)
-                briteDb.execute("DELETE FROM " + Db.GameTable.TABLE_NAME)
-                transaction.markSuccessful()
-                subscriber.onComplete()
-            } finally {
-                transaction.end()
-            }
-        }
-    }
-
-    fun getGameSteps(): Observable<GameStep> {
-        return Observable.create { subscriber ->
-            val QUERY = "SELECT " +
-                    Db.GameTable.KEY_GAME_PLAYER_ID + ", " +
-                    Db.GameTable.KEY_GAME_PLAYER_LEVEL + ", " +
-                    Db.GameTable.KEY_GAME_PLAYER_STRENGTH + ", " +
-                    Db.PlayerTable.KEY_PLAYER_NAME + ", " +
-                    Db.PlayerTable.KEY_PLAYER_COLOR + " FROM " + Db.GameTable.TABLE_NAME +
-                    " INNER JOIN " + Db.PlayerTable.TABLE_NAME + " ON players.id = " + Db.GameTable.KEY_GAME_PLAYER_ID
-            val cursor = briteDb.query(QUERY)
-            while (cursor.moveToNext()) {
-                subscriber.onNext(Db.GameTable.parseCursor(cursor))
-            }
-            cursor.close()
-            subscriber.onComplete()
-        }
+    fun deleteGameSteps(): Completable = Completable.create {
+        database.gameDao().deleteGameSteps()
+        it.onComplete()
     }
 }

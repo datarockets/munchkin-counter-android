@@ -10,7 +10,6 @@ ext.version = [
         tap_target_view : "1.9.1",
         rxkotlin        : "2.1.0",
         rxandroid       : "2.0.1",
-        sqlbrite        : "2.0.0",
         timber          : "4.5.1",
         butterknife     : "8.7.0",
         dagger          : "2.11",
@@ -25,6 +24,7 @@ def version = ext.version
 
 ext.library = [
         kotlin              : "org.jetbrains.kotlin:kotlin-stdlib:${version.kotlin}",
+        annotations         : "com.android.support:support-annotations:${version.support}",
         support_v4          : "com.android.support:support-v4:${version.support}",
         support_compat      : "com.android.support:appcompat-v7:${version.support}",
         support_design      : "com.android.support:design:${version.support}",
@@ -41,7 +41,6 @@ ext.library = [
         tap_target_view     : "com.getkeepsafe.taptargetview:taptargetview:${version.tap_target_view}",
         rxkotlin            : "io.reactivex.rxjava2:rxkotlin:${version.rxkotlin}",
         rxandroid           : "io.reactivex.rxjava2:rxandroid:${version.rxandroid}",
-        sqlbrite            : "com.squareup.sqlbrite2:sqlbrite:${version.sqlbrite}",
         timber              : "com.jakewharton.timber:timber:${version.timber}",
         butterknife         : "com.jakewharton:butterknife:${version.butterknife}",
         butterknife_compiler: "com.jakewharton:butterknife-compiler:${version.butterknife}",

@@ -27,7 +27,7 @@ class WelcomeActivity : OnboarderActivity(), WelcomeView {
         super.onCreate(savedInstanceState)
 
         activityComponent = DaggerActivityComponent.builder()
-                .applicationComponent(MunchkinApplication[this].mApplicationComponent)
+                .applicationComponent(MunchkinApplication[this].applicationComponent)
                 .activityModule(ActivityModule(this))
                 .build()
         activityComponent.inject(this)

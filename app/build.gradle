@@ -50,10 +50,6 @@ android {
 
 }
 
-kapt {
-    generateStubs = true
-}
-
 dependencies {
     compile "${library.kotlin}"
     compile "${library.support_v4}"
@@ -72,7 +68,6 @@ dependencies {
     compile "${library.tap_target_view}"
     compile "${library.rxkotlin}"
     compile "${library.rxandroid}"
-    compile "${library.sqlbrite}"
     compile "${library.timber}"
     compile "${library.dagger}"
     kapt "${library.dagger_compiler}"

@@ -58,7 +58,6 @@ class PlayersListPresenter
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete { playersListView?.deletePlayerFromList(playerId) }
                 .subscribe()
-        dataManager.updatePlayersPosition()
     }
 
 

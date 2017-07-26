@@ -44,7 +44,7 @@ open class BaseActivity : AppCompatActivity() {
     fun activityComponent(): ActivityComponent {
         if (activityComponent == null) {
             activityComponent = DaggerActivityComponent.builder()
-                    .applicationComponent(MunchkinApplication[this].mApplicationComponent)
+                    .applicationComponent(MunchkinApplication[this].applicationComponent)
                     .activityModule(ActivityModule(this))
                     .build()
         }
