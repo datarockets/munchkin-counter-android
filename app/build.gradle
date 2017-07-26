@@ -57,6 +57,7 @@ dependencies {
     compile "${library.support_design}"
     compile "${library.support_recycler}"
     compile "${library.support_card}"
+    compile "${library.constraint_layout}"
     compile "${library.room_runtime}"
     compile "${library.room_rxjava2}"
     kapt "${library.room_compiler}"

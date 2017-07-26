@@ -20,8 +20,8 @@ import com.datarockets.mnchkn.ui.players.helpers.ItemTouchHelperViewHolder
 import java.util.*
 import javax.inject.Inject
 
-class PlayerEditorListAdapter
-@Inject constructor() : RecyclerView.Adapter<PlayerEditorListAdapter.ViewHolder>(), ItemTouchHelperAdapter {
+class PlayersListAdapter
+@Inject constructor() : RecyclerView.Adapter<PlayersListAdapter.ViewHolder>(), ItemTouchHelperAdapter {
 
     private val players = mutableListOf<Player>()
 
@@ -29,65 +29,38 @@ class PlayerEditorListAdapter
         setHasStableIds(true)
     }
 
-    interface OnItemClickListener {
+    interface PlayersListListener {
         fun onPlayerItemClick(playerId: Long)
-    }
-
-    interface OnItemCheckboxClickListener {
         fun onPlayerItemCheckboxClick(playerId: Long, isPlaying: Boolean)
-    }
-
-    interface OnItemMovedListener {
         fun onItemMoved(fromPosition: Int, toPosition: Int)
-    }
-
-    interface OnStartDragListener {
         fun onStartDrag(viewHolder: RecyclerView.ViewHolder)
     }
 
-    var clickListener: OnItemClickListener? = null
-    var checkboxClickListener: OnItemCheckboxClickListener? = null
-    var dragStartListener: OnStartDragListener? = null
-    var itemMovedListener: OnItemMovedListener? = null
+    var listener: PlayersListListener? = null
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        clickListener = listener
-    }
-
-    fun setOnItemCheckboxClickListener(listener: OnItemCheckboxClickListener) {
-        checkboxClickListener = listener
-    }
-
-    fun setOnStartDragListener(listener: OnStartDragListener) {
-        dragStartListener = listener
-    }
-
-    fun setOnItemMovedListener(listener: OnItemMovedListener) {
-        itemMovedListener = listener
+    fun setPlayersListListener(listener: PlayersListListener) {
+        this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent!!.context).inflate(R.layout.player_item, parent, false)
+        val view = LayoutInflater.from(parent!!.context).inflate(R.layout.item_player, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-
         val player = players[position]
 
         val color = Color.parseColor(player.color)
         val capitalizedPlayerFirstLetter = player.name!!.substring(0, 1).toUpperCase()
-        val drawable = TextDrawable.builder()
-                .buildRound(capitalizedPlayerFirstLetter, color)
+        val drawable = TextDrawable.builder().buildRound(capitalizedPlayerFirstLetter, color)
 
         holder?.ivPlayerImage?.setImageDrawable(drawable)
         holder?.tvPlayerName?.text = player.name
         holder?.cbIsPlaying?.isChecked = player.playing
 
-
-        holder?.itemView?.setOnTouchListener { view, event ->
+        holder?.ivReorder?.setOnTouchListener { view, event ->
             if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                dragStartListener?.onStartDrag(holder)
+                listener?.onStartDrag(holder)
             }
             false
         }
@@ -124,7 +97,7 @@ class PlayerEditorListAdapter
     }
 
     override fun onItemMoved(fromPosition: Int, toPosition: Int) {
-        itemMovedListener?.onItemMoved(fromPosition, toPosition)
+        listener?.onItemMoved(fromPosition, toPosition)
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
@@ -139,20 +112,14 @@ class PlayerEditorListAdapter
     }
 
     fun getPositionForItemId(id: Long): Int {
-        val count = itemCount
-        for (i in 0..count - 1) {
-            if (id == getItemId(i)) {
-                return i
-            }
-        }
-        return RecyclerView.NO_POSITION
+        return (0..itemCount - 1).firstOrNull { id == getItemId(it) } ?: RecyclerView.NO_POSITION
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), ItemTouchHelperViewHolder {
-
-        @BindView(R.id.iv_player_color) lateinit var ivPlayerImage: ImageView
-        @BindView(R.id.tv_player_name) lateinit var tvPlayerName: TextView
-        @BindView(R.id.cb_is_playing) lateinit var cbIsPlaying: CheckBox
+        @BindView(R.id.iv_reorder) lateinit var ivReorder: ImageView
+        @BindView(R.id.iv_icon) lateinit var ivPlayerImage: ImageView
+        @BindView(R.id.tv_name) lateinit var tvPlayerName: TextView
+        @BindView(R.id.cb_playing) lateinit var cbIsPlaying: CheckBox
 
         init {
             ButterKnife.bind(this, view)
@@ -160,7 +127,7 @@ class PlayerEditorListAdapter
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val playerId = getItemId(position)
-                    clickListener?.onPlayerItemClick(playerId)
+                    listener?.onPlayerItemClick(playerId)
                 }
             }
             cbIsPlaying.setOnCheckedChangeListener { compoundButton, isChecked ->
@@ -168,7 +135,7 @@ class PlayerEditorListAdapter
                 if (position != RecyclerView.NO_POSITION) {
                     val playerId = getItemId(position)
                     players[position].playing = isChecked
-                    checkboxClickListener?.onPlayerItemCheckboxClick(playerId, isChecked)
+                    listener?.onPlayerItemCheckboxClick(playerId, isChecked)
                 }
             }
         }

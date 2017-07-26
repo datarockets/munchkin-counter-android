@@ -19,26 +19,24 @@ import com.datarockets.mnchkn.data.models.Player
 import com.datarockets.mnchkn.ui.base.BaseActivity
 import com.datarockets.mnchkn.ui.dashboard.DashboardActivity
 import com.datarockets.mnchkn.ui.dialogs.NewPlayerDialogFragment
+import com.datarockets.mnchkn.ui.dialogs.NewPlayerDialogFragment.NewPlayerDialogListener
 import com.datarockets.mnchkn.ui.dialogs.PlayerActionsDialogFragment
+import com.datarockets.mnchkn.ui.dialogs.PlayerActionsDialogFragment.PlayerActionsListener
 import com.datarockets.mnchkn.ui.editplayer.EditPlayerDialogFragment
+import com.datarockets.mnchkn.ui.editplayer.EditPlayerDialogFragment.EditPlayerDialogListener
+import com.datarockets.mnchkn.ui.players.PlayersListAdapter.PlayersListListener
 import com.datarockets.mnchkn.ui.players.helpers.ItemTouchHelperCallback
 import com.datarockets.mnchkn.ui.settings.SettingsActivity
 import javax.inject.Inject
 
-class PlayersListActivity : BaseActivity(), PlayersListView,
-        NewPlayerDialogFragment.NewPlayerDialogListener,
-        EditPlayerDialogFragment.EditPlayerDialogListener,
-        PlayerEditorListAdapter.OnItemClickListener,
-        PlayerEditorListAdapter.OnItemCheckboxClickListener,
-        PlayerEditorListAdapter.OnStartDragListener,
-        PlayerEditorListAdapter.OnItemMovedListener,
-        PlayerActionsDialogFragment.PlayerActionsListener {
+class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogListener, EditPlayerDialogListener,
+        PlayersListListener, PlayerActionsListener {
 
     @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
     @BindView(R.id.lv_player_list) lateinit var lvPlayersList: RecyclerView
     @BindView(R.id.fab_add_player) lateinit var fabAddPlayer: FloatingActionButton
 
-    @Inject lateinit var lvPlayerEditorListAdapter: PlayerEditorListAdapter
+    @Inject lateinit var lvPlayersListAdapter: PlayersListAdapter
     @Inject lateinit var playersListPresenter: PlayersListPresenter
     @Inject lateinit var linearLayoutManager: LinearLayoutManager
 
@@ -53,18 +51,13 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
         setSupportActionBar(toolbar)
 
         lvPlayersList.apply {
-            adapter = lvPlayerEditorListAdapter
+            adapter = lvPlayersListAdapter
             layoutManager = linearLayoutManager
         }
 
-        lvPlayerEditorListAdapter.apply {
-            setOnItemClickListener(this@PlayersListActivity)
-            setOnItemCheckboxClickListener(this@PlayersListActivity)
-            setOnStartDragListener(this@PlayersListActivity)
-            setOnItemMovedListener(this@PlayersListActivity)
-        }
+        lvPlayersListAdapter.setPlayersListListener(this@PlayersListActivity)
 
-        itemTouchHelperCallback = ItemTouchHelperCallback(lvPlayerEditorListAdapter)
+        itemTouchHelperCallback = ItemTouchHelperCallback(lvPlayersListAdapter)
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(lvPlayersList)
 
@@ -86,15 +79,15 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     }
 
     override fun addPlayerToList(player: Player) {
-        lvPlayerEditorListAdapter.addPlayer(player)
+        lvPlayersListAdapter.addPlayer(player)
     }
 
     override fun deletePlayerFromList(playerId: Long) {
-        lvPlayerEditorListAdapter.deletePlayer(playerId)
+        lvPlayersListAdapter.deletePlayer(playerId)
     }
 
     override fun setPlayersList(players: List<Player>) {
-        lvPlayerEditorListAdapter.setPlayers(players)
+        lvPlayersListAdapter.setPlayers(players)
     }
 
     override fun showAddNewPlayerDialog() {
@@ -145,7 +138,7 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     }
 
     override fun onFinishEditDialog(inputName: String) {
-        val playersCount = lvPlayerEditorListAdapter.itemCount
+        val playersCount = lvPlayersListAdapter.itemCount
         playersListPresenter.addPlayer(inputName, playersCount)
     }
 
@@ -168,7 +161,7 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     }
 
     override fun onEditedPlayerName(playerId: Long, playerName: String) {
-        lvPlayerEditorListAdapter.updatePlayerName(playerId, playerName)
+        lvPlayersListAdapter.updatePlayerName(playerId, playerName)
     }
 
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
@@ -176,8 +169,8 @@ class PlayersListActivity : BaseActivity(), PlayersListView,
     }
 
     override fun onItemMoved(fromPosition: Int, toPosition: Int) {
-        val movedPlayerId = lvPlayerEditorListAdapter.getItemId(fromPosition)
-        val draggerPlayerId = lvPlayerEditorListAdapter.getItemId(toPosition)
+        val movedPlayerId = lvPlayersListAdapter.getItemId(fromPosition)
+        val draggerPlayerId = lvPlayersListAdapter.getItemId(toPosition)
         playersListPresenter.changePlayerPosition(draggerPlayerId, toPosition)
         playersListPresenter.changePlayerPosition(movedPlayerId, fromPosition)
     }

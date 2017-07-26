@@ -38,8 +38,7 @@ class PlayersListPresenter
                 .subscribe { player -> playersListView?.addPlayerToList(player) }
     }
 
-    fun changePlayerPosition(movedPlayerId: Long,
-                             newPosition: Int) {
+    fun changePlayerPosition(movedPlayerId: Long, newPosition: Int) {
         disposable = dataManager.changePlayerPosition(movedPlayerId, newPosition)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -60,7 +59,6 @@ class PlayersListPresenter
                 .doOnComplete { playersListView?.deletePlayerFromList(playerId) }
                 .subscribe()
     }
-
 
     fun clearGameSteps() {
         disposable = dataManager.clearGameSteps()
