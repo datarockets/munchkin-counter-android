@@ -10,7 +10,6 @@ import com.datarockets.mnchkn.data.models.Player
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,90 +17,88 @@ import javax.inject.Singleton
 class DatabaseHelper
 @Inject constructor() {
 
-    val database = MunchkinApplication.database
-
     fun setPlayer(player: Player): Single<Player> = Single.create {
-        val playerId = database.playerDao().setPlayer(PlayerEntityMapper.transform(player))
-        val playerEntity = database.playerDao().getPlayerById(playerId)
+        val playerId = MunchkinApplication.database.playerDao().setPlayer(PlayerEntityMapper.transform(player))
+        val playerEntity = MunchkinApplication.database.playerDao().getPlayerById(playerId)
         it.onSuccess(PlayerMapper.transform(playerEntity))
     }
 
     fun getPlayer(playerId: Long): Maybe<Player> = Maybe.create {
-        val playerEntity = database.playerDao().getPlayerById(playerId)
+        val playerEntity = MunchkinApplication.database.playerDao().getPlayerById(playerId)
         it.onSuccess(PlayerMapper.transform(playerEntity))
         it.onComplete()
     }
 
     fun getPlayers(): Single<List<Player>> = Single.create {
-        val playerEntityList = database.playerDao().getPlayers()
+        val playerEntityList = MunchkinApplication.database.playerDao().getPlayers()
         it.onSuccess(PlayerMapper.transform(playerEntityList))
     }
 
     fun getPlayingPlayersByPosition(): Single<List<Player>> = Single.create {
-        val playerEntityList = database.playerDao().getPlayingPlayersByPosition()
+        val playerEntityList = MunchkinApplication.database.playerDao().getPlayingPlayersByPosition()
         it.onSuccess(PlayerMapper.transform(playerEntityList))
     }
 
     fun getPlayedPlayersByLevel(): Single<List<Player>> = Single.create {
-        val playerEntityList = database.playerDao().getPlayingPlayersByLevel()
+        val playerEntityList = MunchkinApplication.database.playerDao().getPlayingPlayersByLevel()
         it.onSuccess(PlayerMapper.transform(playerEntityList))
     }
 
     fun getPlayedPlayersByStrength(): Single<List<Player>> = Single.create {
-        val playerEntityList = database.playerDao().getPlayingPlayersByStrength()
+        val playerEntityList = MunchkinApplication.database.playerDao().getPlayingPlayersByStrength()
         it.onSuccess(PlayerMapper.transform(playerEntityList))
     }
 
     fun getPlayedPlayersByTotal(): Single<List<Player>> = Single.create {
-        val playerEntityList = database.playerDao().getPlayingPlayersByTotal()
+        val playerEntityList = MunchkinApplication.database.playerDao().getPlayingPlayersByTotal()
         it.onSuccess(PlayerMapper.transform(playerEntityList))
     }
 
     fun deletePlayer(playerId: Long): Completable = Completable.create {
-        database.playerDao().deletePlayerById(playerId)
+        MunchkinApplication.database.playerDao().deletePlayerById(playerId)
         it.onComplete()
     }
 
     fun updatePlayerName(playerId: Long, playerName: String): Completable = Completable.create {
-        val playerEntity = database.playerDao().getPlayerById(playerId).copy(name = playerName)
-        database.playerDao().updatePlayer(playerEntity)
+        val playerEntity = MunchkinApplication.database.playerDao().getPlayerById(playerId).copy(name = playerName)
+        MunchkinApplication.database.playerDao().updatePlayer(playerEntity)
         it.onComplete()
     }
 
     fun updatePlayerScores(playerId: Long, levelScore: Int, strengthScore: Int): Completable = Completable.create {
-        val playerEntity = database.playerDao().getPlayerById(playerId).copy(level = levelScore, strength = strengthScore)
-        database.playerDao().updatePlayer(playerEntity)
+        val playerEntity = MunchkinApplication.database.playerDao().getPlayerById(playerId).copy(level = levelScore, strength = strengthScore)
+        MunchkinApplication.database.playerDao().updatePlayer(playerEntity)
         it.onComplete()
     }
 
     fun updatePlayerPlaying(playerId: Long, isPlaying: Boolean): Completable = Completable.create {
-        val playerEntity = database.playerDao().getPlayerById(playerId).copy(isPlaying = isPlaying)
-        database.playerDao().updatePlayer(playerEntity)
+        val playerEntity = MunchkinApplication.database.playerDao().getPlayerById(playerId).copy(isPlaying = isPlaying)
+        MunchkinApplication.database.playerDao().updatePlayer(playerEntity)
         it.onComplete()
     }
 
     fun changePlayersPositions(playerId: Long, newPosition: Int): Completable = Completable.create {
-        val playerEntity = database.playerDao().getPlayerById(playerId).copy(position = newPosition)
-        database.playerDao().updatePlayer(playerEntity)
+        val playerEntity = MunchkinApplication.database.playerDao().getPlayerById(playerId).copy(position = newPosition)
+        MunchkinApplication.database.playerDao().updatePlayer(playerEntity)
         it.onComplete()
     }
 
     fun setGameStep(gameStep: GameStep): Completable = Completable.create {
-        database.gameDao().setGameStep(GameEntityMapper.transform(gameStep))
+        MunchkinApplication.database.gameDao().setGameStep(GameEntityMapper.transform(gameStep))
         it.onComplete()
     }
 
     fun getGameSteps(): Single<List<GameStep>> = Single.create {
-        val gameStepList = database.gameDao().getGameSteps()
+        val gameStepList = MunchkinApplication.database.gameDao().getGameSteps()
         it.onSuccess(GameStepMapper.transform(gameStepList))
     }
 
     fun deleteGameStepsAndResetPlayingPlayers(): Completable = Completable.create {
-        database.gameDao().deleteGameSteps()
-        val playersEntityList = database.playerDao().getPlayingPlayersByPosition()
+        MunchkinApplication.database.gameDao().deleteGameSteps()
+        val playersEntityList = MunchkinApplication.database.playerDao().getPlayingPlayersByPosition()
         playersEntityList.forEach {
             val playerEntity = it.copy(level = 1, strength = 1)
-            database.playerDao().updatePlayer(playerEntity)
+            MunchkinApplication.database.playerDao().updatePlayer(playerEntity)
         }
         it.onComplete()
     }

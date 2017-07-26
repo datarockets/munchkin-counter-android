@@ -12,26 +12,26 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ActivityModule(private val mActivity: AppCompatActivity) {
+class ActivityModule(private val activity: AppCompatActivity) {
 
     @Provides
     fun providesActivity(): Activity {
-        return mActivity
+        return activity
     }
 
     @Provides
     @ActivityContext
     fun providesContext(): Context {
-        return mActivity
+        return activity
     }
 
     @Provides
     fun providesSupportFragmentManager(): FragmentManager {
-        return mActivity.supportFragmentManager
+        return activity.supportFragmentManager
     }
 
     @Provides
     fun providesLinearLayoutManager(): LinearLayoutManager {
-        return LinearLayoutManager(mActivity)
+        return LinearLayoutManager(activity)
     }
 }

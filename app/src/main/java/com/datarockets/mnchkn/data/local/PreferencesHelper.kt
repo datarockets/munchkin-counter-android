@@ -13,28 +13,28 @@ import javax.inject.Singleton
 class PreferencesHelper
 @Inject constructor(@ApplicationContext context: Context) {
 
-    private val mPref: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private val pref: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     fun checkIsUserSeenOnboarding(): Boolean {
-        return mPref.getBoolean(IS_ONBOARDING_SEEN, false)
+        return pref.getBoolean(IS_ONBOARDING_SEEN, false)
     }
 
     fun setOnboardingSeen() {
-        mPref.edit().putBoolean(IS_ONBOARDING_SEEN, true).apply()
+        pref.edit().putBoolean(IS_ONBOARDING_SEEN, true).apply()
     }
 
     val isWakeLockActive: Boolean
-        get() = mPref.getBoolean(IS_WAKELOCK_ACTIVE, false)
+        get() = pref.getBoolean(IS_WAKELOCK_ACTIVE, false)
 
     fun setWakeLock(isActive: Boolean) {
-        mPref.edit().putBoolean(IS_WAKELOCK_ACTIVE, isActive).apply()
+        pref.edit().putBoolean(IS_WAKELOCK_ACTIVE, isActive).apply()
     }
 
     val isGameStarted: Boolean
-        get() = mPref.getBoolean(IS_GAME_STARTED, false)
+        get() = pref.getBoolean(IS_GAME_STARTED, false)
 
     fun setGameStatus(isStarted: Boolean) {
-        mPref.edit().putBoolean(IS_GAME_STARTED, isStarted).apply()
+        pref.edit().putBoolean(IS_GAME_STARTED, isStarted).apply()
     }
 
     companion object {

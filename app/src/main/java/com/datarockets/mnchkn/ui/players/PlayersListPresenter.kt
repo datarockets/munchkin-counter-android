@@ -1,6 +1,7 @@
 package com.datarockets.mnchkn.ui.players
 
 import com.datarockets.mnchkn.data.DataManager
+import com.datarockets.mnchkn.data.utils.SortType
 import com.datarockets.mnchkn.ui.base.Presenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -18,7 +19,7 @@ class PlayersListPresenter
     }
 
     fun checkIsEnoughPlayers() {
-        disposable = dataManager.getPlayingPlayers()
+        disposable = dataManager.getPlayers(SortType.POSITION)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { players ->
@@ -82,7 +83,7 @@ class PlayersListPresenter
     }
 
     fun getPlayersList() {
-        disposable = dataManager.getPlayers()
+        disposable = dataManager.getPlayers(SortType.NONE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { players -> playersListView?.setPlayersList(players) }

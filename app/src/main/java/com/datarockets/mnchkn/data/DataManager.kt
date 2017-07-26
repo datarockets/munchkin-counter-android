@@ -7,6 +7,7 @@ import com.datarockets.mnchkn.data.local.PreferencesHelper
 import com.datarockets.mnchkn.data.local.SharingHelper
 import com.datarockets.mnchkn.data.models.GameStep
 import com.datarockets.mnchkn.data.models.Player
+import com.datarockets.mnchkn.data.utils.SortType
 import com.datarockets.mnchkn.utils.ColorUtil
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -31,21 +32,15 @@ open class DataManager
         return databaseHelper.getPlayer(playerId)
     }
 
-    open fun getPlayers(): Single<List<Player>> {
-        return databaseHelper.getPlayers()
-    }
-
-    open fun getPlayingPlayers(): Single<List<Player>> {
-        return databaseHelper.getPlayingPlayersByPosition()
-    }
-
-    open fun getPlayers(sortType: Int): Single<List<Player>> {
+    open fun getPlayers(@SortType sortType: Int): Single<List<Player>> {
         when (sortType) {
-            0 -> return databaseHelper.getPlayedPlayersByLevel()
-            1 -> return databaseHelper.getPlayedPlayersByStrength()
-            2 -> return databaseHelper.getPlayedPlayersByTotal()
+            SortType.POSITION -> return databaseHelper.getPlayingPlayersByPosition()
+            SortType.LEVEL -> return databaseHelper.getPlayedPlayersByLevel()
+            SortType.STRENGTH -> return databaseHelper.getPlayedPlayersByStrength()
+            SortType.TOTAL -> return databaseHelper.getPlayedPlayersByTotal()
+            SortType.NONE -> return databaseHelper.getPlayers()
         }
-        return Single.just(null)
+        return Single.just(emptyList())
     }
 
     fun addPlayer(playerName: String, position: Int): Single<Player> {

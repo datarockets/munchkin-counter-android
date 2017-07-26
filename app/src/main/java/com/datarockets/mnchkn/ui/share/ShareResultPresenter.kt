@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class ShareResultPresenter
-@Inject constructor(private val mDataManager: DataManager) : Presenter<ShareResultView> {
+@Inject constructor(private val dataManager: DataManager) : Presenter<ShareResultView> {
 
     private var shareResultView: ShareResultView? = null
     private var disposable: Disposable? = null
@@ -19,7 +19,7 @@ class ShareResultPresenter
     }
 
     fun shareGameResults(sharingOption: SharingHelper.SHARE_WITH) {
-        disposable = mDataManager.generateShareableIntent()
+        disposable = dataManager.generateShareableIntent()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { shareableIntent ->
