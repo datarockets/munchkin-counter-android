@@ -26,7 +26,10 @@ class DashboardPresenter
         disposable = mDataManager.getPlayingPlayers()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { players -> dashboardView?.setPlayers(players) }
+                .subscribe { players ->
+                    dashboardView?.setPlayers(players)
+                    players.forEach { insertStep(it.id, it.levelScore, it.strengthScore) }
+                }
     }
 
     fun insertStep(playerId: Long, levelScore: Int, strengthScore: Int) {

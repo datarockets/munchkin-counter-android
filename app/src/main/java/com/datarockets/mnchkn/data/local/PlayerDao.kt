@@ -2,7 +2,6 @@ package com.datarockets.mnchkn.data.local
 
 import android.arch.persistence.room.*
 import com.datarockets.mnchkn.data.entity.PlayerEntity
-import io.reactivex.Maybe
 
 @Dao
 interface PlayerDao {

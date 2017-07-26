@@ -10,6 +10,7 @@ import com.datarockets.mnchkn.data.models.Player
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -95,8 +96,13 @@ class DatabaseHelper
         it.onSuccess(GameStepMapper.transform(gameStepList))
     }
 
-    fun deleteGameSteps(): Completable = Completable.create {
+    fun deleteGameStepsAndResetPlayingPlayers(): Completable = Completable.create {
         database.gameDao().deleteGameSteps()
+        val playersEntityList = database.playerDao().getPlayingPlayersByPosition()
+        playersEntityList.forEach {
+            val playerEntity = it.copy(level = 1, strength = 1)
+            database.playerDao().updatePlayer(playerEntity)
+        }
         it.onComplete()
     }
 }

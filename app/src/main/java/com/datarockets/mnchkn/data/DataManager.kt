@@ -79,7 +79,7 @@ open class DataManager
     }
 
     fun clearGameSteps(): Completable {
-        return databaseHelper.deleteGameSteps()
+        return databaseHelper.deleteGameStepsAndResetPlayingPlayers()
     }
 
     fun getLineData(type: Int): Observable<LineData> {
