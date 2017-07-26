@@ -1,17 +1,13 @@
 package com.datarockets.mnchkn
 
 import android.app.Application
-import android.arch.persistence.room.Room
 import android.content.Context
 import com.crashlytics.android.Crashlytics
-import com.datarockets.mnchkn.data.local.MunchkinDatabase
-
 import com.datarockets.mnchkn.injection.components.ApplicationComponent
 import com.datarockets.mnchkn.injection.components.DaggerApplicationComponent
 import com.datarockets.mnchkn.injection.modules.ApplicationModule
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import io.fabric.sdk.android.Fabric
-
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,8 +29,6 @@ class MunchkinApplication : Application() {
         applicationComponent.inject(this)
 
         Fabric.with(this, crashlytics)
-
-        database = Room.databaseBuilder(this, MunchkinDatabase::class.java, "players_db").build()
     }
 
     val mixpanel: MixpanelAPI
@@ -49,7 +43,5 @@ class MunchkinApplication : Application() {
         operator fun get(context: Context): MunchkinApplication {
             return context.applicationContext as MunchkinApplication
         }
-
-        lateinit var database: MunchkinDatabase
     }
 }
