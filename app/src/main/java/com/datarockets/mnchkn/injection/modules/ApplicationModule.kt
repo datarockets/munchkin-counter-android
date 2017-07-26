@@ -24,14 +24,14 @@ class ApplicationModule(private val application: Application) {
     }
 
     @Provides
-    fun providesMunchkinApplication(): MunchkinApplication {
-        return application as MunchkinApplication
+    @ApplicationContext
+    fun providesApplicationContext(): Context {
+        return application
     }
 
     @Provides
-    @ApplicationContext
     fun providesContext(): Context {
-        return application
+        return application.applicationContext
     }
 
     @Provides
@@ -50,8 +50,8 @@ class ApplicationModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun providesDatabase(application: Application): MunchkinDatabase {
-        return Room.databaseBuilder(application, MunchkinDatabase::class.java, "players_db").build()
+    fun providesDatabase(context: Context): MunchkinDatabase {
+        return Room.databaseBuilder(context, MunchkinDatabase::class.java, "players_db").build()
     }
 
     @Singleton
