@@ -227,7 +227,8 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
             }
 
             override fun onSequenceFinish() {
-                playersListPresenter.removeTempPlayer()
+                if (lvPlayersListAdapter.hasPlayerWithId(-1))
+                    playersListPresenter.removeTempPlayer()
             }
 
             override fun onSequenceCanceled(lastTarget: TapTarget) = Unit

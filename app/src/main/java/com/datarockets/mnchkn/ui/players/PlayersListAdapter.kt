@@ -115,6 +115,10 @@ class PlayersListAdapter
         return (0..itemCount - 1).firstOrNull { id == players[it].id } ?: RecyclerView.NO_POSITION
     }
 
+    fun hasPlayerWithId(playerId: Long): Boolean {
+        return players.find { (id) -> id == playerId } != null
+    }
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), ItemTouchHelperViewHolder {
         @BindView(R.id.iv_reorder) lateinit var ivReorder: ImageView
         @BindView(R.id.iv_icon) lateinit var ivPlayerImage: ImageView

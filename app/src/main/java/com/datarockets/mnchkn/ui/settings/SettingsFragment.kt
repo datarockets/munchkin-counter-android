@@ -20,7 +20,7 @@ class SettingsFragment : PreferenceFragment(), Preference.OnPreferenceClickListe
         if (preference?.key.equals(getString(R.string.settings_show_tutorial_key))) {
             PreferenceManager.getDefaultSharedPreferences(preference?.context).edit()
                     .putBoolean(PreferencesHelper.IS_FIRST_LAUNCH, true).apply()
-            
+
             val intent = preference?.context?.packageManager?.getLaunchIntentForPackage(preference.context?.packageName)
             intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             preference?.context?.startActivity(intent)
