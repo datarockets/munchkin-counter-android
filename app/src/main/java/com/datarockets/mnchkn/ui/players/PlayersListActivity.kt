@@ -222,7 +222,6 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
         TapTargetSequence(this).targets(targets).listener(object : TapTargetSequence.Listener {
             override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {
                 if (lastTarget?.id() == 0 && lvPlayersListAdapter.itemCount == 0) {
-                    println(lvPlayersListAdapter.itemCount)
                     playersListPresenter.createTempPlayer(getString(R.string.showcase_players_temp_player_name), -1)
                 }
             }

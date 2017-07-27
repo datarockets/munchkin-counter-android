@@ -33,8 +33,16 @@
     <string name="text.level">Level</string>
     <string name="text.strength">Strength</string>
     <string name="text.steps">Steps</string>
+
+
+    <string name="settings.category.screen">Screen</string>
+    <string name="settings.category.tutorial">Tutorial</string>
     <string name="settings.max_level">Maximum level</string>
     <string name="settings.keep_screen_on">Keep screen awake</string>
+    <string name="settings.show.tutorial.key">settings.show.tutorial.key</string>
+    <string name="settings.show.tutorial.title">Show tutorial</string>
+    <string name="settings.show.tutorial.summary">Show tutorial again</string>
+
     <string name="tab.level">Level</string>
     <string name="tab.strength">Strength</string>
     <string name="tab.summary">Summary</string>

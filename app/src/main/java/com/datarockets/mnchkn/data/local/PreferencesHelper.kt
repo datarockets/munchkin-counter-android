@@ -48,6 +48,6 @@ class PreferencesHelper
         private val IS_ONBOARDING_SEEN = "is_onboarding_seen"
         private val IS_WAKELOCK_ACTIVE = "is_wakelock_active"
         private val IS_GAME_STARTED = "is_game_started"
-        private val IS_FIRST_LAUNCH = "is_first_launch"
+        val IS_FIRST_LAUNCH = "is_first_launch"
     }
 }
