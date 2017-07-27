@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/settings.category.screen"
+        />
+
     <CheckBoxPreference
+        android:key="is_wakelock_active"
         android:title="@string/settings.keep_screen_on"
-        android:key="is_wakelock_active"/>
+        />
+
+    <PreferenceCategory
+        android:title="@string/settings.category.tutorial"
+        />
+
+    <Preference
+        android:key="@string/settings.show.tutorial.key"
+        android:summary="@string/settings.show.tutorial.summary"
+        android:title="@string/settings.show.tutorial.title"
+        />
+
 </PreferenceScreen>

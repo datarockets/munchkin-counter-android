@@ -37,9 +37,17 @@ class PreferencesHelper
         pref.edit().putBoolean(IS_GAME_STARTED, isStarted).apply()
     }
 
+    val isFirstLaunch: Boolean
+        get() = pref.getBoolean(IS_FIRST_LAUNCH, true)
+
+    fun setFirstLaunch(isFirstLaunch: Boolean) {
+        pref.edit().putBoolean(IS_FIRST_LAUNCH, isFirstLaunch).apply()
+    }
+
     companion object {
         private val IS_ONBOARDING_SEEN = "is_onboarding_seen"
         private val IS_WAKELOCK_ACTIVE = "is_wakelock_active"
         private val IS_GAME_STARTED = "is_game_started"
+        val IS_FIRST_LAUNCH = "is_first_launch"
     }
 }

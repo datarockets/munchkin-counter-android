@@ -18,6 +18,13 @@ class PlayersListPresenter
         playersListView = mvpView
     }
 
+    fun checkIsFirstLaunch() {
+        val isFirstLaunch = dataManager.localPreferencesHelper.isFirstLaunch
+        if (isFirstLaunch) {
+            playersListView?.showShowcase()
+        }
+    }
+
     fun checkIsEnoughPlayers() {
         disposable = dataManager.getPlayers(SortType.POSITION)
                 .subscribeOn(Schedulers.io())
@@ -38,8 +45,14 @@ class PlayersListPresenter
                 .subscribe { player -> playersListView?.addPlayerToList(player) }
     }
 
-    fun changePlayerPosition(movedPlayerId: Long,
-                             newPosition: Int) {
+    fun createTempPlayer(playerName: String, position: Int) {
+        disposable = dataManager.addTempPlayer(playerName, position)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { player -> playersListView?.addPlayerToList(player) }
+    }
+
+    fun changePlayerPosition(movedPlayerId: Long, newPosition: Int) {
         disposable = dataManager.changePlayerPosition(movedPlayerId, newPosition)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -61,6 +74,17 @@ class PlayersListPresenter
                 .subscribe()
     }
 
+    fun removeTempPlayer() {
+        deletePlayerListItem(-1)
+    }
+
+    fun finishTutorial() {
+        dataManager.localPreferencesHelper.setFirstLaunch(false)
+    }
+
+    fun showcaseCanceled() {
+        playersListView?.showShowcaseCanceledMessage()
+    }
 
     fun clearGameSteps() {
         disposable = dataManager.clearGameSteps()
@@ -79,7 +103,9 @@ class PlayersListPresenter
 
     fun checkIsGameStarted() {
         val isGameStarted = dataManager.localPreferencesHelper.isGameStarted
-        if (isGameStarted) playersListView?.showStartContinueDialog()
+        if (isGameStarted) {
+            playersListView?.showStartContinueDialog()
+        }
     }
 
     fun getPlayersList() {

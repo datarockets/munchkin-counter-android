@@ -33,15 +33,37 @@
     <string name="text.level">Level</string>
     <string name="text.strength">Strength</string>
     <string name="text.steps">Steps</string>
+
+
+    <string name="settings.category.screen">Screen</string>
+    <string name="settings.category.tutorial">Tutorial</string>
     <string name="settings.max_level">Maximum level</string>
     <string name="settings.keep_screen_on">Keep screen awake</string>
+    <string name="settings.show.tutorial.key">settings.show.tutorial.key</string>
+    <string name="settings.show.tutorial.title">Show tutorial</string>
+    <string name="settings.show.tutorial.summary">Show tutorial again</string>
+
     <string name="tab.level">Level</string>
     <string name="tab.strength">Strength</string>
     <string name="tab.summary">Summary</string>
     <string name="onboarder.page1.title">Welcome!</string>
     <string name="onboarder.page1.description">Munchkin Level Counter makes your game a way better</string>
     <string name="onboarder.page2.title">Unlimited</string>
-    <string name="onboarder.page2.description">Add so much players as you want</string>
+    <string name="onboarder.page2.description">Add as much players as you want</string>
     <string name="onboarder.page3.title">Usability</string>
     <string name="onboarder.page3.description">Handle players scores easy</string>
+
+    <!-- Players list showcase -->
+
+    <string name="showcase.players.add.title">Add player</string>
+    <string name="showcase.players.add.description">Click here to add new player</string>
+    <string name="showcase.players.reorder.title">Reorder players</string>
+    <string name="showcase.players.reorder.description">Drag to reorder players</string>
+    <string name="showcase.players.select.title">Select player</string>
+    <string name="showcase.players.select.description">Check checkbox to select player for the game</string>
+    <string name="showcase.players.edit.title">Edit &amp; delete</string>
+    <string name="showcase.players.edit.description">Click at player item to edit or delete them</string>
+    <string name="showcase.players.temp.player.name">Example Player</string>
+    <string name="showcase.players.canceled.message">You always can start tutorial again from app settings</string>
+
 </resources>
