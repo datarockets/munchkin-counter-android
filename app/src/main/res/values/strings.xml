@@ -64,5 +64,6 @@
     <string name="showcase.players.edit.title">Edit &amp; delete</string>
     <string name="showcase.players.edit.description">Click at player item to edit or delete them</string>
     <string name="showcase.players.temp.player.name">Example Player</string>
+    <string name="showcase.players.canceled.message">You always can start tutorial again from app settings</string>
 
 </resources>

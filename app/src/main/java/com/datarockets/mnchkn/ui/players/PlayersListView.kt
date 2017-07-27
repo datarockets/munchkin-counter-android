@@ -12,4 +12,5 @@ interface PlayersListView : MvpView {
     fun showStartContinueDialog()
     fun showWarning()
     fun showShowcase()
+    fun showShowcaseCanceledMessage()
 }

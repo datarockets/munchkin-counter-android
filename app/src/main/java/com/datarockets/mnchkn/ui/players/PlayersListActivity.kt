@@ -139,6 +139,10 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
         showFirstLaunchShowcase()
     }
 
+    override fun showShowcaseCanceledMessage() {
+        Toast.makeText(this, getString(R.string.showcase_players_canceled_message), Toast.LENGTH_SHORT).show()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_start_game -> playersListPresenter.checkIsEnoughPlayers()
@@ -218,7 +222,6 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
                         .descriptionTextColorInt(ContextCompat.getColor(applicationContext, R.color.colorShowcaseTextDescription))
                         .drawShadow(true)
                         .transparentTarget(true)
-                        .cancelable(false)
             }
         }
 
@@ -236,7 +239,9 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
                 }
             }
 
-            override fun onSequenceCanceled(lastTarget: TapTarget) = Unit
+            override fun onSequenceCanceled(lastTarget: TapTarget) {
+                playersListPresenter.showcaseCanceled()
+            }
         }).start()
     }
 }

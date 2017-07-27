@@ -82,6 +82,10 @@ class PlayersListPresenter
         dataManager.localPreferencesHelper.setFirstLaunch(false)
     }
 
+    fun showcaseCanceled() {
+        playersListView?.showShowcaseCanceledMessage()
+    }
+
     fun clearGameSteps() {
         disposable = dataManager.clearGameSteps()
                 .subscribeOn(Schedulers.io())
