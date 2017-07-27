@@ -53,6 +53,18 @@ open class DataManager
         return databaseHelper.setPlayer(player)
     }
 
+    fun addTempPlayer(playerName: String, position: Int): Single<Player> {
+        databaseHelper.deletePlayer(-1)
+        val player = Player()
+        player.id = -1
+        player.name = playerName
+        player.levelScore = 1
+        player.strengthScore = 1
+        player.color = ColorUtil.generatePlayerAvatarColor()
+        player.position = position
+        return databaseHelper.setPlayer(player)
+    }
+
     fun changePlayerPosition(movedPlayerId: Long, newPosition: Int): Completable {
         return databaseHelper.changePlayersPositions(movedPlayerId, newPosition)
     }

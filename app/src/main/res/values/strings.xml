@@ -41,7 +41,20 @@
     <string name="onboarder.page1.title">Welcome!</string>
     <string name="onboarder.page1.description">Munchkin Level Counter makes your game a way better</string>
     <string name="onboarder.page2.title">Unlimited</string>
-    <string name="onboarder.page2.description">Add so much players as you want</string>
+    <string name="onboarder.page2.description">Add as much players as you want</string>
     <string name="onboarder.page3.title">Usability</string>
     <string name="onboarder.page3.description">Handle players scores easy</string>
+
+    <!-- Players list showcase -->
+
+    <string name="showcase.players.add.title">Add player</string>
+    <string name="showcase.players.add.description">Click here to add new player</string>
+    <string name="showcase.players.reorder.title">Reorder players</string>
+    <string name="showcase.players.reorder.description">Drag to reorder players</string>
+    <string name="showcase.players.select.title">Select player</string>
+    <string name="showcase.players.select.description">Check checkbox to select player for the game</string>
+    <string name="showcase.players.edit.title">Edit &amp; delete</string>
+    <string name="showcase.players.edit.description">Click at player item to edit or delete them</string>
+    <string name="showcase.players.temp.player.name">Example Player</string>
+
 </resources>

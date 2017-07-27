@@ -112,7 +112,7 @@ class PlayersListAdapter
     }
 
     fun getPositionForItemId(id: Long): Int {
-        return (0..itemCount - 1).firstOrNull { id == getItemId(it) } ?: RecyclerView.NO_POSITION
+        return (0..itemCount - 1).firstOrNull { id == players[it].id } ?: RecyclerView.NO_POSITION
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), ItemTouchHelperViewHolder {

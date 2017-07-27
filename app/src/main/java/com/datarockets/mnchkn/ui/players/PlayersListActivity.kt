@@ -1,8 +1,10 @@
 package com.datarockets.mnchkn.ui.players
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -27,6 +29,8 @@ import com.datarockets.mnchkn.ui.editplayer.EditPlayerDialogFragment.EditPlayerD
 import com.datarockets.mnchkn.ui.players.PlayersListAdapter.PlayersListListener
 import com.datarockets.mnchkn.ui.players.helpers.ItemTouchHelperCallback
 import com.datarockets.mnchkn.ui.settings.SettingsActivity
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import javax.inject.Inject
 
 class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogListener, EditPlayerDialogListener,
@@ -66,6 +70,8 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
             checkIsGameStarted()
             getPlayersList()
         }
+
+        playersListPresenter.checkIsFirstLaunch()
     }
 
     override fun onResume() {
@@ -129,6 +135,10 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
         Toast.makeText(this, R.string.text_player_add_warning, Toast.LENGTH_SHORT).show()
     }
 
+    override fun showShowcase() {
+        showFirstLaunchShowcase()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_start_game -> playersListPresenter.checkIsEnoughPlayers()
@@ -178,5 +188,50 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
     override fun onDestroy() {
         super.onDestroy()
         playersListPresenter.detachView()
+    }
+
+    private fun showFirstLaunchShowcase() {
+        val density = resources.displayMetrics.density.toInt()
+        val width = resources.displayMetrics.widthPixels / density
+
+        val targets = listOf<TapTarget>(
+                TapTarget.forView(fabAddPlayer,
+                        getString(R.string.showcase_players_add_title),
+                        getString(R.string.showcase_players_add_description))
+                        .id(0),
+                TapTarget.forBounds(Rect(0, 80 * density, 56 * density, 136 * density),
+                        getString(R.string.showcase_players_reorder_title),
+                        getString(R.string.showcase_players_reorder_description)),
+                TapTarget.forBounds(Rect((width - 56) * density, 80 * density, width * density, 136 * density),
+                        getString(R.string.showcase_players_select_title),
+                        getString(R.string.showcase_players_select_description)),
+                TapTarget.forBounds(Rect(0, 80 * density, width * density, 136 * density),
+                        getString(R.string.showcase_players_select_title),
+                        getString(R.string.showcase_players_select_description))
+        ).apply {
+            forEach { tapTarget ->
+                tapTarget.titleTextSize(24)
+                        .descriptionTextSize(18)
+                        .drawShadow(true)
+                        .transparentTarget(true)
+                        .cancelable(false)
+                        .dimColorInt(ContextCompat.getColor(applicationContext, R.color.card_general))
+            }
+        }
+
+        TapTargetSequence(this).targets(targets).listener(object : TapTargetSequence.Listener {
+            override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {
+                if (lastTarget?.id() == 0 && lvPlayersListAdapter.itemCount == 0) {
+                    println(lvPlayersListAdapter.itemCount)
+                    playersListPresenter.createTempPlayer(getString(R.string.showcase_players_temp_player_name), -1)
+                }
+            }
+
+            override fun onSequenceFinish() {
+                playersListPresenter.removeTempPlayer()
+            }
+
+            override fun onSequenceCanceled(lastTarget: TapTarget) = Unit
+        }).start()
     }
 }

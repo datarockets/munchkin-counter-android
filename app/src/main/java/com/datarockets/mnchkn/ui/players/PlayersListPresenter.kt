@@ -18,6 +18,13 @@ class PlayersListPresenter
         playersListView = mvpView
     }
 
+    fun checkIsFirstLaunch() {
+        val isFirstLaunch = dataManager.localPreferencesHelper.isFirstLaunch
+        if (isFirstLaunch) {
+            playersListView?.showShowcase()
+        }
+    }
+
     fun checkIsEnoughPlayers() {
         disposable = dataManager.getPlayers(SortType.POSITION)
                 .subscribeOn(Schedulers.io())
@@ -33,6 +40,13 @@ class PlayersListPresenter
 
     fun addPlayer(playerName: String, position: Int) {
         disposable = dataManager.addPlayer(playerName, position)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { player -> playersListView?.addPlayerToList(player) }
+    }
+
+    fun createTempPlayer(playerName: String, position: Int) {
+        disposable = dataManager.addTempPlayer(playerName, position)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { player -> playersListView?.addPlayerToList(player) }
@@ -60,6 +74,11 @@ class PlayersListPresenter
                 .subscribe()
     }
 
+    fun removeTempPlayer() {
+        dataManager.localPreferencesHelper.setFirstLaunch(false)
+        deletePlayerListItem(-1)
+    }
+
     fun clearGameSteps() {
         disposable = dataManager.clearGameSteps()
                 .subscribeOn(Schedulers.io())
@@ -77,7 +96,9 @@ class PlayersListPresenter
 
     fun checkIsGameStarted() {
         val isGameStarted = dataManager.localPreferencesHelper.isGameStarted
-        if (isGameStarted) playersListView?.showStartContinueDialog()
+        if (isGameStarted) {
+            playersListView?.showStartContinueDialog()
+        }
     }
 
     fun getPlayersList() {
