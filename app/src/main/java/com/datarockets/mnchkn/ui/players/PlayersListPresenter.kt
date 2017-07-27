@@ -75,8 +75,11 @@ class PlayersListPresenter
     }
 
     fun removeTempPlayer() {
-        dataManager.localPreferencesHelper.setFirstLaunch(false)
         deletePlayerListItem(-1)
+    }
+
+    fun finishTutorial() {
+        dataManager.localPreferencesHelper.setFirstLaunch(false)
     }
 
     fun clearGameSteps() {

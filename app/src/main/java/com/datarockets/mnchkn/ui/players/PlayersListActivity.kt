@@ -206,16 +206,19 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
                         getString(R.string.showcase_players_select_title),
                         getString(R.string.showcase_players_select_description)),
                 TapTarget.forBounds(Rect(0, 80 * density, width * density, 136 * density),
-                        getString(R.string.showcase_players_select_title),
-                        getString(R.string.showcase_players_select_description))
+                        getString(R.string.showcase_players_edit_title),
+                        getString(R.string.showcase_players_edit_description))
         ).apply {
             forEach { tapTarget ->
-                tapTarget.titleTextSize(24)
-                        .descriptionTextSize(18)
+                tapTarget.titleTextSize(34)
+                        .descriptionTextSize(20)
+                        .outerCircleColorInt(ContextCompat.getColor(applicationContext, R.color.colorShowcaseOuter))
+                        .dimColorInt(ContextCompat.getColor(applicationContext, R.color.colorShowcaseDim))
+                        .textColorInt(ContextCompat.getColor(applicationContext, R.color.colorShowcaseTextTitle))
+                        .descriptionTextColorInt(ContextCompat.getColor(applicationContext, R.color.colorShowcaseTextDescription))
                         .drawShadow(true)
                         .transparentTarget(true)
                         .cancelable(false)
-                        .dimColorInt(ContextCompat.getColor(applicationContext, R.color.card_general))
             }
         }
 
@@ -227,8 +230,10 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
             }
 
             override fun onSequenceFinish() {
-                if (lvPlayersListAdapter.hasPlayerWithId(-1))
+                playersListPresenter.finishTutorial()
+                if (lvPlayersListAdapter.hasPlayerWithId(-1)) {
                     playersListPresenter.removeTempPlayer()
+                }
             }
 
             override fun onSequenceCanceled(lastTarget: TapTarget) = Unit
