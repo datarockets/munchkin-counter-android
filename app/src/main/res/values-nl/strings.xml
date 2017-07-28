@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Munchkin Level Teller</string>
+    <string name="app_name">Level Counter for Munchkin</string>
     <string name="title.choose_game_type">Kies Spel Type</string>
     <string name="title.players_editor">Speler Bewerking</string>
     <string name="title.analytics">Analyse</string>

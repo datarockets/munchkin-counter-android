@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <dimen name="font_larger">22sp</dimen>
     <dimen name="font_large">18sp</dimen>
     <dimen name="font_normal">16sp</dimen>
@@ -24,6 +25,5 @@
     <dimen name="activity_half_margin">8dp</dimen>
 
     <dimen name="section_image_item">192dp</dimen>
-
 
 </resources>

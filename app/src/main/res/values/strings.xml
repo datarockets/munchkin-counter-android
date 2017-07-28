@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Munchkin Level Counter</string>
+    <string name="app_name">Level Counter for Munchkin</string>
     <string name="title.choose_game_type">Choose Game Type</string>
     <string name="title.players_editor">Players Editor</string>
     <string name="title.analytics">Analytics</string>

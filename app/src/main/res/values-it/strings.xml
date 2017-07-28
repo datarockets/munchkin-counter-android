@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Munchkin Level Counter</string>
+    <string name="app_name">Level Counter for Munchkin</string>
     <string name="button.add_new_player">Aggiungere giocatore</string>
     <string name="button.continue">Continuare</string>
     <string name="button.finish">Finire</string>

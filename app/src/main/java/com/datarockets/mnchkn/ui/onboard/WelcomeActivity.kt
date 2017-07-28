@@ -39,17 +39,17 @@ class WelcomeActivity : OnboarderActivity(), WelcomeView {
                 R.string.onboarder_page1_title,
                 R.string.onboarder_page1_description,
                 R.drawable.ic_munchkin)
-        onboarderPageOne.setBackgroundColor(R.color.card_general)
+        onboarderPageOne.setBackgroundColor(R.color.colorPrimary)
         onboarderPageTwo = OnboarderPage(
                 R.string.onboarder_page2_title,
                 R.string.onboarder_page2_description,
                 R.drawable.ic_infinite)
-        onboarderPageTwo.setBackgroundColor(R.color.card_light)
+        onboarderPageTwo.setBackgroundColor(R.color.colorPrimary)
         onboarderPageThree = OnboarderPage(
                 R.string.onboarder_page3_title,
                 R.string.onboarder_page3_description,
-                R.drawable.ic_dice)
-        onboarderPageThree.setBackgroundColor(R.color.card_corner)
+                R.drawable.ic_dice_white)
+        onboarderPageThree.setBackgroundColor(R.color.colorAccent)
         onboarderPages.add(onboarderPageOne)
         onboarderPages.add(onboarderPageTwo)
         onboarderPages.add(onboarderPageThree)

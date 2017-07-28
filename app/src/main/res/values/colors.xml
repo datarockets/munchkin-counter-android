@@ -7,17 +7,8 @@
     <color name="colorAccent">#3B1606</color>
 
     <color name="black">@android:color/black</color>
-    <color name="black_transparent">#14000000</color>
     <color name="white">@android:color/white</color>
     <color name="transparent">@android:color/transparent</color>
-
-    <color name="card_general">#F7C568</color>
-    <color name="card_light">#F7D774</color>
-    <color name="card_corner">#3B1606</color>
-    <color name="card_background">#F8E9D4</color>
-
-    <color name="indicator_selected">#FFF</color>
-    <color name="indicator_unselected">#333</color>
 
     <color name="colorShowcaseOuter">@color/colorPrimary</color>
     <color name="colorShowcaseDim">@color/colorPrimaryDark</color>
