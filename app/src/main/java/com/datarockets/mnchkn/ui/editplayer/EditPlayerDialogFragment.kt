@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import butterknife.*
 import com.amulyakhare.textdrawable.TextDrawable
@@ -24,7 +24,7 @@ class EditPlayerDialogFragment : BottomSheetDialogFragment(), EditPlayerView {
     private var editPlayerDialogListener: EditPlayerDialogListener? = null
 
     @BindView(R.id.et_player_name) lateinit var etPlayerName: EditText
-    @BindView(R.id.btn_update_player) lateinit var btnUpdatePlayer: Button
+    @BindView(R.id.btn_update_player) lateinit var btnUpdatePlayer: ImageButton
     @BindView(R.id.iv_player_color) lateinit var ivPlayerColor: ImageView
 
     @Inject lateinit var editPlayerPresenter: EditPlayerPresenter

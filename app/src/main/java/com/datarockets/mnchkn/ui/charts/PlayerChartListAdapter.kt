@@ -48,7 +48,7 @@ class PlayerChartListAdapter
         if (convertView != null) {
             holder = convertView.tag as ViewHolder
         } else {
-            convertView = LayoutInflater.from(parent.context).inflate(R.layout.player_chart_item, null)
+            convertView = LayoutInflater.from(parent.context).inflate(R.layout.item_player_chart, null)
             holder = ViewHolder(convertView)
             convertView!!.tag = holder
         }

@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import butterknife.*
 import com.datarockets.mnchkn.R
 import com.datarockets.mnchkn.ui.base.BaseActivity
@@ -16,7 +16,7 @@ import com.datarockets.mnchkn.ui.base.BaseActivity
 class NewPlayerDialogFragment : BottomSheetDialogFragment() {
 
     @BindView(R.id.et_player_name) lateinit var etPlayerName: EditText
-    @BindView(R.id.btn_add_new_player) lateinit var btnAddNewPlayer: Button
+    @BindView(R.id.btn_add_new_player) lateinit var btnAddNewPlayer: ImageButton
 
     private lateinit var listener: NewPlayerDialogListener
     private lateinit var unbinder: Unbinder

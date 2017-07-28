@@ -50,7 +50,7 @@ class PlayerListAdapter
             holder = convertView.tag as ViewHolder
         } else {
             convertView = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.player_list_item, parent, false)
+                    .inflate(R.layout.item_player_list, parent, false)
             holder = ViewHolder(convertView)
             convertView!!.tag = holder
         }

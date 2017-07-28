@@ -31,7 +31,7 @@ class PlayerEditorActionsAdapter
         if (convertView != null) {
             holder = convertView.tag as ViewHolder
         } else {
-            convertView = LayoutInflater.from(parent.context).inflate(R.layout.player_action_item, parent, false)
+            convertView = LayoutInflater.from(parent.context).inflate(R.layout.item_player_action, parent, false)
             holder = ViewHolder(convertView)
             convertView.tag = holder
         }

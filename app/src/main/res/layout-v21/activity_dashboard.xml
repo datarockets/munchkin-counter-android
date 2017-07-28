@@ -15,60 +15,46 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cv_fragment_player"
+    <fragment
+        android:id="@+id/fragment_player"
+        class="com.datarockets.mnchkn.ui.player.PlayerFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:cardElevation="2dp"
+        android:elevation="2dp"
         app:layout_constraintBottom_toTopOf="@id/lv_player_list"
         app:layout_constraintDimensionRatio="4:3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        >
-
-        <fragment
-            android:id="@+id/fragment_player"
-            class="com.datarockets.mnchkn.ui.player.PlayerFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_player"
-            />
-
-    </android.support.v7.widget.CardView>
+        tools:layout="@layout/fragment_player"
+        />
 
     <ListView
         android:id="@+id/lv_player_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_above="@+id/btn_next_player"
         android:layout_alignParentTop="true"
         android:choiceMode="singleChoice"
-        app:layout_constraintBottom_toTopOf="@id/cv_button_next_player"
+        app:layout_constraintBottom_toTopOf="@id/btn_next_player"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_fragment_player"
+        app:layout_constraintTop_toBottomOf="@id/fragment_player"
         />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cv_button_next_player"
+    <Button
+        android:id="@+id/btn_next_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="2dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:elevation="2dp"
+        android:text="@string/button.next_player"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lv_player_list"
-        >
-
-        <Button
-            android:id="@+id/btn_next_player"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            android:textSize="16sp"
-            android:text="@string/button.next_player"
-            />
-
-    </android.support.v7.widget.CardView>
+        />
 
 </android.support.constraint.ConstraintLayout>

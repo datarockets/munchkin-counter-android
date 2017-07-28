@@ -1,116 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:background="@drawable/player_background"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="@drawable/player_background"
+    >
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <com.datarockets.mnchkn.views.fonts.MunchkinTextView
+        android:id="@+id/tv_player_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Dzmitry"
+        />
 
-        <com.datarockets.mnchkn.views.fonts.MunchkinTextView
-            android:id="@+id/tv_player_name"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/white"
-            tools:text="Dzmitry"
-            android:textSize="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <ImageButton
+        android:id="@+id/btn_level_score_up"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/counter_button_size"
+        android:background="@color/transparent"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/btn_strength_score_up"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_player_name"
+        app:srcCompat="@drawable/ic_arrow_up"
+        tools:ignore="ContentDescription"
+        />
 
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/btn_strength_score_up"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/counter_button_size"
+        android:background="@color/transparent"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/btn_level_score_up"
+        app:layout_constraintTop_toBottomOf="@id/tv_player_name"
+        app:srcCompat="@drawable/ic_arrow_up"
+        tools:ignore="ContentDescription"
+        />
 
+    <com.datarockets.mnchkn.views.fonts.MunchkinTextView
+        android:id="@+id/tv_level_score"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_count"
+        app:layout_constraintEnd_toStartOf="@id/tv_strength_score"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_level_score_up"
+        tools:text="0"
+        />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <com.datarockets.mnchkn.views.fonts.MunchkinTextView
+        android:id="@+id/tv_strength_score"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/tv_level_score"
+        app:layout_constraintTop_toBottomOf="@id/btn_strength_score_up"
+        tools:text="0"
+        />
 
-        <LinearLayout
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <ImageButton
+        android:id="@+id/btn_level_score_down"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/counter_button_size"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:rotation="180"
+        app:layout_constraintEnd_toStartOf="@id/btn_strength_score_down"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_level_score"
+        app:srcCompat="@drawable/ic_arrow_up"
+        tools:ignore="ContentDescription"
+        />
 
-            <ImageButton
-                android:id="@+id/btn_level_score_up"
-                android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/ic_arrow_up"
-                android:background="@color/transparent"
-                android:layout_width="@dimen/counter_button_size"
-                android:layout_height="@dimen/counter_button_size" />
+    <ImageButton
+        android:id="@+id/btn_strength_score_down"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/counter_button_size"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:rotation="180"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/btn_level_score_down"
+        app:layout_constraintTop_toBottomOf="@id/tv_strength_score"
+        app:srcCompat="@drawable/ic_arrow_up"
+        tools:ignore="ContentDescription"
+        />
 
-            <com.datarockets.mnchkn.views.fonts.MunchkinTextView
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/tv_level_score"
-                android:textColor="@color/white"
-                android:textSize="@dimen/font_count"
-                tools:text="0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </com.datarockets.mnchkn.views.fonts.MunchkinTextView>
+    <com.datarockets.mnchkn.views.fonts.MunchkinTextView
+        android:id="@+id/tv_level_score_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/text.level"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/tv_strength_score_description"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_level_score_down"
+        />
 
-            <ImageButton
-                android:id="@+id/btn_level_score_down"
-                android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/ic_arrow_down"
-                android:background="@color/transparent"
-                android:layout_width="@dimen/counter_button_size"
-                android:layout_height="@dimen/counter_button_size" />
+    <com.datarockets.mnchkn.views.fonts.MunchkinTextView
+        android:id="@+id/tv_strength_score_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/text.strength"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/tv_level_score_description"
+        app:layout_constraintTop_toBottomOf="@id/btn_strength_score_down"
+        />
 
-            <com.datarockets.mnchkn.views.fonts.MunchkinTextView
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/white"
-                android:text="@string/text.level"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageButton
-                android:id="@+id/btn_strength_score_up"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/transparent"
-                app:srcCompat="@drawable/ic_arrow_up"
-                android:layout_width="@dimen/counter_button_size"
-                android:layout_height="@dimen/counter_button_size" />
-
-            <com.datarockets.mnchkn.views.fonts.MunchkinTextView
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/tv_strength_score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textSize="@dimen/font_count"
-                tools:text="0"/>
-
-            <ImageButton
-                android:id="@+id/btn_strength_score_down"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/transparent"
-                app:srcCompat="@drawable/ic_arrow_down"
-                android:layout_width="@dimen/counter_button_size"
-                android:layout_height="@dimen/counter_button_size" />
-
-            <com.datarockets.mnchkn.views.fonts.MunchkinTextView
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/white"
-                android:text="@string/text.strength"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
