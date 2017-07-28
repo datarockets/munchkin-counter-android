@@ -74,6 +74,18 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
         playersListPresenter.checkIsFirstLaunch()
     }
 
+    override fun onStart() {
+        super.onStart()
+        lvPlayersList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                when {
+                    dy > 0 -> fabAddPlayer.hide()
+                    dy < 0 -> fabAddPlayer.show()
+                }
+            }
+        })
+    }
+
     override fun onResume() {
         super.onResume()
         trackWithProperties("Current activity", "Activity name", "PlayersListActivity")
