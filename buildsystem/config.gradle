@@ -5,8 +5,8 @@ ext.configuration = [
         versionPatch     : 0,
         versionClassifier: "",
         minimumSdk       : 15,
-        compileSdk       : 25,
-        targetSdk        : 25,
+        compileSdk       : 26,
+        targetSdk        : 26,
         buildTools       : "25.0.3"
 ]
 
