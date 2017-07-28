@@ -1,5 +1,5 @@
 ext.configuration = [
-        applicationId    : "com.datarockets.mnchkn",
+        applicationId    : "com.datarockets.mnchknlvlcntr",
         versionMajor     : 1,
         versionMinor     : 4,
         versionPatch     : 0,

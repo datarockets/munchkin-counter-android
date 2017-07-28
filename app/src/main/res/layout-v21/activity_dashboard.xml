@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/fragment_player"
-        class="com.datarockets.mnchkn.ui.player.PlayerFragment"
+        class="com.datarockets.mnchknlvlcntr.ui.player.PlayerFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:elevation="2dp"

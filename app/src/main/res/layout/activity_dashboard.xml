@@ -29,7 +29,7 @@
 
         <fragment
             android:id="@+id/fragment_player"
-            class="com.datarockets.mnchkn.ui.player.PlayerFragment"
+            class="com.datarockets.mnchknlvlcntr.ui.player.PlayerFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/fragment_player"

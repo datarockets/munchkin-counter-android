@@ -1,9 +1,9 @@
-import com.datarockets.mnchkn.MockModelFabric
-import com.datarockets.mnchkn.data.DataManager
-import com.datarockets.mnchkn.data.models.Player
-import com.datarockets.mnchkn.data.utils.SortType
-import com.datarockets.mnchkn.ui.players.PlayersListPresenter
-import com.datarockets.mnchkn.ui.players.PlayersListView
+import com.datarockets.mnchknlvlcntr.MockModelFabric
+import com.datarockets.mnchknlvlcntr.data.DataManager
+import com.datarockets.mnchknlvlcntr.data.models.Player
+import com.datarockets.mnchknlvlcntr.data.utils.SortType
+import com.datarockets.mnchknlvlcntr.ui.players.PlayersListPresenter
+import com.datarockets.mnchknlvlcntr.ui.players.PlayersListView
 import io.reactivex.Observable
 import org.junit.After
 import org.junit.Before

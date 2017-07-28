@@ -1,0 +1,10 @@
+package com.datarockets.mnchknlvlcntr.data.models
+
+data class Player(var id: Long = System.currentTimeMillis(),
+                  var name: String? = null,
+                  var levelScore: Int = 1,
+                  var strengthScore: Int = 1,
+                  var totalScore: Int = levelScore + strengthScore,
+                  var color: String? = null,
+                  var position: Int = 0,
+                  var playing: Boolean = false)
