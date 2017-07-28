@@ -11,7 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/MunchkinCounterTheme">
+        android:theme="@style/AppTheme.NoActionBar">
 
         <activity
             android:name="com.datarockets.mnchknlvlcntr.ui.SplashActivity"
@@ -26,11 +26,14 @@
 
         <activity
             android:name="com.datarockets.mnchknlvlcntr.ui.players.PlayersListActivity"
-            android:label="@string/title.players_editor"/>
+            android:label="@string/title.players_editor"
+            />
 
         <activity
             android:name="com.datarockets.mnchknlvlcntr.ui.dashboard.DashboardActivity"
-            android:screenOrientation="portrait"/>
+            android:label="@string/title.counter"
+            android:screenOrientation="portrait"
+            />
 
         <activity
             android:name="com.datarockets.mnchknlvlcntr.ui.result.GameResultActivity"

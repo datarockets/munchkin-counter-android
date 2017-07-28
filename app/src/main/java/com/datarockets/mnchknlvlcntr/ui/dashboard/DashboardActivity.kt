@@ -53,7 +53,7 @@ class DashboardActivity : BaseActivity(), DashboardView, PlayerFragment.OnScores
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.drawer, menu)
+        menuInflater.inflate(R.menu.menu_in_game, menu)
         return super.onCreateOptionsMenu(menu)
     }
 

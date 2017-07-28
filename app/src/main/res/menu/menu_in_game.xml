@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/item_roll_dice"
-        android:icon="@drawable/ic_dice"
+        android:icon="@drawable/ic_dice_white"
         android:title="@string/menu.roll_dice"
         app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"
         />
 
     <item
         android:id="@+id/item_finish_game"
+        android:icon="@drawable/ic_finish"
         android:title="@string/menu.finish"
-        app:showAsAction="ifRoom|withText"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"
         />
 </menu>
