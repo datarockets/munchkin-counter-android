@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.OnScrollListener
 import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
@@ -76,7 +77,7 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
 
     override fun onStart() {
         super.onStart()
-        lvPlayersList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        lvPlayersList.addOnScrollListener(object : OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 when {
                     dy > 0 -> fabAddPlayer.hide()
@@ -199,6 +200,11 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
         val draggerPlayerId = lvPlayersListAdapter.getItemId(toPosition)
         playersListPresenter.changePlayerPosition(draggerPlayerId, toPosition)
         playersListPresenter.changePlayerPosition(movedPlayerId, fromPosition)
+    }
+
+    override fun onStop() {
+        lvPlayersList.clearOnScrollListeners()
+        super.onStop()
     }
 
     override fun onDestroy() {
