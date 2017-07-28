@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/item_roll_dice"
-        android:icon="@drawable/ic_dice_white"
+        android:icon="@drawable/ic_dice"
         android:title="@string/menu.roll_dice"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"

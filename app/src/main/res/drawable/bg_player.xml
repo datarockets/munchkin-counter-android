@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
     <item>
         <bitmap
-            android:src="@drawable/mnchknbackground"
+            android:src="@drawable/bg_mnchkn"
             android:tileMode="disabled"
             android:gravity="center"/>
     </item>

@@ -2,8 +2,8 @@
 <resources>
 
     <color name="colorPrimary">#F7D774</color>
-    <color name="colorPrimaryDark">#F7D774</color>
-    <color name="colorPrimaryLight">#FFECD3</color>
+    <color name="colorPrimaryDark">#F6D264</color>
+    <color name="colorPrimaryLight">#FCEEC4</color>
     <color name="colorAccent">#3B1606</color>
 
     <color name="black">@android:color/black</color>
@@ -14,5 +14,8 @@
     <color name="colorShowcaseDim">@color/colorPrimaryDark</color>
     <color name="colorShowcaseTextTitle">#FAFAFA</color>
     <color name="colorShowcaseTextDescription">#FAFAFA</color>
+
+    <color name="colorTextPrimaryDark">#212121</color>
+    <color name="colorTextSecondaryDark">#767676</color>
 
 </resources>

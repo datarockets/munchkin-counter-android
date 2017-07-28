@@ -6,7 +6,7 @@
     android:id="@+id/ll_root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_with_avatar_height"
-    android:background="@drawable/player_list_item_selector"
+    android:background="?selectableItemBackground"
     >
 
     <ImageView
