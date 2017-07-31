@@ -258,6 +258,7 @@ class PlayersListActivity : BaseActivity(), PlayersListView, NewPlayerDialogList
             }
 
             override fun onSequenceCanceled(lastTarget: TapTarget) {
+                playersListPresenter.finishTutorial()
                 playersListPresenter.showcaseCanceled()
             }
         }).start()

@@ -38,7 +38,7 @@ class WelcomeActivity : OnboarderActivity(), WelcomeView {
         onboarderPageOne = OnboarderPage(
                 R.string.onboarder_page1_title,
                 R.string.onboarder_page1_description,
-                R.drawable.ic_munchkin)
+                R.drawable.ic_logo_v)
         onboarderPageOne.setBackgroundColor(R.color.colorPrimary)
         onboarderPageTwo = OnboarderPage(
                 R.string.onboarder_page2_title,
