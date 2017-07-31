@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Level Counter for Munchkin</string>
+    <string name="app_name">Score for Munchkin</string>
 
     <string translatable="true" name="title.players_editor">Players</string>
     <string translatable="true" name="title.counter">Level Counter</string>
