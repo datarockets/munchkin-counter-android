@@ -1,47 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Level Counter for Munchkin</string>
-    <string name="title.choose_game_type">Выберите тип игры</string>
-    <string name="title.players_editor">Редактор игроков</string>
-    <string name="title.analytics">Аналитика</string>
-    <string name="title.settings">Настройки</string>
-    <string name="menu.finish">Финиш</string>
-    <string name="menu.settings">Настройки</string>
-    <string name="button.finish">Финиш</string>
-    <string name="button.skip">Пропустить</string>
-    <string name="button.add_new_player">Добавить игрока</string>
-    <string name="button.yes">Да</string>
-    <string name="button.no">Нет</string>
-    <string name="button.start">Старт</string>
-    <string name="button.continue">Продолжить</string>
-    <string name="dialog.finish_game.title">Завершить игру</string>
-    <string name="dialog.finish_game.message">Вы хотите завершить игру?</string>
-    <string name="dialog.player_delete.title">Удалить игрока</string>
-    <string name="dialog.player_delete.message">Вы хотите удалить этого игрока?</string>
-    <string name="dialog.start_continue_game.title">Продолжить или начать заново?</string>
-    <string name="dialog.start_continue_game.message">Вы бы хотели продолжить или начать новую игру?</string>
-    <string name="progress_dialog.stats_loader.title">Загрузка</string>
-    <string name="progress_dialog.stats_loader.message">Подождите, пока мы загрузим графики</string>
-    <string name="text.player_add_warning">Пожалуйста, добавьте двух и более игроков и нажмите на Старт</string>
-    <string name="text.player_name">Имя игрока</string>
-    <string name="text.level">Уровень</string>
-    <string name="text.strength">Сила</string>
-    <string name="text.steps">Ходы</string>
-    <string name="settings.max_level">Максимальный уровень</string>
-    <string name="tab.level">Уровень</string>
-    <string name="tab.strength">Сила</string>
-    <string name="tab.summary">Итого</string>
-    <string name="onboarder.page1.title">Добро пожаловать!</string>
-    <string name="onboarder.page1.description">Munchkin Level Counter сделает вашу игру лучше</string>
-    <string name="onboarder.page2.title">Безлимитный</string>
-    <string name="onboarder.page2.description">Добавьте столько игроков, сколько хотите</string>
-    <string name="onboarder.page3.title">Удобство</string>
-    <string name="onboarder.page3.description">Управляйте количеством очков других игроков</string>
-    <string name="settings.keep_screen_on">Держать экран включенным</string>
-    <string name="button.update_player">Обновить игрока</string>
-    <string name="menu.roll_dice">Бросить кость</string>
-    <string name="text.edit_player">Изменить игрока</string>
-    <string name="button.next_player">Следующий игрок</string>
-    <string name="dialog.player_actions.delete_player">Удалить игрока</string>
-    <string name="dialog.player_actions.edit_player">Изменить игрока</string>
-    <string name="menu.share_app">Поделись Munchkin Level Counter</string>
+
+    <string translatable="true" name="title.choose_game_type">Выберите тип игры</string>
+    <string translatable="true" name="title.players_editor">Редактор игроков</string>
+    <string translatable="true" name="title.analytics">Аналитика</string>
+    <string translatable="true" name="title.settings">Настройки</string>
+
+    <string translatable="true" name="menu.finish">Финиш</string>
+    <string translatable="true" name="menu.settings">Настройки</string>
+    <string translatable="true" name="menu.roll_dice">Бросить кости</string>
+    <string translatable="true" name="menu.share_app">Поделись приложением</string>
+
+    <string translatable="true" name="button.finish">Финиш</string>
+    <string translatable="true" name="button.skip">Пропустить</string>
+    <string translatable="true" name="button.add_new_player">Добавить игрока</string>
+    <string translatable="true" name="button.yes">Да</string>
+    <string translatable="true" name="button.no">Нет</string>
+    <string translatable="true" name="button.start">Старт</string>
+    <string translatable="true" name="button.continue">Продолжить</string>
+    <string translatable="true" name="button.update_player">Обновить игрока</string>
+    <string translatable="true" name="button.next_player">Следующий игрок</string>
+
+    <string translatable="true" name="dialog.finish_game.title">Завершить игру</string>
+    <string translatable="true" name="dialog.finish_game.message">Вы хотите завершить игру?</string>
+    <string translatable="true" name="dialog.player_delete.title">Удалить игрока</string>
+    <string translatable="true" name="dialog.player_delete.message">Вы хотите удалить этого игрока?</string>
+    <string translatable="true" name="dialog.start_continue_game.title">Продолжить или начать заново?</string>
+    <string translatable="true" name="dialog.start_continue_game.message">Вы бы хотели продолжить или начать новую игру?</string>
+    <string translatable="true" name="dialog.player_actions.delete_player">Удалить игрока</string>
+    <string translatable="true" name="dialog.player_actions.edit_player">Изменить игрока</string>
+    <string translatable="true" name="progress_dialog.stats_loader.title">Загрузка</string>
+    <string translatable="true" name="progress_dialog.stats_loader.message">Подождите, пока мы загрузим графики</string>
+
+    <string translatable="true" name="text.player_add_warning">Пожалуйста, добавьте двух и более игроков и нажмите на Старт</string>
+    <string translatable="true" name="text.player_name">Имя игрока</string>
+    <string translatable="true" name="text.level">Уровень</string>
+    <string translatable="true" name="text.strength">Сила</string>
+    <string translatable="true" name="text.steps">Ходы</string>
+    <string translatable="true" name="text.edit_player">Изменить игрока</string>
+
+    <string translatable="true" name="settings.max_level">Максимальный уровень</string>
+    <string translatable="true" name="settings.keep_screen_on">Держать экран включенным</string>
+    <string translatable="true" name="settings.category.screen">Экран</string>
+    <string translatable="true" name="settings.category.tutorial">Обучение</string>
+    <string translatable="true" name="settings.show.tutorial.title">Показать обучение</string>
+    <string translatable="true" name="settings.show.tutorial.summary">Показать обучение ещё раз</string>
+
+    <string translatable="true" name="tab.level">Уровень</string>
+    <string translatable="true" name="tab.strength">Сила</string>
+    <string translatable="true" name="tab.summary">Итого</string>
+
+    <string translatable="true" name="onboarder.page1.title">Добро пожаловать!</string>
+    <string translatable="true" name="onboarder.page1.description">Munchkin Level Counter сделает вашу игру лучше</string>
+    <string translatable="true" name="onboarder.page2.title">Безлимитный</string>
+    <string translatable="true" name="onboarder.page2.description">Добавьте столько игроков, сколько хотите</string>
+    <string translatable="true" name="onboarder.page3.title">Удобство</string>
+    <string translatable="true" name="onboarder.page3.description">Управляйте количеством очков других игроков</string>
+
+    <string translatable="true" name="showcase.players.add.title">Добавить игрока</string>
+    <string translatable="true" name="showcase.players.add.description">Кликните сюда, чтобы добавить игрока</string>
+    <string translatable="true" name="showcase.players.reorder.title">Изменить порядок игроков</string>
+    <string translatable="true" name="showcase.players.reorder.description">Перетащите, чтобы изменить порядок игроков</string>
+    <string translatable="true" name="showcase.players.select.title">Выбрать игрока</string>
+    <string translatable="true" name="showcase.players.select.description">Установите флажок, чтобы выбрать игрока</string>
+    <string translatable="true" name="showcase.players.edit.title">Редактироване и удаление</string>
+    <string translatable="true" name="showcase.players.edit.description">Нажмите на игрока, чтобы отредактировать или удалить его</string>
+    <string translatable="true" name="showcase.players.temp.player.name">Игрок</string>
+    <string translatable="true" name="showcase.players.canceled.message">Вы всегда можете начать обучение снова из настроек приложения</string>
+
 </resources>
