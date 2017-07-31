@@ -26,6 +26,8 @@
         android:id="@+id/tv_player_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
