@@ -12,7 +12,7 @@
         android:id="@+id/tv_share_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Choose how to share with:"
+        android:text="@string/share.title"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

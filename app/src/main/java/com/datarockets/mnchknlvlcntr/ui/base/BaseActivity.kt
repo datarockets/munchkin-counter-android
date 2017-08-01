@@ -1,5 +1,6 @@
 package com.datarockets.mnchknlvlcntr.ui.base
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
@@ -15,6 +16,7 @@ import org.json.JSONObject
 
 import timber.log.Timber
 
+@SuppressLint("Registered")
 open class BaseActivity : AppCompatActivity() {
 
     private var activityComponent: ActivityComponent? = null
