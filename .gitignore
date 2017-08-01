@@ -43,3 +43,5 @@ fabric.properties
 
 # Sandbox stuff
 _sandbox
+
+.keystore

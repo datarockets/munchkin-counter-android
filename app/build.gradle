@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
+
 apply from: "$rootProject.projectDir/buildsystem/config.gradle"
 apply from: "$rootProject.projectDir/buildsystem/library.gradle"
 
@@ -18,6 +19,7 @@ android {
         versionCode buildVersionCode()
         versionName buildVersionName()
         vectorDrawables.useSupportLibrary = true
+        resConfigs "en", "de", "es", "it", "fr", "nl", "ru"
         buildConfigField("String", "MIXPANEL_API_KEY", "\"" + MIXPANEL_API_KEY + "\"")
     }
 
@@ -33,8 +35,16 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            debuggable false
             minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            debuggable true
         }
     }
 
@@ -46,6 +56,14 @@ android {
         androidTest {
             java.srcDir commonTestDir
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
     }
 }
 
