@@ -6,7 +6,7 @@
     android:id="@+id/ll_root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_with_avatar_height"
-    android:background="@drawable/player_list_item_selector"
+    android:background="?selectableItemBackground"
     >
 
     <ImageView
@@ -53,6 +53,8 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingStart="16dp"
+        android:lines="1"
+        android:ellipsize="end"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/cb_playing"

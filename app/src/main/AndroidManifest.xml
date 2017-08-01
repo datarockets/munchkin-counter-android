@@ -1,43 +1,50 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.datarockets.mnchkn">
+          package="com.datarockets.mnchknlvlcntr">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
 
     <application
-        android:name=".MunchkinApplication"
+        android:name="com.datarockets.mnchknlvlcntr.MunchkinApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/MunchkinCounterTheme">
+        android:theme="@style/AppTheme.NoActionBar">
 
         <activity
-            android:name=".ui.SplashActivity"
+            android:name="com.datarockets.mnchknlvlcntr.ui.SplashActivity"
             android:theme="@style/SplashScreenTheme">
             <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.onboard.WelcomeActivity" />
+        <activity android:name="com.datarockets.mnchknlvlcntr.ui.onboard.WelcomeActivity"/>
+
         <activity
-            android:name=".ui.players.PlayersListActivity"
-            android:label="@string/title.players_editor" />
+            android:name="com.datarockets.mnchknlvlcntr.ui.players.PlayersListActivity"
+            android:label="@string/title.players_editor"
+            />
+
         <activity
-            android:name=".ui.dashboard.DashboardActivity"
-            android:screenOrientation="portrait" />
+            android:name="com.datarockets.mnchknlvlcntr.ui.dashboard.DashboardActivity"
+            android:label="@string/title.counter"
+            android:screenOrientation="portrait"
+            />
+
         <activity
-            android:name=".ui.result.GameResultActivity"
+            android:name="com.datarockets.mnchknlvlcntr.ui.result.GameResultActivity"
             android:configChanges="orientation"
             android:label="@string/title.analytics"
-            android:parentActivityName=".ui.dashboard.DashboardActivity" />
+            android:parentActivityName="com.datarockets.mnchknlvlcntr.ui.dashboard.DashboardActivity"/>
+
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name="com.datarockets.mnchknlvlcntr.ui.settings.SettingsActivity"
             android:label="@string/title.settings"
-            android:parentActivityName="ui.dashboard.DashboardActivity" />
+            android:parentActivityName="com.datarockets.mnchknlvlcntr.ui.dashboard.DashboardActivity"/>
 
     </application>
 

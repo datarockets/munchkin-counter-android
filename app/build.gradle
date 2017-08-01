@@ -47,7 +47,6 @@ android {
             java.srcDir commonTestDir
         }
     }
-
 }
 
 dependencies {

@@ -1,8 +1,8 @@
-import com.datarockets.mnchkn.MockModelFabric
-import com.datarockets.mnchkn.data.DataManager
-import com.datarockets.mnchkn.data.utils.SortType
-import com.datarockets.mnchkn.ui.dashboard.DashboardPresenter
-import com.datarockets.mnchkn.ui.dashboard.DashboardView
+import com.datarockets.mnchknlvlcntr.MockModelFabric
+import com.datarockets.mnchknlvlcntr.data.DataManager
+import com.datarockets.mnchknlvlcntr.data.utils.SortType
+import com.datarockets.mnchknlvlcntr.ui.dashboard.DashboardPresenter
+import com.datarockets.mnchknlvlcntr.ui.dashboard.DashboardView
 import io.reactivex.Observable
 import org.junit.After
 import org.junit.Before

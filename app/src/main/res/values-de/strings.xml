@@ -1,47 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Munchkin Level Counter</string>
-    <string name="title.choose_game_type">Wähle den Spieltyp</string>
-    <string name="title.players_editor">Spieler Editor</string>
-    <string name="title.analytics">Analyse</string>
-    <string name="title.settings">Einstellungen</string>
-    <string name="menu.finish">Ende</string>
-    <string name="menu.settings">Einstellungen</string>
-    <string name="button.finish">Ende</string>
-    <string name="button.skip">Überspringen</string>
-    <string name="button.add_new_player">Spieler hinzufügen</string>
-    <string name="button.yes">Ja</string>
-    <string name="button.no">Nein</string>
-    <string name="button.start">Start </string>
-    <string name="button.continue">Weiter</string>
-    <string name="dialog.finish_game.title">Spiel beenden</string>
-    <string name="dialog.finish_game.message">Möchtest du das Spiel beenden?</string>
-    <string name="dialog.player_delete.title">Spieler Löschen</string>
-    <string name="dialog.player_delete.message">Möchtest du diesen Spieler wirklich löschen?</string>
-    <string name="dialog.start_continue_game.title">Fortsetzen oder starten?</string>
-    <string name="dialog.start_continue_game.message">Möchtest du ein Spiel fortsetzen oder ein Neues beginnen?</string>
-    <string name="progress_dialog.stats_loader.title">Laden</string>
-    <string name="progress_dialog.stats_loader.message">Bitte warten, während wir deine Statistiken laden</string>
-    <string name="text.player_add_warning">Bitte füge zwei oder mehr Spieler hinzu und drücke auf Start</string>
-    <string name="text.player_name">Spielername</string>
-    <string name="text.level">Level</string>
-    <string name="text.strength">Stärke</string>
-    <string name="text.steps">Runde</string>
-    <string name="settings.max_level">Maximales Level</string>
-    <string name="tab.level">Level</string>
-    <string name="tab.strength">Stärke</string>
-    <string name="tab.summary">Zusammenfassung</string>
-    <string name="onboarder.page1.title">Willkommen!</string>
-    <string name="onboarder.page1.description">Munchkin Level Counter macht dein Spiel um Längen besser</string>
-    <string name="onboarder.page2.title">Unbegrenzt</string>
-    <string name="onboarder.page2.description">Füge so viele Spieler hinzu, wie du willst</string>
-    <string name="onboarder.page3.title">Nutzbarkeit</string>
-    <string name="onboarder.page3.description">Verwalte deine Spielergebnisse ganz einfach</string>
-    <string name="settings.keep_screen_on">Halten Bildschirm wach</string>
-    <string name="button.update_player">Spieler aktualisieren</string>
-    <string name="menu.roll_dice">Würfeln</string>
-    <string name="text.edit_player">Spieler bearbeiten</string>
-    <string name="button.next_player">Nächste Spieler</string>
-    <string name="dialog.player_actions.delete_player">Spieler löschen</string>
-    <string name="dialog.player_actions.edit_player">Spieler bearbeiten</string>
-    <string name="menu.share_app">Empfehlen Munchkin Level Counter</string>
+
+    <string translatable="true" name="title.choose_game_type">Wähle den Spieltyp</string>
+    <string translatable="true" name="title.players_editor">Spieler Editor</string>
+    <string translatable="true" name="title.analytics">Analyse</string>
+    <string translatable="true" name="title.settings">Einstellungen</string>
+
+    <string translatable="true" name="menu.finish">Ende</string>
+    <string translatable="true" name="menu.settings">Einstellungen</string>
+    <string translatable="true" name="menu.roll_dice">Würfeln</string>
+    <string translatable="true" name="menu.share_app">Empfehlen app</string>
+
+    <string translatable="true" name="button.finish">Ende</string>
+    <string translatable="true" name="button.skip">Überspringen</string>
+    <string translatable="true" name="button.add_new_player">Spieler hinzufügen</string>
+    <string translatable="true" name="button.yes">Ja</string>
+    <string translatable="true" name="button.no">Nein</string>
+    <string translatable="true" name="button.start">Start </string>
+    <string translatable="true" name="button.continue">Weiter</string>
+    <string translatable="true" name="button.update_player">Spieler aktualisieren</string>
+    <string translatable="true" name="button.next_player">Nächste Spieler</string>
+
+    <string translatable="true" name="dialog.finish_game.title">Spiel beenden</string>
+    <string translatable="true" name="dialog.finish_game.message">Möchtest du das Spiel beenden?</string>
+    <string translatable="true" name="dialog.player_delete.title">Spieler Löschen</string>
+    <string translatable="true" name="dialog.player_delete.message">Möchtest du diesen Spieler wirklich löschen?</string>
+    <string translatable="true" name="dialog.start_continue_game.title">Fortsetzen oder starten?</string>
+    <string translatable="true" name="dialog.start_continue_game.message">Möchtest du ein Spiel fortsetzen oder ein Neues beginnen?</string>
+    <string translatable="true" name="progress_dialog.stats_loader.title">Laden</string>
+    <string translatable="true" name="progress_dialog.stats_loader.message">Bitte warten, während wir deine Statistiken laden</string>
+    <string translatable="true" name="dialog.player_actions.delete_player">Spieler löschen</string>
+    <string translatable="true" name="dialog.player_actions.edit_player">Spieler bearbeiten</string>
+
+    <string translatable="true" name="text.player_add_warning">Bitte füge zwei oder mehr Spieler hinzu und drücke auf Start</string>
+    <string translatable="true" name="text.player_name">Spielername</string>
+    <string translatable="true" name="text.level">Level</string>
+    <string translatable="true" name="text.strength">Stärke</string>
+    <string translatable="true" name="text.steps">Runde</string>
+    <string translatable="true" name="text.edit_player">Spieler bearbeiten</string>
+
+    <string translatable="true" name="settings.max_level">Maximales Level</string>
+    <string translatable="true" name="settings.keep_screen_on">Halten Bildschirm wach</string>
+    <string translatable="true" name="settings.category.screen">Bildschirm</string>
+    <string translatable="true" name="settings.category.tutorial">Tutorial</string>
+    <string translatable="true" name="settings.show.tutorial.title">Tutorial anzeigen</string>
+    <string translatable="true" name="settings.show.tutorial.summary">Zeige Tutorial wieder</string>
+
+    <string translatable="true" name="tab.level">Level</string>
+    <string translatable="true" name="tab.strength">Stärke</string>
+    <string translatable="true" name="tab.summary">Zusammenfassung</string>
+
+    <string translatable="true" name="onboarder.page1.title">Willkommen!</string>
+    <string translatable="true" name="onboarder.page1.description">Munchkin Level Counter macht dein Spiel um Längen besser</string>
+    <string translatable="true" name="onboarder.page2.title">Unbegrenzt</string>
+    <string translatable="true" name="onboarder.page2.description">Füge so viele Spieler hinzu, wie du willst</string>
+    <string translatable="true" name="onboarder.page3.title">Nutzbarkeit</string>
+    <string translatable="true" name="onboarder.page3.description">Verwalte deine Spielergebnisse ganz einfach</string>
+
+    <!-- Translation needed -->
+    <string translatable="true" name="showcase.players.add.title">Add player</string>
+    <string translatable="true" name="showcase.players.add.description">Click here to add new player</string>
+    <string translatable="true" name="showcase.players.reorder.title">Reorder players</string>
+    <string translatable="true" name="showcase.players.reorder.description">Drag to reorder players</string>
+    <string translatable="true" name="showcase.players.select.title">Select player</string>
+    <string translatable="true" name="showcase.players.select.description">Check checkbox to select player for the game</string>
+    <string translatable="true" name="showcase.players.edit.title">Edit &amp; delete</string>
+    <string translatable="true" name="showcase.players.edit.description">Click at player item to edit or delete them</string>
+    <string translatable="true" name="showcase.players.temp.player.name">Example Player</string>
+    <string translatable="true" name="showcase.players.canceled.message">You always can start tutorial again from app settings</string>
+    <!-- Translation needed -->
+
 </resources>

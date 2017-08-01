@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:minHeight="?attr/actionBarSize"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:titleTextColor="@color/black"
-    android:background="?attr/colorPrimary">
+    android:layout_height="?attr/actionBarSize"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="4dp"
+    app:contentPaddingLeft="-8dp"
+    app:contentPaddingRight="-8dp"
+    app:contentPaddingTop="-8dp"
+    >
 
-</android.support.v7.widget.Toolbar>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/AppTheme"
+        app:theme="@style/ToolbarTheme"
+        />
+
+</android.support.v7.widget.CardView>
