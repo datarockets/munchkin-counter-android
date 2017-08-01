@@ -13,6 +13,7 @@ bin/
 gen/
 out/
 build/
+app/release/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -44,4 +45,5 @@ fabric.properties
 # Sandbox stuff
 _sandbox
 
-.keystore
+*.keystore
+/keystores
