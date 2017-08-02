@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
+
 apply from: "$rootProject.projectDir/buildsystem/config.gradle"
 apply from: "$rootProject.projectDir/buildsystem/library.gradle"
 
@@ -18,23 +19,39 @@ android {
         versionCode buildVersionCode()
         versionName buildVersionName()
         vectorDrawables.useSupportLibrary = true
+        resConfigs "en", "de", "es", "it", "fr", "nl", "ru"
         buildConfigField("String", "MIXPANEL_API_KEY", "\"" + MIXPANEL_API_KEY + "\"")
+        setProperty("archivesBaseName", "LevelCounterForMunchkin-$versionName")
     }
 
     signingConfigs {
         release {
-            storeFile file("${KEYSTORE_FILE}")
-            keyAlias "${KEYSTORE_ALIAS}"
-            storePassword "${KEYSTORE_PASSWORD}"
-            keyPassword "${KEYSTORE_PASSWORD}"
+            def keystorePropertiesFile= rootProject.file("keystores/" + "mnchkn.properties")
+            def keystoreProperties = new Properties()
+            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+            storeFile file(keystoreProperties['key.store'])
+            storePassword keystoreProperties['key.store.password']
+            keyAlias keystoreProperties['key.alias']
+            keyPassword keystoreProperties['key.alias.password']
         }
     }
 
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            debuggable false
             minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
+            debuggable true
         }
     }
 
@@ -46,6 +63,14 @@ android {
         androidTest {
             java.srcDir commonTestDir
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
     }
 }
 
@@ -61,7 +86,6 @@ dependencies {
     compile "${library.room_rxjava2}"
     kapt "${library.room_compiler}"
     compile "${library.text_drawable}"
-    compile "${library.color_picker}"
     compile "${library.onboarder}"
     compile "${library.mixpanel}"
     compile "${library.mp_android_chart}"

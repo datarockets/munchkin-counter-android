@@ -2,8 +2,6 @@ package com.datarockets.mnchknlvlcntr.ui
 
 import android.content.Intent
 import android.os.Bundle
-
-import com.datarockets.mnchknlvlcntr.R
 import com.datarockets.mnchknlvlcntr.ui.base.BaseActivity
 import com.datarockets.mnchknlvlcntr.ui.onboard.WelcomeActivity
 

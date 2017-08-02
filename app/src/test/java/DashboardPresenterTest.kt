@@ -22,8 +22,7 @@ class DashboardPresenterTest {
     @Mock lateinit var mMockDataManager: DataManager
     private lateinit var mPresenter: DashboardPresenter
 
-    @Rule @JvmField
-    public val mOverrideSchedulersRule = RxSchedulersOverrideRule()
+    @Rule @JvmField val mOverrideSchedulersRule = RxSchedulersOverrideRule()
 
     @Before
     fun setUp() {

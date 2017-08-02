@@ -15,7 +15,7 @@ class SharingHelper
 
     fun generateShareableIntent(): Observable<Intent> {
         return Observable.create { subscriber ->
-            val link = "https://play.google.com/store/apps/details?id=com.datarockets.mnchkn"
+            val link = "https://play.google.com/store/apps/details?id=com.datarockets.mnchknlvlcntr"
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_TEXT, link)
