@@ -22,11 +22,12 @@ android {
         resConfigs "en", "de", "es", "it", "fr", "nl", "ru"
         buildConfigField("String", "MIXPANEL_API_KEY", "\"" + MIXPANEL_API_KEY + "\"")
         setProperty("archivesBaseName", "LevelCounterForMunchkin-$versionName")
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
         release {
-            def keystorePropertiesFile= rootProject.file("keystores/" + "mnchkn.properties")
+            def keystorePropertiesFile = rootProject.file("keystores/" + "mnchkn.properties")
             def keystoreProperties = new Properties()
             keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
             storeFile file(keystoreProperties['key.store'])
@@ -109,4 +110,6 @@ dependencies {
     testCompile "${library.junit}"
     testCompile "${library.mockito}"
     kaptTest "${library.dagger}"
+    androidTestCompile "${library.support_test_runner}"
+    androidTestCompile "${library.support_test_rules}"
 }
