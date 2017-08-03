@@ -7,47 +7,28 @@ import java.util.*
 
 object MockModelFabric {
 
-    fun randomString(): String {
-        return UUID.randomUUID().toString()
-    }
-
-    fun newPlayer(): Player {
-        val random = Random()
-        val player = Player()
-        player.id = random.nextLong()
-        player.name = newPlayerName()
-        player.color = newPlayerColor()
-        return player
-    }
-
     fun newPlayer(position: Int): Player {
-        val player = newPlayer()
-        player.position = position
-        return player
+        val random = Random()
+        val level = random.nextInt(100)
+        val strength = random.nextInt(100)
+        return Player(System.nanoTime(), randomString(), level, strength, level + strength, newPlayerColor(),
+                position, random.nextBoolean())
     }
 
-    fun newStep(): GameStep {
-        val gameStep = GameStep()
-        gameStep.playerId = 1
-        gameStep.playerLevel = 1
-        gameStep.playerLevel = 1
-        return gameStep
+    fun newPlayerList(count: Int): List<Player> = (0..count - 1).map { newPlayer(it) }
+
+    fun newGameStep(playerId: Long): GameStep {
+        val random = Random()
+        return GameStep(playerId, random.nextInt(), random.nextInt())
     }
 
-
-    fun newPlayersList(size: Int): List<Player> {
-        val list: MutableList<Player> = mutableListOf()
-        (0..size - 1).mapTo(list) { newPlayer(it) }
-        return list
+    fun newGameStepList(playerList: List<Player>, count: Int): List<GameStep> {
+        val gameStepList = mutableListOf<GameStep>()
+        playerList.forEach { (id) -> (0..count - 1).forEach { gameStepList.add(newGameStep(id)) } }
+        return gameStepList
     }
 
-    fun newPlayerName(): String {
-        return randomString()
-    }
+    private fun randomString(): String = UUID.randomUUID().toString()
 
-    fun newPlayerColor(): String {
-        val generatedColor = ColorGenerator.MATERIAL.randomColor
-        return Integer.toHexString(generatedColor).substring(2)
-    }
-
+    private fun newPlayerColor(): String = Integer.toHexString(ColorGenerator.MATERIAL.randomColor).substring(2)
 }

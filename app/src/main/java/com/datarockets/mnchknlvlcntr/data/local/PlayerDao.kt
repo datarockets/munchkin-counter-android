@@ -21,7 +21,7 @@ interface PlayerDao {
     @Query("SELECT * FROM players WHERE is_playing == 1 ORDER BY strength DESC")
     fun getPlayingPlayersByStrength(): List<PlayerEntity>
 
-    @Query("SELECT * FROM players WHERE is_playing == 1 ORDER BY level DESC, strength DESC")
+    @Query("SELECT *, (level + strength) AS total FROM players WHERE is_playing == 1 ORDER BY total DESC")
     fun getPlayingPlayersByTotal(): List<PlayerEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
